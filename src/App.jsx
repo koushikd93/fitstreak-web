@@ -85,6 +85,129 @@ const FOOD_DB = [
   { name: "Watermelon (1 cup)", cal: 46, protein: 1, carbs: 12, fat: 0.2, category: "fruit", region: "Pan India" },
   { name: "Pomegranate (1 cup)", cal: 144, protein: 3, carbs: 33, fat: 2, category: "fruit", region: "Pan India" },
   { name: "Chikoo / Sapota (1 pc)", cal: 83, protein: 0.4, carbs: 20, fat: 1, category: "fruit", region: "Pan India" },
+  // North Indian Expanded
+  { name: "Chole (1 bowl)", cal: 240, protein: 12, carbs: 32, fat: 8, category: "lunch", region: "North India" },
+  { name: "Kadhi Pakora (1 bowl)", cal: 220, protein: 6, carbs: 18, fat: 14, category: "lunch", region: "North India" },
+  { name: "Stuffed Paratha (1 pc)", cal: 260, protein: 6, carbs: 34, fat: 12, category: "breakfast", region: "North India" },
+  { name: "Gobi Paratha (1 pc)", cal: 240, protein: 5, carbs: 32, fat: 11, category: "breakfast", region: "North India" },
+  { name: "Paneer Tikka (6 pcs)", cal: 280, protein: 18, carbs: 8, fat: 20, category: "snack", region: "North India" },
+  { name: "Baingan Bharta (1 bowl)", cal: 160, protein: 3, carbs: 14, fat: 10, category: "lunch", region: "North India" },
+  { name: "Shahi Paneer", cal: 360, protein: 16, carbs: 14, fat: 28, category: "lunch", region: "North India" },
+  { name: "Malai Kofta", cal: 400, protein: 12, carbs: 22, fat: 30, category: "lunch", region: "North India" },
+  { name: "Chana Masala (1 bowl)", cal: 230, protein: 12, carbs: 34, fat: 6, category: "lunch", region: "North India" },
+  { name: "Dahi Bhalla (3 pcs)", cal: 200, protein: 6, carbs: 28, fat: 8, category: "snack", region: "North India" },
+  { name: "Kulcha (1 pc)", cal: 280, protein: 7, carbs: 44, fat: 8, category: "lunch", region: "Punjab" },
+  { name: "Rumali Roti (1 pc)", cal: 120, protein: 4, carbs: 22, fat: 2, category: "lunch", region: "North India" },
+  { name: "Rabdi (1 bowl)", cal: 280, protein: 8, carbs: 36, fat: 12, category: "sweet", region: "North India" },
+  { name: "Matar Paneer (1 bowl)", cal: 300, protein: 14, carbs: 16, fat: 20, category: "lunch", region: "North India" },
+  { name: "Dal Tadka (1 bowl)", cal: 200, protein: 10, carbs: 28, fat: 6, category: "lunch", region: "Pan India" },
+  { name: "Jeera Rice (1 plate)", cal: 240, protein: 5, carbs: 46, fat: 4, category: "lunch", region: "Pan India" },
+  // South Indian Expanded
+  { name: "Rava Dosa", cal: 180, protein: 4, carbs: 26, fat: 7, category: "breakfast", region: "South India" },
+  { name: "Uttapam (1 pc)", cal: 200, protein: 5, carbs: 30, fat: 6, category: "breakfast", region: "South India" },
+  { name: "Bisi Bele Bath (1 plate)", cal: 340, protein: 10, carbs: 52, fat: 10, category: "lunch", region: "Karnataka" },
+  { name: "Rasam (1 bowl)", cal: 60, protein: 2, carbs: 10, fat: 1, category: "lunch", region: "South India" },
+  { name: "Coconut Chutney (2 tbsp)", cal: 50, protein: 1, carbs: 4, fat: 3, category: "snack", region: "South India" },
+  { name: "Pongal (1 bowl)", cal: 260, protein: 8, carbs: 38, fat: 8, category: "breakfast", region: "Tamil Nadu" },
+  { name: "Lemon Rice (1 plate)", cal: 280, protein: 5, carbs: 48, fat: 8, category: "lunch", region: "South India" },
+  { name: "Tomato Rice (1 plate)", cal: 270, protein: 5, carbs: 46, fat: 7, category: "lunch", region: "South India" },
+  { name: "Tamarind Rice (1 plate)", cal: 290, protein: 5, carbs: 50, fat: 8, category: "lunch", region: "South India" },
+  { name: "Avial (1 bowl)", cal: 140, protein: 3, carbs: 12, fat: 9, category: "lunch", region: "Kerala" },
+  { name: "Thoran (1 bowl)", cal: 120, protein: 3, carbs: 10, fat: 8, category: "lunch", region: "Kerala" },
+  { name: "Kerala Fish Fry (2 pcs)", cal: 280, protein: 22, carbs: 10, fat: 18, category: "lunch", region: "Kerala" },
+  { name: "Chicken 65 (6 pcs)", cal: 320, protein: 24, carbs: 12, fat: 20, category: "snack", region: "Andhra Pradesh" },
+  { name: "Hyderabadi Haleem", cal: 350, protein: 20, carbs: 30, fat: 16, category: "lunch", region: "Hyderabad" },
+  // Bihari / Eastern India
+  { name: "Litti Chokha (2 pcs)", cal: 380, protein: 10, carbs: 52, fat: 14, category: "lunch", region: "Bihar" },
+  { name: "Sattu Paratha (1 pc)", cal: 270, protein: 10, carbs: 36, fat: 10, category: "breakfast", region: "Bihar" },
+  { name: "Sattu Sharbat (1 glass)", cal: 120, protein: 6, carbs: 20, fat: 2, category: "drink", region: "Bihar" },
+  { name: "Thekua (3 pcs)", cal: 240, protein: 4, carbs: 36, fat: 10, category: "snack", region: "Bihar" },
+  { name: "Chura Dahi (1 bowl)", cal: 280, protein: 6, carbs: 42, fat: 10, category: "breakfast", region: "Bihar" },
+  { name: "Pua (2 pcs)", cal: 220, protein: 4, carbs: 30, fat: 10, category: "sweet", region: "Bihar" },
+  { name: "Aloo Chokha (1 bowl)", cal: 160, protein: 3, carbs: 24, fat: 6, category: "lunch", region: "Bihar" },
+  { name: "Machher Jhol (fish curry)", cal: 250, protein: 20, carbs: 10, fat: 14, category: "lunch", region: "Bengal" },
+  { name: "Kosha Mangsho", cal: 380, protein: 28, carbs: 8, fat: 26, category: "lunch", region: "Bengal" },
+  { name: "Shukto (1 bowl)", cal: 140, protein: 4, carbs: 16, fat: 7, category: "lunch", region: "Bengal" },
+  { name: "Mishti Doi (1 bowl)", cal: 180, protein: 5, carbs: 28, fat: 5, category: "sweet", region: "Bengal" },
+  { name: "Pitha (2 pcs)", cal: 200, protein: 3, carbs: 32, fat: 7, category: "sweet", region: "Assam/Bengal" },
+  // Rajasthani / Gujarati
+  { name: "Dal Baati Churma", cal: 520, protein: 14, carbs: 65, fat: 24, category: "lunch", region: "Rajasthan" },
+  { name: "Gatte Ki Sabzi", cal: 240, protein: 8, carbs: 22, fat: 14, category: "lunch", region: "Rajasthan" },
+  { name: "Ker Sangri", cal: 160, protein: 4, carbs: 18, fat: 8, category: "lunch", region: "Rajasthan" },
+  { name: "Pyaaz Kachori (1 pc)", cal: 220, protein: 4, carbs: 26, fat: 12, category: "snack", region: "Rajasthan" },
+  { name: "Ghevar (1 pc)", cal: 350, protein: 4, carbs: 48, fat: 16, category: "sweet", region: "Rajasthan" },
+  { name: "Undhiyu (1 bowl)", cal: 280, protein: 8, carbs: 30, fat: 14, category: "lunch", region: "Gujarat" },
+  { name: "Handvo (1 pc)", cal: 180, protein: 6, carbs: 24, fat: 7, category: "snack", region: "Gujarat" },
+  { name: "Fafda Jalebi", cal: 340, protein: 6, carbs: 46, fat: 16, category: "breakfast", region: "Gujarat" },
+  { name: "Khandvi (6 rolls)", cal: 150, protein: 5, carbs: 20, fat: 5, category: "snack", region: "Gujarat" },
+  // NE India / Nepal / Sri Lanka / Bangladesh expanded
+  { name: "Bamboo Shoot Curry", cal: 120, protein: 4, carbs: 12, fat: 6, category: "lunch", region: "NE India" },
+  { name: "Pork with Axone", cal: 340, protein: 26, carbs: 6, fat: 24, category: "lunch", region: "Nagaland" },
+  { name: "Thukpa (1 bowl)", cal: 280, protein: 12, carbs: 36, fat: 10, category: "lunch", region: "Nepal/Sikkim" },
+  { name: "Gundruk Soup", cal: 60, protein: 3, carbs: 8, fat: 1, category: "lunch", region: "Nepal" },
+  { name: "Yomari (2 pcs)", cal: 200, protein: 4, carbs: 34, fat: 6, category: "sweet", region: "Nepal" },
+  { name: "Chatamari (1 pc)", cal: 220, protein: 8, carbs: 28, fat: 8, category: "lunch", region: "Nepal" },
+  { name: "Panta Bhat (Bangladesh)", cal: 180, protein: 4, carbs: 38, fat: 1, category: "breakfast", region: "Bangladesh" },
+  { name: "Beef Bhuna (Bangladesh)", cal: 380, protein: 30, carbs: 6, fat: 26, category: "lunch", region: "Bangladesh" },
+  { name: "Pitha (Bangladesh, 2 pcs)", cal: 210, protein: 4, carbs: 34, fat: 7, category: "sweet", region: "Bangladesh" },
+  { name: "Lamprais (Sri Lanka)", cal: 580, protein: 22, carbs: 65, fat: 24, category: "lunch", region: "Sri Lanka" },
+  { name: "Kiribath (Sri Lanka)", cal: 240, protein: 5, carbs: 36, fat: 9, category: "breakfast", region: "Sri Lanka" },
+  { name: "Watalappam (Sri Lanka)", cal: 260, protein: 6, carbs: 38, fat: 10, category: "sweet", region: "Sri Lanka" },
+  { name: "Ema Datshi (Bhutan)", cal: 200, protein: 8, carbs: 12, fat: 14, category: "lunch", region: "Bhutan" },
+  // Street Food
+  { name: "Pav Bhaji (1 plate)", cal: 400, protein: 10, carbs: 52, fat: 18, category: "snack", region: "Mumbai" },
+  { name: "Dabeli (1 pc)", cal: 200, protein: 4, carbs: 28, fat: 8, category: "snack", region: "Gujarat" },
+  { name: "Aloo Tikki (2 pcs)", cal: 220, protein: 5, carbs: 30, fat: 10, category: "snack", region: "North India" },
+  { name: "Chole Tikki", cal: 300, protein: 10, carbs: 38, fat: 13, category: "snack", region: "Delhi" },
+  { name: "Dahi Puri (6 pcs)", cal: 220, protein: 5, carbs: 32, fat: 8, category: "snack", region: "Mumbai" },
+  { name: "Misal Pav", cal: 350, protein: 12, carbs: 44, fat: 14, category: "breakfast", region: "Maharashtra" },
+  { name: "Poha Jalebi", cal: 320, protein: 5, carbs: 52, fat: 11, category: "breakfast", region: "Madhya Pradesh" },
+  { name: "Frankie / Kathi Roll", cal: 350, protein: 14, carbs: 36, fat: 16, category: "snack", region: "Kolkata" },
+  { name: "Chaat Papdi", cal: 180, protein: 4, carbs: 26, fat: 7, category: "snack", region: "Pan India" },
+  // Protein foods
+  { name: "Boiled Eggs (2 pcs)", cal: 140, protein: 12, carbs: 1, fat: 10, category: "snack", region: "Pan India" },
+  { name: "Paneer (100g raw)", cal: 260, protein: 18, carbs: 3, fat: 20, category: "snack", region: "Pan India" },
+  { name: "Soya Chunks (1 cup cooked)", cal: 170, protein: 26, carbs: 10, fat: 2, category: "lunch", region: "Pan India" },
+  { name: "Sprouts Chaat (1 bowl)", cal: 150, protein: 10, carbs: 22, fat: 3, category: "snack", region: "Pan India" },
+  { name: "Chicken Breast Grilled (150g)", cal: 230, protein: 35, carbs: 0, fat: 10, category: "lunch", region: "Pan India" },
+  { name: "Fish Tikka (4 pcs)", cal: 200, protein: 28, carbs: 4, fat: 8, category: "snack", region: "Pan India" },
+  { name: "Mutton Keema (1 bowl)", cal: 320, protein: 24, carbs: 6, fat: 22, category: "lunch", region: "North India" },
+  { name: "Egg Bhurji (2 eggs)", cal: 200, protein: 14, carbs: 4, fat: 14, category: "breakfast", region: "Pan India" },
+  { name: "Greek Yogurt (1 cup)", cal: 130, protein: 12, carbs: 8, fat: 5, category: "snack", region: "Pan India" },
+  { name: "Peanut Butter Toast (1 pc)", cal: 240, protein: 8, carbs: 24, fat: 14, category: "breakfast", region: "Pan India" },
+  { name: "Whey Protein Shake", cal: 120, protein: 24, carbs: 3, fat: 1, category: "drink", region: "Pan India" },
+  // Common additions
+  { name: "Ghee (1 tbsp)", cal: 120, protein: 0, carbs: 0, fat: 14, category: "snack", region: "Pan India" },
+  { name: "Pickle / Achar (1 tbsp)", cal: 30, protein: 0, carbs: 4, fat: 2, category: "snack", region: "Pan India" },
+  { name: "Papad Roasted (1 pc)", cal: 40, protein: 2, carbs: 6, fat: 1, category: "snack", region: "Pan India" },
+  { name: "Papad Fried (1 pc)", cal: 80, protein: 2, carbs: 6, fat: 5, category: "snack", region: "Pan India" },
+  { name: "Raita (1 bowl)", cal: 90, protein: 4, carbs: 8, fat: 4, category: "lunch", region: "Pan India" },
+  { name: "Green Salad (1 bowl)", cal: 35, protein: 2, carbs: 6, fat: 0.5, category: "lunch", region: "Pan India" },
+  // More fruits
+  { name: "Grapes (1 cup)", cal: 104, protein: 1, carbs: 27, fat: 0.2, category: "fruit", region: "Pan India" },
+  { name: "Pineapple (1 cup)", cal: 82, protein: 1, carbs: 22, fat: 0.2, category: "fruit", region: "Pan India" },
+  { name: "Jackfruit (1 cup)", cal: 155, protein: 3, carbs: 38, fat: 1, category: "fruit", region: "South India" },
+  { name: "Litchi (10 pcs)", cal: 66, protein: 1, carbs: 17, fat: 0.4, category: "fruit", region: "Pan India" },
+  { name: "Jamun (1 cup)", cal: 62, protein: 1, carbs: 14, fat: 0.3, category: "fruit", region: "Pan India" },
+  { name: "Sitaphal / Custard Apple (1 pc)", cal: 136, protein: 2, carbs: 34, fat: 0.6, category: "fruit", region: "Pan India" },
+  { name: "Amla / Indian Gooseberry (2 pcs)", cal: 30, protein: 0.5, carbs: 7, fat: 0.1, category: "fruit", region: "Pan India" },
+  // More drinks
+  { name: "Badam Milk (1 glass)", cal: 200, protein: 7, carbs: 26, fat: 8, category: "drink", region: "Pan India" },
+  { name: "Haldi Doodh / Turmeric Milk", cal: 150, protein: 5, carbs: 18, fat: 6, category: "drink", region: "Pan India" },
+  { name: "Aam Panna (1 glass)", cal: 90, protein: 0, carbs: 22, fat: 0, category: "drink", region: "North India" },
+  { name: "Rooh Afza (1 glass)", cal: 130, protein: 0, carbs: 32, fat: 0, category: "drink", region: "Pan India" },
+  { name: "Kanji (1 glass)", cal: 40, protein: 1, carbs: 8, fat: 0, category: "drink", region: "North India" },
+  { name: "Solkadhi (1 glass)", cal: 60, protein: 1, carbs: 6, fat: 3, category: "drink", region: "Maharashtra" },
+  { name: "Black Coffee (1 cup)", cal: 5, protein: 0, carbs: 1, fat: 0, category: "drink", region: "Pan India" },
+  { name: "Green Tea (1 cup)", cal: 2, protein: 0, carbs: 0, fat: 0, category: "drink", region: "Pan India" },
+  // More sweets
+  { name: "Rasmalai (2 pcs)", cal: 270, protein: 8, carbs: 34, fat: 12, category: "sweet", region: "Bengal" },
+  { name: "Kaju Katli (2 pcs)", cal: 200, protein: 4, carbs: 24, fat: 10, category: "sweet", region: "Pan India" },
+  { name: "Peda (2 pcs)", cal: 160, protein: 4, carbs: 22, fat: 6, category: "sweet", region: "Pan India" },
+  { name: "Malpua (2 pcs)", cal: 300, protein: 5, carbs: 40, fat: 14, category: "sweet", region: "Bihar/Bengal" },
+  { name: "Phirni (1 bowl)", cal: 200, protein: 4, carbs: 32, fat: 6, category: "sweet", region: "North India" },
+  { name: "Kulfi (1 stick)", cal: 160, protein: 4, carbs: 20, fat: 7, category: "sweet", region: "Pan India" },
+  { name: "Imarti (1 pc)", cal: 150, protein: 2, carbs: 24, fat: 6, category: "sweet", region: "North India" },
 ];
 
 const WORKOUTS_DB = [
@@ -124,30 +247,62 @@ const LEADERBOARD = [
 const MOTIV = ["\u{1F525} Your only competition is yesterday's you","\u{1F4AA} Sweat now, flex later","\u26A1 1% better every single day","\u{1F3C6} Champions train, losers complain","\u{1F48E} Pain today = strength tomorrow","\u2705 Don't stop when tired. Stop when done","\u{1F680} Small steps still move forward"];
 
 const REELS = [
-  {id:1,title:"5-Min Ab Burner",trainer:"Coach Ravi",views:"24K",likes:"2.4K",gradient:"linear-gradient(135deg,#FF6B35,#E94560)",anim:"crunch",exercises:["Crunches x20","Plank 30s","Leg Raises x15","Twists x20"],duration:"5:00"},
-  {id:2,title:"No-Equipment HIIT",trainer:"Priya Fitness",views:"18K",likes:"1.8K",gradient:"linear-gradient(135deg,#667eea,#764ba2)",anim:"burpee",exercises:["Burpees x10","Jump Squats x15","High Knees 30s","Climbers x20"],duration:"7:00"},
-  {id:3,title:"Morning Yoga Flow",trainer:"Zen Studios",views:"31K",likes:"3.1K",gradient:"linear-gradient(135deg,#11998e,#38ef7d)",anim:"yoga",exercises:["Sun Salutation x5","Warrior II 30s","Tree Pose 20s","Savasana 60s"],duration:"10:00"},
-  {id:4,title:"Upper Body Blast",trainer:"FitWithArjun",views:"12K",likes:"1.2K",gradient:"linear-gradient(135deg,#fc5c7d,#6a82fb)",anim:"pu",exercises:["Push-Ups x15","Diamond x10","Dips x12","Shoulder Taps x20"],duration:"8:00"},
-  {id:5,title:"Leg Day Home",trainer:"StrongLegs Co",views:"9K",likes:"900",gradient:"linear-gradient(135deg,#f093fb,#f5576c)",anim:"squat",exercises:["Squats x20","Lunges x16","Bridges x15","Wall Sit 45s"],duration:"12:00"},
-  {id:6,title:"Full Body Burn",trainer:"FitStreak",views:"42K",likes:"4.5K",gradient:"linear-gradient(135deg,#FA8BFF,#2BD2FF 50%,#2BFF88)",anim:"jj",exercises:["Jumping Jacks x30","Squats x20","Push-Ups x15","Burpees x10"],duration:"15:00"},
+  {id:1,title:"5-Min Ab Burner",trainer:"MadFit",views:"24M",likes:"580K",gradient:"linear-gradient(135deg,#FF6B35,#E94560)",exercises:["Crunches x20","Plank 30s","Leg Raises x15","Twists x20"],duration:"5:00"},
+  {id:2,title:"No-Equipment HIIT",trainer:"growwithjo",views:"18M",likes:"320K",gradient:"linear-gradient(135deg,#667eea,#764ba2)",exercises:["Burpees x10","Jump Squats x15","High Knees 30s","Climbers x20"],duration:"15:00"},
+  {id:3,title:"Morning Yoga Flow",trainer:"Yoga With Adriene",views:"31M",likes:"410K",gradient:"linear-gradient(135deg,#11998e,#38ef7d)",exercises:["Sun Salutation x5","Warrior II 30s","Tree Pose 20s","Savasana 60s"],duration:"10:00"},
+  {id:4,title:"Upper Body No Equipment",trainer:"THENX",views:"12M",likes:"290K",gradient:"linear-gradient(135deg,#fc5c7d,#6a82fb)",exercises:["Push-Ups x15","Diamond x10","Dips x12","Shoulder Taps x20"],duration:"8:00"},
+  {id:5,title:"Leg Day at Home",trainer:"Pamela Reif",views:"19M",likes:"340K",gradient:"linear-gradient(135deg,#f093fb,#f5576c)",exercises:["Squats x20","Lunges x16","Bridges x15","Wall Sit 45s"],duration:"10:00"},
+  {id:6,title:"Full Body Fat Burn",trainer:"JERICH0",views:"42M",likes:"890K",gradient:"linear-gradient(135deg,#FA8BFF,#2BD2FF 50%,#2BFF88)",exercises:["Jumping Jacks x30","Squats x20","Push-Ups x15","Burpees x10"],duration:"20:00"},
 ];
 
-function ExAnim({type,size=200}){
+function ExAnim({type,size=200,showLabel=false,color="auto"}){
   const[f,setF]=useState(0);
-  useEffect(()=>{const iv=setInterval(()=>setF(x=>(x+1)%60),50);return()=>clearInterval(iv)},[]);
-  const p=f/60,b=Math.sin(p*Math.PI*2),ab=Math.abs(b),s=size,cx=s/2,cy=s/2,hr=s*.06,bt=cy-s*.18,bb=cy+s*.05;
+  const uid=useRef(Math.random().toString(36).slice(2,7)).current;
+  useEffect(()=>{const iv=setInterval(()=>setF(x=>(x+1)%120),33);return()=>clearInterval(iv)},[]);
+  const p=f/120,b=Math.sin(p*Math.PI*2),ab=Math.abs(b),s=size,cx=s/2,cy=s/2;
+  const colors={jj:"#FF6B35",burpee:"#E94560",squat:"#667eea",mc:"#38ef7d",pu:"#fc5c7d",plank:"#f093fb",yoga:"#11998e",hk:"#FF6B35",crunch:"#E94560",lunge:"#667eea",bridge:"#38ef7d"};
+  const c=color==="auto"?(colors[type]||"#FF6B35"):color;
+  const c2=c+"40";
+  // Body dimensions
+  const hr=s*.065,bw=s*.035;
+  const headY=cy-s*.2,shoulderY=headY+hr+s*.04,hipY=cy+s*.06,kneeOff=s*.16,footOff=s*.28;
+  
+  function limb(x1,y1,x2,y2,w=bw){return <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={c} strokeWidth={w} strokeLinecap="round"/>}
+  function joint(x,y,r=bw*.6){return <circle cx={x} cy={y} r={r} fill={c}/>}
+  
   const figs={
-    jj:()=>{const as=ab*s*.22,ls=ab*s*.15,jh=ab*s*.06;return <g transform={`translate(0,${-jh})`}><circle cx={cx} cy={bt-hr-4} r={hr} fill="#FF6B35"/><line x1={cx} y1={bt} x2={cx} y2={bb} stroke="#FF6B35" strokeWidth={3} strokeLinecap="round"/><line x1={cx} y1={bt+10} x2={cx-as} y2={bt-as*.8} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bt+10} x2={cx+as} y2={bt-as*.8} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb} x2={cx-ls} y2={bb+s*.2} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb} x2={cx+ls} y2={bb+s*.2} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    burpee:()=>{const ph=p<.33?0:p<.66?1:2;if(ph===0){const t=p/.33,sq=t*s*.1;return <g><circle cx={cx} cy={bt-hr-4+sq} r={hr} fill="#E94560"/><line x1={cx} y1={bt+sq} x2={cx} y2={bb+sq*.5} stroke="#E94560" strokeWidth={3} strokeLinecap="round"/><line x1={cx} y1={bb+sq*.5} x2={cx-12} y2={bb+s*.18} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb+sq*.5} x2={cx+12} y2={bb+s*.18} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/></g>}else if(ph===1)return <g><circle cx={cx-s*.15} cy={cy-2} r={hr} fill="#E94560"/><line x1={cx-s*.12} y1={cy} x2={cx+s*.18} y2={cy} stroke="#E94560" strokeWidth={3} strokeLinecap="round"/><line x1={cx+s*.18} y1={cy} x2={cx+s*.18} y2={cy+s*.15} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+s*.14} y1={cy} x2={cx+s*.14} y2={cy+s*.15} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/></g>;const jh=Math.sin((p-.66)/.34*Math.PI)*s*.12;return <g transform={`translate(0,${-jh})`}><circle cx={cx} cy={bt-hr-8} r={hr} fill="#E94560"/><line x1={cx} y1={bt-4} x2={cx} y2={bb} stroke="#E94560" strokeWidth={3} strokeLinecap="round"/><line x1={cx} y1={bt+6} x2={cx-18} y2={bt-16} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bt+6} x2={cx+18} y2={bt-16} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb} x2={cx-10} y2={bb+s*.18} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb} x2={cx+10} y2={bb+s*.18} stroke="#E94560" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    squat:()=>{const d=ab*s*.1;return <g><circle cx={cx} cy={bt-hr-4+d} r={hr} fill="#667eea"/><line x1={cx} y1={bt+d} x2={cx} y2={bb+d*.6} stroke="#667eea" strokeWidth={3} strokeLinecap="round"/><line x1={cx} y1={bt+8+d} x2={cx-20} y2={bt+13+d} stroke="#667eea" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bt+8+d} x2={cx+20} y2={bt+13+d} stroke="#667eea" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb+d*.6} x2={cx-14} y2={bb+s*.19} stroke="#667eea" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb+d*.6} x2={cx+14} y2={bb+s*.19} stroke="#667eea" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    mc:()=>{const sw=b>0,kd=ab*s*.14;return <g><circle cx={cx-s*.15} cy={cy-6} r={hr} fill="#38ef7d"/><line x1={cx-s*.12} y1={cy-2} x2={cx+s*.12} y2={cy+6} stroke="#38ef7d" strokeWidth={3} strokeLinecap="round"/><line x1={cx-s*.08} y1={cy} x2={cx-s*.2} y2={cy+s*.1} stroke="#38ef7d" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+s*.12} y1={cy+6} x2={cx+(sw?0:s*.12)} y2={cy+6+(sw?s*.16:kd)} stroke="#38ef7d" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+s*.12} y1={cy+6} x2={cx+(!sw?0:s*.12)} y2={cy+6+(!sw?s*.16:kd)} stroke="#38ef7d" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    pu:()=>{const d=ab*s*.05;return <g><circle cx={cx-s*.18} cy={cy-4+d} r={hr} fill="#fc5c7d"/><line x1={cx-s*.14} y1={cy+d} x2={cx+s*.14} y2={cy+d+2} stroke="#fc5c7d" strokeWidth={3} strokeLinecap="round"/><line x1={cx-s*.08} y1={cy+d-2} x2={cx-s*.14} y2={cy+s*.12+d} stroke="#fc5c7d" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+s*.08} y1={cy+d+1} x2={cx+s*.14} y2={cy+s*.12+d} stroke="#fc5c7d" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+s*.14} y1={cy+d+2} x2={cx+s*.22} y2={cy+d+s*.12} stroke="#fc5c7d" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    plank:()=>{const sh=Math.sin(f*.5);return <g transform={`translate(0,${sh})`}><circle cx={cx-s*.18} cy={cy-2} r={hr} fill="#f093fb"/><line x1={cx-s*.14} y1={cy} x2={cx+s*.18} y2={cy+2} stroke="#f093fb" strokeWidth={3} strokeLinecap="round"/><line x1={cx-s*.08} y1={cy-1} x2={cx-s*.12} y2={cy+s*.1} stroke="#f093fb" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+s*.18} y1={cy+2} x2={cx+s*.18} y2={cy+s*.1} stroke="#f093fb" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    yoga:()=>{const sw=Math.sin(p*Math.PI*2)*5;return <g><circle cx={cx+sw*.3} cy={bt-hr-8} r={hr} fill="#11998e"/><line x1={cx+sw*.2} y1={bt-4} x2={cx} y2={bb} stroke="#11998e" strokeWidth={3} strokeLinecap="round"/><line x1={cx+sw*.2} y1={bt+6} x2={cx-22+sw} y2={bt-6} stroke="#11998e" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+sw*.2} y1={bt+6} x2={cx+22+sw} y2={bt-6} stroke="#11998e" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb} x2={cx-16} y2={bb+s*.18} stroke="#11998e" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb} x2={cx+16} y2={bb+s*.18} stroke="#11998e" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    hk:()=>{const lu=b>0,kh=ab*s*.12;return <g><circle cx={cx} cy={bt-hr-6-kh*.2} r={hr} fill="#FF6B35"/><line x1={cx} y1={bt-2-kh*.2} x2={cx} y2={bb} stroke="#FF6B35" strokeWidth={3} strokeLinecap="round"/><line x1={cx} y1={bb} x2={lu?cx-4:cx-10} y2={lu?bb-kh:bb+s*.18} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bb} x2={!lu?cx+4:cx+10} y2={!lu?bb-kh:bb+s*.18} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bt+6} x2={cx-16} y2={bt+12+(lu?-8:8)} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx} y1={bt+6} x2={cx+16} y2={bt+12+(!lu?-8:8)} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/></g>},
-    crunch:()=>{const a=ab*20;return <g><circle cx={cx-10} cy={cy-a*.3} r={hr} fill="#FF6B35"/><line x1={cx-6} y1={cy-a*.2+6} x2={cx+5} y2={cy+14} stroke="#FF6B35" strokeWidth={3} strokeLinecap="round"/><line x1={cx+5} y1={cy+14} x2={cx+20} y2={cy+s*.12} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/><line x1={cx+5} y1={cy+14} x2={cx-10} y2={cy+s*.12} stroke="#FF6B35" strokeWidth={2.5} strokeLinecap="round"/></g>},
+    jj:()=>{const as=ab*s*.24,ls=ab*s*.17,jh=ab*s*.07;const hy=headY-jh;
+      return <g><circle cx={cx} cy={hy} r={hr} fill={c}/>{joint(cx,hy+hr+2)}{limb(cx,hy+hr+2,cx,hipY-jh)}{limb(cx,shoulderY-jh,cx-as,shoulderY-as*.7-jh)}{limb(cx,shoulderY-jh,cx+as,shoulderY-as*.7-jh)}{limb(cx,hipY-jh,cx-ls,hipY+footOff-jh)}{limb(cx,hipY-jh,cx+ls,hipY+footOff-jh)}{joint(cx-as,shoulderY-as*.7-jh,3)}{joint(cx+as,shoulderY-as*.7-jh,3)}{joint(cx-ls,hipY+footOff-jh,3)}{joint(cx+ls,hipY+footOff-jh,3)}</g>},
+    burpee:()=>{const ph=p<.3?0:p<.55?1:p<.8?2:3;
+      if(ph===0){const t=p/.3,sq=t*s*.12;return <g><circle cx={cx} cy={headY+sq} r={hr} fill={c}/>{limb(cx,headY+sq+hr,cx,hipY+sq*.5)}{limb(cx,shoulderY+sq,cx-16,shoulderY+sq+12)}{limb(cx,shoulderY+sq,cx+16,shoulderY+sq+12)}{limb(cx,hipY+sq*.5,cx-14,hipY+footOff)}{limb(cx,hipY+sq*.5,cx+14,hipY+footOff)}</g>}
+      if(ph===1){const pp=(p-.3)/.25;const pushD=Math.sin(pp*Math.PI)*s*.04;return <g><circle cx={cx-s*.17} cy={cy-2+pushD} r={hr} fill={c}/>{limb(cx-s*.14,cy+pushD,cx+s*.16,cy+2+pushD)}{limb(cx-s*.07,cy-2+pushD,cx-s*.13,cy+s*.1+pushD)}{limb(cx+s*.07,cy+pushD,cx+s*.13,cy+s*.1+pushD)}{limb(cx+s*.16,cy+2+pushD,cx+s*.24,cy+pushD+s*.1)}</g>}
+      if(ph===2){const t=(p-.55)/.25,sq=(1-t)*s*.1;return <g><circle cx={cx} cy={headY+sq} r={hr} fill={c}/>{limb(cx,headY+sq+hr,cx,hipY+sq*.4)}{limb(cx,shoulderY+sq,cx-14,shoulderY+sq+10)}{limb(cx,shoulderY+sq,cx+14,shoulderY+sq+10)}{limb(cx,hipY+sq*.4,cx-14,hipY+footOff)}{limb(cx,hipY+sq*.4,cx+14,hipY+footOff)}</g>}
+      const jh=Math.sin((p-.8)/.2*Math.PI)*s*.14;return <g><circle cx={cx} cy={headY-jh} r={hr} fill={c}/>{limb(cx,headY-jh+hr,cx,hipY-jh)}{limb(cx,shoulderY-jh,cx-20,shoulderY-18-jh)}{limb(cx,shoulderY-jh,cx+20,shoulderY-18-jh)}{limb(cx,hipY-jh,cx-10,hipY+footOff-jh)}{limb(cx,hipY-jh,cx+10,hipY+footOff-jh)}</g>},
+    squat:()=>{const d=ab*s*.12;return <g><circle cx={cx} cy={headY+d} r={hr} fill={c}/>{limb(cx,headY+d+hr,cx,hipY+d*.6)}{limb(cx,shoulderY+d,cx-20,shoulderY+d+8)}{limb(cx,shoulderY+d,cx+20,shoulderY+d+8)}{limb(cx,hipY+d*.6,cx-16,hipY+footOff)}{limb(cx,hipY+d*.6,cx+16,hipY+footOff)}{joint(cx,hipY+d*.6,4)}{joint(cx-16,hipY+footOff,3)}{joint(cx+16,hipY+footOff,3)}</g>},
+    mc:()=>{const sw=b>0,kd=ab*s*.16;return <g><circle cx={cx-s*.17} cy={cy-8} r={hr} fill={c}/>{limb(cx-s*.13,cy-4,cx+s*.14,cy+4)}{limb(cx-s*.07,cy-2,cx-s*.18,cy+s*.08)}{limb(cx+s*.14,cy+4,cx+(sw?-2:s*.14),cy+4+(sw?s*.18:kd))}{limb(cx+s*.14,cy+4,cx+(!sw?-2:s*.14),cy+4+(!sw?s*.18:kd))}{joint(cx+(sw?-2:s*.14),cy+4+(sw?s*.18:kd),3)}{joint(cx+(!sw?-2:s*.14),cy+4+(!sw?s*.18:kd),3)}</g>},
+    pu:()=>{const d=ab*s*.06;return <g><circle cx={cx-s*.19} cy={cy-5+d} r={hr} fill={c}/>{limb(cx-s*.15,cy+d-1,cx+s*.16,cy+d+2)}{limb(cx-s*.08,cy+d-3,cx-s*.15,cy+s*.11+d)}{limb(cx+s*.09,cy+d,cx+s*.15,cy+s*.11+d)}{limb(cx+s*.16,cy+d+2,cx+s*.24,cy+d+s*.1)}{joint(cx-s*.15,cy+s*.11+d,3)}{joint(cx+s*.15,cy+s*.11+d,3)}</g>},
+    plank:()=>{const sh=Math.sin(f*.3)*1.5;return <g transform={`translate(0,${sh})`}><circle cx={cx-s*.19} cy={cy-3} r={hr} fill={c}/>{limb(cx-s*.15,cy,cx+s*.2,cy+2)}{limb(cx-s*.09,cy-2,cx-s*.13,cy+s*.09)}{limb(cx+s*.2,cy+2,cx+s*.2,cy+s*.09)}{joint(cx-s*.13,cy+s*.09,3)}{joint(cx+s*.2,cy+s*.09,3)}</g>},
+    yoga:()=>{const sw=Math.sin(p*Math.PI*2)*6;return <g><circle cx={cx+sw*.3} cy={headY-6} r={hr} fill={c}/>{limb(cx+sw*.2,headY+hr-4,cx,hipY)}{limb(cx+sw*.2,shoulderY-2,cx-24+sw,shoulderY-14)}{limb(cx+sw*.2,shoulderY-2,cx+24+sw,shoulderY-14)}{limb(cx,hipY,cx-18,hipY+footOff)}{limb(cx,hipY,cx+18,hipY+footOff)}{joint(cx-24+sw,shoulderY-14,3)}{joint(cx+24+sw,shoulderY-14,3)}</g>},
+    hk:()=>{const lu=b>0,kh=ab*s*.14;return <g><circle cx={cx} cy={headY-kh*.2} r={hr} fill={c}/>{limb(cx,headY-kh*.2+hr,cx,hipY)}{limb(cx,hipY,lu?cx-5:cx-12,lu?hipY-kh+10:hipY+footOff)}{limb(cx,hipY,!lu?cx+5:cx+12,!lu?hipY-kh+10:hipY+footOff)}{limb(cx,shoulderY,cx-18,shoulderY+(lu?-10:10))}{limb(cx,shoulderY,cx+18,shoulderY+(!lu?-10:10))}</g>},
+    crunch:()=>{const a=ab*22;return <g><circle cx={cx-12} cy={cy-a*.3} r={hr} fill={c}/>{limb(cx-8,cy-a*.2+6,cx+6,cy+16)}{limb(cx-8,cy-a*.2+10,cx-24,cy-a*.15)}{limb(cx-8,cy-a*.2+10,cx+8,cy-a*.15)}{limb(cx+6,cy+16,cx+22,cy+s*.11)}{limb(cx+6,cy+16,cx-12,cy+s*.11)}</g>},
+    lunge:()=>{const d=ab*s*.1;return <g><circle cx={cx} cy={headY+d*.5} r={hr} fill={c}/>{limb(cx,headY+d*.5+hr,cx,hipY+d*.3)}{limb(cx,shoulderY+d*.3,cx-16,shoulderY+d*.3+6)}{limb(cx,shoulderY+d*.3,cx+16,shoulderY+d*.3+6)}{limb(cx,hipY+d*.3,cx-20,hipY+footOff)}{limb(cx,hipY+d*.3,cx+14,hipY+footOff)}{joint(cx-20,hipY+footOff,3)}{joint(cx+14,hipY+footOff,3)}</g>},
+    bridge:()=>{const lift=ab*s*.08;return <g><circle cx={cx-s*.15} cy={cy+s*.06-lift*.3} r={hr} fill={c}/>{limb(cx-s*.1,cy+s*.06-lift*.2,cx+s*.05,cy+s*.04-lift)}{limb(cx+s*.05,cy+s*.04-lift,cx+s*.18,cy+s*.12)}{limb(cx+s*.05,cy+s*.04-lift,cx-s*.08,cy+s*.12)}{joint(cx+s*.18,cy+s*.12,3)}{joint(cx-s*.08,cy+s*.12,3)}</g>},
   };
-  return <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} style={{display:"block"}}><defs><radialGradient id="gbg"><stop offset="0%" stopColor="#FF6B3510"/><stop offset="100%" stopColor="transparent"/></radialGradient></defs><circle cx={cx} cy={cy} r={s*.38} fill="url(#gbg)"/>{(figs[type]||figs.jj)()}</svg>
+  const render=figs[type]||figs.jj;
+  const phase=Math.floor(p*4)%4;
+  const phaseDot=(i)=>({cx:cx-12+i*8,cy:hipY+footOff+16,r:i===phase?3:2,fill:i===phase?c:"#ffffff30"});
+  
+  return <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} style={{display:"block"}}>
+    <defs>
+      <radialGradient id={`g${uid}`}><stop offset="0%" stopColor={c2}/><stop offset="100%" stopColor="transparent"/></radialGradient>
+      <filter id={`b${uid}`}><feGaussianBlur stdDeviation="3"/></filter>
+    </defs>
+    <circle cx={cx} cy={cy} r={s*.4} fill={`url(#g${uid})`}/>
+    <g filter={`url(#b${uid})`} opacity={0.3}>{render()}</g>
+    {render()}
+    <circle {...phaseDot(0)}/><circle {...phaseDot(1)}/><circle {...phaseDot(2)}/><circle {...phaseDot(3)}/>
+    {showLabel&&<text x={cx} y={s-8} fill="#ffffff80" fontSize={10} textAnchor="middle" fontFamily="Arial">{type.toUpperCase()}</text>}
+  </svg>
 }
 
 const load=async()=>{try{const r=await window.storage.get("fs-v4");return r?JSON.parse(r.value):null}catch{return null}};
@@ -177,6 +332,7 @@ export default function App(){
   const[sli,setSli]=useState("");
   const[os,setOs]=useState(0);
   const[od,setOd]=useState({name:"",goal:"",level:"",duration:15});
+  const[reelExIdx,setReelExIdx]=useState(0);
   const[camOn,setCamOn]=useState(false);
   const[scanning,setScanning]=useState(false);
   const[scanResult,setScanResult]=useState(null);
@@ -218,36 +374,38 @@ export default function App(){
   const capturePhoto=()=>{
     if(!videoRef.current||!canvasRef.current)return null;
     const v=videoRef.current;const c=canvasRef.current;
-    c.width=v.videoWidth||640;c.height=v.videoHeight||480;
+    // Compress: resize to max 480px width to save API tokens
+    const maxW=480;const scale=Math.min(maxW/(v.videoWidth||640),1);
+    c.width=Math.round((v.videoWidth||640)*scale);c.height=Math.round((v.videoHeight||480)*scale);
     const ctx=c.getContext("2d");ctx.drawImage(v,0,0,c.width,c.height);
-    return c.toDataURL("image/jpeg",0.8);
+    return c.toDataURL("image/jpeg",0.6);
   };
 
+  const getScanCount=()=>{try{const d=JSON.parse(localStorage.getItem("fs-scan-limit")||"{}");if(d.date===new Date().toDateString())return d.count||0;return 0}catch{return 0}};
+  const incScanCount=()=>{try{const today=new Date().toDateString();const d=JSON.parse(localStorage.getItem("fs-scan-limit")||"{}");const count=d.date===today?(d.count||0)+1:1;localStorage.setItem("fs-scan-limit",JSON.stringify({date:today,count}))}catch{}};
+  const MAX_SCANS_PER_DAY=10;
+
   const scanFood=async()=>{
+    const used=getScanCount();
+    if(used>=MAX_SCANS_PER_DAY){setScanError(`Daily scan limit reached (${MAX_SCANS_PER_DAY}/day). Add food manually from the 200+ database below!`);return}
     const imgData=capturePhoto();
     if(!imgData){setScanError("Could not capture photo. Try again.");return}
     setCapturedImg(imgData);stopCam();setScanning(true);setScanError(null);
     try{
       const base64=imgData.split(",")[1];
-      const resp=await fetch("https://api.anthropic.com/v1/messages",{
+      const resp=await fetch("/api/scan-food",{
         method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          model:"claude-sonnet-4-20250514",max_tokens:1000,
-          messages:[{role:"user",content:[
-            {type:"image",source:{type:"base64",media_type:"image/jpeg",data:base64}},
-            {type:"text",text:`Identify every food item visible in this image. For EACH item, estimate its nutritional content per typical serving as shown. Return ONLY a JSON array (no markdown, no backticks, no explanation) where each element has these exact keys: "name" (string, include portion like "1 plate" or "1 cup"), "cal" (number, kcal), "protein" (number, grams), "carbs" (number, grams), "fat" (number, grams), "category" (one of: "breakfast","lunch","snack","drink","sweet","fruit"), "region" (string, cuisine origin e.g. "North India","South India","Pan India","Nepal","Sri Lanka","Italian","Chinese","Japanese","American" etc). If you see a common Indian/South Asian dish, use its local name. If no food is visible, return: [{"name":"No food detected","cal":0,"protein":0,"carbs":0,"fat":0,"category":"snack","region":"N/A"}]. Return ONLY the JSON array.`}
-          ]}]
-        })
+        body:JSON.stringify({imageBase64:base64})
       });
       const data=await resp.json();
-      const text=data.content?.map(c=>c.text||"").join("")||"";
-      const clean=text.replace(/```json|```/g,"").trim();
-      const items=JSON.parse(clean);
+      if(data.error){setScanError(data.error);setScanning(false);return}
+      incScanCount();
+      const items=data.items||[];
       if(Array.isArray(items)&&items.length>0){
         setScanResult(items.filter(i=>i.cal>0));
         if(items[0].name==="No food detected")setScanError("No food detected in the image. Try pointing the camera at food.")
       }else{setScanError("Could not identify food. Try a clearer photo.")}
-    }catch(e){console.error(e);setScanError("AI analysis failed. Try again or add food manually.")}
+    }catch(e){console.error(e);setScanError("Scan failed. Check internet and try again.")}
     setScanning(false)
   };
 
@@ -299,6 +457,7 @@ export default function App(){
         <div><span style={{fontSize:22,fontWeight:800,color:"#667eea"}}>{ex.rest}s</span><p style={{fontSize:11,color:"#888"}}>Rest</p></div>
       </div>
       <div style={{background:"#ffffff08",borderRadius:10,padding:10}}><p style={{fontSize:12,color:"#ccc"}}>{"\u{1F4A1}"} {ex.tip}</p></div>
+        <a href={`https://m.youtube.com/results?search_query=how+to+do+${encodeURIComponent(ex.name)}+exercise+proper+form`} target="_blank" rel="noopener noreferrer" style={{display:"block",marginTop:10,background:"#FF000020",border:"1px solid #FF000040",borderRadius:10,padding:"8px 14px",textAlign:"center",textDecoration:"none",color:"#ff4444",fontSize:13,fontWeight:600}}>{"\u25B6"} Watch Exercise Demo on YouTube</a>
     </div>
     <div style={{textAlign:"center",marginBottom:20}}>{tr?<div><p style={{fontSize:13,color:"#888",marginBottom:6}}>Rest Timer</p><span style={{fontSize:44,fontWeight:900,color:"#FF6B35"}}>{tm}s</span></div>:<button onClick={()=>{setTm(ex.rest);setTr(true)}} style={{background:"#1A1A2E",border:"1px solid #FF6B35",borderRadius:12,padding:"9px 22px",color:"#FF6B35",fontSize:13,fontWeight:600,cursor:"pointer"}}>Start Rest Timer ({ex.rest}s)</button>}</div>
     <div style={{display:"flex",gap:10}}>{ei>0&&<button onClick={()=>setEi(i=>i-1)} style={{...BS,flex:1}}>← Previous</button>}{ei<wa.exercises.length-1?<button onClick={()=>{setEi(i=>i+1);setTr(false)}} style={{...BP,flex:1}}>Next Exercise →</button>:<button onClick={()=>cw(wa)} style={{...BP,flex:1,background:"linear-gradient(135deg,#38ef7d,#11998e)"}}>Complete {"\u2705"}</button>}</div>
@@ -315,27 +474,79 @@ export default function App(){
       <div style={{display:"flex",gap:4,marginBottom:28}}>{[1,2,3,4,5,6].map(i=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i<=fts?"#FF6B35":"#1A1A2E"}}/>)}</div>
       <p style={{fontSize:13,color:"#FF6B35",fontWeight:600,marginBottom:6}}>Step {fts}/6</p>
       <h2 style={{fontSize:22,fontWeight:800,color:"#fff",marginBottom:20}}>{step.l}</h2>
-      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:28}}><input type="number" value={ftd[step.k]||""} onChange={e=>setFtd(d=>({...d,[step.k]:Number(e.target.value)}))} placeholder={`e.g. ${step.p}`} style={{...IS,flex:1}} autoFocus/><span style={{color:"#888",fontSize:13,minWidth:36}}>{step.un}</span></div>
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:28}}><input type="text" inputMode="numeric" pattern="[0-9]*" value={ftd[step.k]||""} onChange={e=>setFtd(d=>({...d,[step.k]:Number(e.target.value)}))} placeholder={`e.g. ${step.p}`} style={{...IS,flex:1}} autoFocus/><span style={{color:"#888",fontSize:13,minWidth:36}}>{step.un}</span></div>
       <button disabled={!ftd[step.k]} onClick={()=>setFts(s=>s+1)} style={{...BP,width:"100%",opacity:ftd[step.k]?1:.4}}>{fts===6?"See My Fitness Age \u{1F9EC}":"Next →"}</button>
     </div>
   </div>};
 
-  // ── EXPLORE REELS ──
-  const Explore=()=>{const r=REELS[ri];
+  // ── EXPLORE REELS — ANIMATED FOLLOW ALONG ──
+  const Explore=()=>{const r=REELS[ri];const anims=["jj","burpee","squat","mc","pu","plank","yoga","hk","crunch","lunge"];const reelAnim=anims[ri%anims.length];const currentEx=r.exercises[reelExIdx%r.exercises.length];
   return <div style={{height:"100vh",position:"relative",overflow:"hidden"}}><div style={{height:"100%",background:r.gradient,display:"flex",flexDirection:"column",justifyContent:"flex-end",padding:24,paddingBottom:100,position:"relative"}}>
+    {/* Header */}
     <div style={{position:"absolute",top:16,left:16,right:16,display:"flex",justifyContent:"space-between",alignItems:"center",zIndex:5}}><h3 style={{fontSize:16,fontWeight:800,color:"#fff"}}>Explore</h3><span style={{fontSize:12,color:"#ffffffaa"}}>{ri+1}/{REELS.length}</span></div>
     <div style={{position:"absolute",top:50,right:16,background:"#00000050",borderRadius:8,padding:"4px 10px",zIndex:5}}><span style={{color:"#fff",fontSize:12,fontWeight:600}}>{"\u23F1"} {r.duration}</span></div>
-    <div onClick={()=>setRp(p=>!p)} style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-60%)",textAlign:"center",cursor:"pointer",zIndex:3}}>
-      {rp?<div><ExAnim type={r.anim} size={220}/><p style={{color:"#ffffffcc",fontSize:13,marginTop:4}}>Tap to pause</p></div>:
-      <div><div style={{width:80,height:80,borderRadius:"50%",background:"#ffffff30",backdropFilter:"blur(10px)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 12px",border:"2px solid #ffffff50"}}><span style={{fontSize:36,marginLeft:4}}>{"\u25B6"}</span></div><p style={{color:"#ffffffbb",fontSize:13}}>Tap to play workout</p></div>}
+
+    {/* Main Content Area */}
+    <div style={{position:"absolute",top:"8%",left:0,right:0,display:"flex",flexDirection:"column",alignItems:"center",zIndex:3}}>
+      {rp ? (
+        <div style={{textAlign:"center",width:"90%",maxWidth:360}}>
+          {/* Large animated exercise demo */}
+          <div style={{background:"#00000030",borderRadius:20,padding:"16px 0",marginBottom:12,backdropFilter:"blur(8px)"}}>
+            <ExAnim type={anims[(ri+reelExIdx)%anims.length]} size={200} showLabel={false} />
+          </div>
+          {/* Current exercise indicator */}
+          <div style={{background:"#00000040",borderRadius:12,padding:12,marginBottom:10,backdropFilter:"blur(8px)"}}>
+            <p style={{fontSize:11,color:"#ffffffaa",textTransform:"uppercase",letterSpacing:1.5,marginBottom:4}}>Now Showing</p>
+            <p style={{fontSize:20,fontWeight:800,color:"#fff"}}>{currentEx}</p>
+          </div>
+          {/* Exercise list with active indicator */}
+          <div style={{textAlign:"left",padding:"0 8px"}}>
+            {r.exercises.map((ex,i) => (
+              <button key={i} onClick={()=>setReelExIdx(i)} style={{display:"flex",alignItems:"center",gap:8,marginBottom:6,width:"100%",background:i===reelExIdx%r.exercises.length?"#ffffff20":"transparent",borderRadius:8,padding:"6px 10px",border:"none",cursor:"pointer"}}>
+                <div style={{width:24,height:24,borderRadius:"50%",background:i===reelExIdx%r.exercises.length?"#fff":"#ffffff30",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                  <span style={{fontSize:11,fontWeight:700,color:i===reelExIdx%r.exercises.length?"#000":"#fff"}}>{i+1}</span>
+                </div>
+                <span style={{color:i===reelExIdx%r.exercises.length?"#fff":"#ffffffcc",fontSize:14,fontWeight:i===reelExIdx%r.exercises.length?700:500}}>{ex}</span>
+              </button>
+            ))}
+          </div>
+          <button onClick={()=>setRp(false)} style={{marginTop:12,background:"#ffffff15",border:"1px solid #ffffff30",borderRadius:10,padding:"8px 20px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer"}}>Stop Demo</button>
+        </div>
+      ) : (
+        <div style={{textAlign:"center",cursor:"pointer"}} onClick={()=>{setRp(true);setReelExIdx(0)}}>
+          {/* Preview mode with animation preview */}
+          <div style={{background:"#00000025",borderRadius:20,padding:20,marginBottom:12,backdropFilter:"blur(4px)",width:280,margin:"0 auto"}}>
+            <ExAnim type={anims[ri%anims.length]} size={180} showLabel={false} />
+          </div>
+          <div style={{display:"inline-flex",alignItems:"center",gap:8,background:"#ffffff25",borderRadius:50,padding:"10px 24px",backdropFilter:"blur(10px)",border:"1px solid #ffffff30"}}>
+            <span style={{fontSize:20}}>{"\u25B6"}</span>
+            <span style={{color:"#fff",fontSize:15,fontWeight:700}}>Follow Along</span>
+          </div>
+          <p style={{color:"#ffffffbb",fontSize:12,marginTop:8}}>Tap to see each exercise with proper form</p>
+        </div>
+      )}
     </div>
-    {rp&&<div style={{position:"absolute",top:80,left:16,zIndex:5}}>{r.exercises.map((ex,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:6,marginBottom:6,animation:`slideIn .3s ease ${i*.1}s both`}}><div style={{width:6,height:6,borderRadius:"50%",background:"#ffffff80"}}/><span style={{color:"#ffffffdd",fontSize:13,fontWeight:500}}>{ex}</span></div>)}</div>}
-    <div style={{position:"relative",zIndex:4}}><h2 style={{fontSize:22,fontWeight:900,color:"#fff",marginBottom:3}}>{r.title}</h2><p style={{fontSize:13,color:"#ffffffcc",marginBottom:10}}>@{r.trainer} · {r.views} views</p><div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:14}}>{r.exercises.map((ex,i)=><span key={i} style={{background:"#ffffff20",borderRadius:8,padding:"3px 8px",fontSize:11,color:"#fff"}}>{ex}</span>)}</div><button onClick={()=>setPop({type:"added",r})} style={{background:"#ffffff20",backdropFilter:"blur(10px)",border:"1px solid #ffffff30",borderRadius:12,padding:"9px 18px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer"}}>+ Add to Routine</button></div>
-    <div style={{position:"absolute",right:14,bottom:120,display:"flex",flexDirection:"column",gap:18,alignItems:"center",zIndex:5}}>{[["\u2764\uFE0F",r.likes],["\u{1F4AC}","189"],["\u{1F4E4}","Share"],["\u{1F516}","Save"]].map(([i,l])=><div key={i} style={{textAlign:"center",cursor:"pointer"}}><div style={{fontSize:22}}>{i}</div><span style={{fontSize:10,color:"#ffffffaa"}}>{l}</span></div>)}</div>
+
+    {/* Bottom Info */}
+    <div style={{position:"relative",zIndex:4}}>
+      <h2 style={{fontSize:22,fontWeight:900,color:"#fff",marginBottom:3}}>{r.title}</h2>
+      <p style={{fontSize:13,color:"#ffffffcc",marginBottom:10}}>@{r.trainer} · {r.views} views</p>
+      <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:14}}>{r.exercises.map((ex,i) => <span key={i} style={{background:"#ffffff20",borderRadius:8,padding:"3px 8px",fontSize:11,color:"#fff"}}>{ex}</span>)}</div>
+      <div style={{display:"flex",gap:8}}>
+        <button onClick={()=>setPop({type:"added",r})} style={{background:"#ffffff20",backdropFilter:"blur(10px)",border:"1px solid #ffffff30",borderRadius:12,padding:"9px 18px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer"}}>+ Add to Routine</button>
+        <button onClick={()=>{setWa(WORKOUTS_DB[ri%WORKOUTS_DB.length]);setEi(0);setTab("wo")}} style={{background:"#ffffff40",backdropFilter:"blur(10px)",border:"1px solid #ffffff40",borderRadius:12,padding:"9px 18px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>{"\u{1F4AA}"} Start Workout</button>
+      </div>
+    </div>
+
+    {/* Side actions */}
+    <div style={{position:"absolute",right:14,bottom:120,display:"flex",flexDirection:"column",gap:18,alignItems:"center",zIndex:5}}>
+      {[["\u2764\uFE0F",r.likes],["\u{1F4AC}","189"],["\u{1F4E4}","Share"],["\u{1F516}","Save"]].map(([i,l]) => <div key={i} style={{textAlign:"center",cursor:"pointer"}}><div style={{fontSize:22}}>{i}</div><span style={{fontSize:10,color:"#ffffffaa"}}>{l}</span></div>)}
+    </div>
   </div>
+  {/* Swipe navigation */}
   <div style={{position:"absolute",bottom:75,left:0,right:0,display:"flex",justifyContent:"center",gap:10,zIndex:6}}>
-    <button disabled={ri===0} onClick={()=>{setRi(i=>i-1);setRp(false)}} style={{...SB,opacity:ri===0?.3:1}}>{"\u2191"}</button>
-    <button disabled={ri===REELS.length-1} onClick={()=>{setRi(i=>i+1);setRp(false)}} style={{...SB,opacity:ri===REELS.length-1?.3:1}}>{"\u2193"}</button>
+    <button disabled={ri===0} onClick={()=>{setRi(i=>i-1);setRp(false);setReelExIdx(0)}} style={{...SB,opacity:ri===0?.3:1}}>{"\u2191"}</button>
+    <button disabled={ri===REELS.length-1} onClick={()=>{setRi(i=>i+1);setRp(false);setReelExIdx(0)}} style={{...SB,opacity:ri===REELS.length-1?.3:1}}>{"\u2193"}</button>
   </div></div>};
 
   // ── FOOD TRACKER WITH AI CAMERA SCANNER ──
@@ -355,7 +566,10 @@ export default function App(){
               <p style={{fontSize:11,color:"#888"}}>Point camera at food to scan calories</p>
             </div>
           </div>
-          {!camOn && !capturedImg && <button onClick={startCam} style={{background:"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:10,padding:"8px 16px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Scan {"\u{1F4F7}"}</button>}
+          {!camOn && !capturedImg && <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <button onClick={startCam} style={{background:"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:10,padding:"8px 16px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Scan {"\u{1F4F7}"}</button>
+            <span style={{fontSize:11,color:"#888"}}>{MAX_SCANS_PER_DAY - getScanCount()}/{MAX_SCANS_PER_DAY} scans left today</span>
+          </div>}
         </div>
 
         {/* Camera View */}
@@ -434,17 +648,17 @@ export default function App(){
     <div style={{display:"flex",gap:6,marginBottom:20}}>{[["walk","\u{1F6B6} Walk"],["run","\u{1F3C3} Run"],["sleep","\u{1F634} Sleep"]].map(([id,label])=><button key={id} onClick={()=>setAt(id)} style={{flex:1,background:at===id?(id==="walk"?"#38ef7d":id==="run"?"#FF6B35":"#667eea"):"#1A1A2E",border:"none",borderRadius:12,padding:"10px 4px",color:at===id?(id==="sleep"?"#fff":"#0A0A0F"):"#888",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>)}</div>
     {at==="walk"&&<div>
       <div style={{background:"linear-gradient(135deg,#11998e,#38ef7d)",borderRadius:20,padding:24,marginBottom:20,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F6B6}"}</div><p style={{fontSize:11,color:"#000000aa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Steps</p><div style={{fontSize:52,fontWeight:900,color:"#0A0A0F"}}>{(u.steps||0).toLocaleString()}</div><p style={{fontSize:14,color:"#0A0A0F99",marginBottom:12}}>Goal: 10,000</p><div style={{background:"#00000020",borderRadius:8,height:10,overflow:"hidden",maxWidth:260,margin:"0 auto"}}><div style={{width:`${Math.min(((u.steps||0)/1e4)*100,100)}%`,height:"100%",background:"#0A0A0F",borderRadius:8}}/></div><p style={{fontSize:12,color:"#0A0A0F88",marginTop:8}}>{"\u2248"} {((u.steps||0)*.000762).toFixed(1)} km · {"\u2248"} {Math.round((u.steps||0)*.04)} kcal</p></div>
-      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="number" value={si} onChange={e=>setSi(e.target.value)} placeholder="Steps" style={{...IS,flex:1}}/><button onClick={()=>{if(si>0){logAct("walk",si);setSi("")}}} disabled={!si||si<=0} style={{...BP,opacity:si>0?1:.4,padding:"12px 20px"}}>+ Add</button></div>
+      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="text" inputMode="numeric" pattern="[0-9]*" value={si} onChange={e=>setSi(e.target.value)} placeholder="Steps" style={{...IS,flex:1}}/><button onClick={()=>{if(si>0){logAct("walk",si);setSi("")}}} disabled={!si||si<=0} style={{...BP,opacity:si>0?1:.4,padding:"12px 20px"}}>+ Add</button></div>
       <div style={{display:"flex",flexWrap:"wrap",gap:6}}>{[1e3,2e3,5e3,8e3,1e4].map(v=><button key={v} onClick={()=>logAct("walk",v)} style={{background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"8px 14px",color:"#38ef7d",fontSize:12,fontWeight:600,cursor:"pointer"}}>{v.toLocaleString()}</button>)}</div>
     </div>}
     {at==="run"&&<div>
       <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:20,padding:24,marginBottom:20,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F3C3}"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Total Distance</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{(u.runKm||0).toFixed(1)}</div><p style={{fontSize:16,color:"#ffffffcc"}}>km</p><p style={{fontSize:12,color:"#ffffffaa",marginTop:8}}>{"\u2248"} {Math.round((u.runKm||0)*62)} kcal burned</p></div>
-      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="number" step="0.1" value={rni} onChange={e=>setRni(e.target.value)} placeholder="km" style={{...IS,flex:1}}/><button onClick={()=>{if(rni>0){logAct("run",rni);setRni("")}}} disabled={!rni||rni<=0} style={{...BP,opacity:rni>0?1:.4,padding:"12px 20px"}}>+ Add</button></div>
+      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="text" inputMode="decimal" pattern="[0-9.]*" value={rni} onChange={e=>setRni(e.target.value)} placeholder="km" style={{...IS,flex:1}}/><button onClick={()=>{if(rni>0){logAct("run",rni);setRni("")}}} disabled={!rni||rni<=0} style={{...BP,opacity:rni>0?1:.4,padding:"12px 20px"}}>+ Add</button></div>
       <div style={{display:"flex",flexWrap:"wrap",gap:6}}>{[1,2,3,5,10].map(v=><button key={v} onClick={()=>logAct("run",v)} style={{background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"8px 14px",color:"#FF6B35",fontSize:12,fontWeight:600,cursor:"pointer"}}>{v} km</button>)}</div>
     </div>}
     {at==="sleep"&&<div>
       <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:20,padding:24,marginBottom:20,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F634}"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Last Night</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{u.sleepHours||0}</div><p style={{fontSize:16,color:"#ffffffcc"}}>hours</p><p style={{fontSize:12,color:"#ffffffaa",marginTop:8}}>{(u.sleepHours||0)>=8?"\u2705 Goal met!":((8-(u.sleepHours||0)).toFixed(1)+"h short")}</p></div>
-      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="number" step="0.5" value={sli} onChange={e=>setSli(e.target.value)} placeholder="Hours" style={{...IS,flex:1}}/><button onClick={()=>{if(sli>0){logAct("sleep",sli);setSli("")}}} disabled={!sli||sli<=0} style={{...BP,opacity:sli>0?1:.4,padding:"12px 20px",background:"linear-gradient(135deg,#667eea,#764ba2)"}}>Log</button></div>
+      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="text" inputMode="decimal" pattern="[0-9.]*" value={sli} onChange={e=>setSli(e.target.value)} placeholder="Hours" style={{...IS,flex:1}}/><button onClick={()=>{if(sli>0){logAct("sleep",sli);setSli("")}}} disabled={!sli||sli<=0} style={{...BP,opacity:sli>0?1:.4,padding:"12px 20px",background:"linear-gradient(135deg,#667eea,#764ba2)"}}>Log</button></div>
       <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:20}}>{[4,5,6,7,8,9].map(v=><button key={v} onClick={()=>logAct("sleep",v)} style={{background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"8px 14px",color:"#667eea",fontSize:12,fontWeight:600,cursor:"pointer"}}>{v}h</button>)}</div>
       {sl.length>0&&<div><h3 style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:10}}>Sleep History</h3><div style={{display:"flex",gap:6,alignItems:"flex-end",height:120,padding:"0 4px"}}>{sl.slice(0,7).reverse().map((s,i)=>{const pc=(s.value/12)*100;return <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4}}><span style={{fontSize:10,color:"#aaa"}}>{s.value}h</span><div style={{width:"100%",height:`${pc}%`,minHeight:8,background:s.value>=8?"linear-gradient(to top,#667eea,#764ba2)":"linear-gradient(to top,#E94560,#E9456080)",borderRadius:6}}/><span style={{fontSize:9,color:"#666"}}>{new Date(s.date).toLocaleDateString([],{weekday:"short"})}</span></div>})}</div></div>}
     </div>}
