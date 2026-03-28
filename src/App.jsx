@@ -333,14 +333,20 @@ export default function App(){
   const[os,setOs]=useState(0);
   const[od,setOd]=useState({name:"",goal:"",level:"",duration:15});
   const[reelExIdx,setReelExIdx]=useState(0);
-  const[camOn,setCamOn]=useState(false);
-  const[scanning,setScanning]=useState(false);
-  const[scanResult,setScanResult]=useState(null);
-  const[scanError,setScanError]=useState(null);
-  const[capturedImg,setCapturedImg]=useState(null);
-  const videoRef=useRef(null);
-  const canvasRef=useRef(null);
-  const streamRef=useRef(null);
+  const[manualFood,setManualFood]=useState({name:"",cuisine:"",grams:"",cal:""});
+  const[aiLookup,setAiLookup]=useState("");
+  const[aiResult,setAiResult]=useState(null);
+  const[aiLoading,setAiLoading]=useState(false);
+  const[aiError,setAiError]=useState(null);
+  const[pedoActive,setPedoActive]=useState(false);
+  const[liveSteps,setLiveSteps]=useState(0);
+  const[runActive,setRunActive]=useState(false);
+  const[runDist,setRunDist]=useState(0);
+  const[runTime,setRunTime]=useState(0);
+  const pedometerRef=useRef({lastMag:0,stepThreshold:1.2,cooldown:0});
+  const geoWatchRef=useRef(null);
+  const runTimerRef=useRef(null);
+  const lastPosRef=useRef(null);
   const tmr=useRef(null);
 
   useEffect(()=>{(async()=>{const s=await load();if(s&&s.onboarded){const td=new Date().toDateString();const la=s.lastActiveDate?new Date(s.lastActiveDate).toDateString():null;const yd=new Date(Date.now()-864e5).toDateString();if(la&&la!==td&&la!==yd){s.freezeTokens>0?s.freezeTokens--:(s.streak=0)}const ll=s.foodLog?.[0]?.date;if(ll&&new Date(ll).toDateString()!==td){s.foodLog=[];s.foodLogTotal=0}setU({...DU,...s});setScr("app")}else setScr("onboarding")})()},[]);
@@ -357,57 +363,80 @@ export default function App(){
 
   const logAct=(type,val)=>{const v=Number(val);const e={type,value:v,date:new Date().toISOString()};setU(x=>{const nl=[e,...(x.activityLog||[])];if(type==="walk")return{...x,steps:(x.steps||0)+v,activityLog:nl};if(type==="run")return{...x,runKm:Math.round(((x.runKm||0)+v)*100)/100,activityLog:nl};if(type==="sleep")return{...x,sleepHours:v,sleepLog:[e,...(x.sleepLog||[]).slice(0,6)],activityLog:nl};return x});axp(type==="sleep"?10:15)};
 
-  const startCam=async()=>{
-    setScanResult(null);setScanError(null);setCapturedImg(null);
+  // ── Gemini calorie lookup (1/day free) ──
+  const getAiLookupCount=()=>{try{const d=JSON.parse(localStorage.getItem("fs-ai-limit")||"{}");if(d.date===new Date().toDateString())return d.count||0;return 0}catch{return 0}};
+  const incAiLookupCount=()=>{try{const today=new Date().toDateString();const d=JSON.parse(localStorage.getItem("fs-ai-limit")||"{}");const count=d.date===today?(d.count||0)+1:1;localStorage.setItem("fs-ai-limit",JSON.stringify({date:today,count}))}catch{}};
+
+  const lookupCalories=async(foodName)=>{
+    if(!foodName.trim()){setAiError("Enter a food name first.");return}
+    if(getAiLookupCount()>=1){setAiError("Daily AI lookup used. Add food manually or pick from the database below.");return}
+    setAiLoading(true);setAiError(null);setAiResult(null);
     try{
-      const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:640},height:{ideal:480}}});
-      streamRef.current=stream;setCamOn(true);
-      setTimeout(()=>{if(videoRef.current){videoRef.current.srcObject=stream;videoRef.current.play().catch(()=>{})}},100);
-    }catch(e){setScanError("Camera access denied. Please allow camera permissions.");console.error(e)}
-  };
-
-  const stopCam=()=>{
-    if(streamRef.current){streamRef.current.getTracks().forEach(t=>t.stop());streamRef.current=null}
-    setCamOn(false)
-  };
-
-  const capturePhoto=()=>{
-    if(!videoRef.current||!canvasRef.current)return null;
-    const v=videoRef.current;const c=canvasRef.current;
-    // Compress: resize to max 480px width to save API tokens
-    const maxW=480;const scale=Math.min(maxW/(v.videoWidth||640),1);
-    c.width=Math.round((v.videoWidth||640)*scale);c.height=Math.round((v.videoHeight||480)*scale);
-    const ctx=c.getContext("2d");ctx.drawImage(v,0,0,c.width,c.height);
-    return c.toDataURL("image/jpeg",0.6);
-  };
-
-  const getScanCount=()=>{try{const d=JSON.parse(localStorage.getItem("fs-scan-limit")||"{}");if(d.date===new Date().toDateString())return d.count||0;return 0}catch{return 0}};
-  const incScanCount=()=>{try{const today=new Date().toDateString();const d=JSON.parse(localStorage.getItem("fs-scan-limit")||"{}");const count=d.date===today?(d.count||0)+1:1;localStorage.setItem("fs-scan-limit",JSON.stringify({date:today,count}))}catch{}};
-  const MAX_SCANS_PER_DAY=10;
-
-  const scanFood=async()=>{
-    const used=getScanCount();
-    if(used>=MAX_SCANS_PER_DAY){setScanError(`Daily scan limit reached (${MAX_SCANS_PER_DAY}/day). Add food manually from the 200+ database below!`);return}
-    const imgData=capturePhoto();
-    if(!imgData){setScanError("Could not capture photo. Try again.");return}
-    setCapturedImg(imgData);stopCam();setScanning(true);setScanError(null);
-    try{
-      const base64=imgData.split(",")[1];
-      const resp=await fetch("/api/scan-food",{
+      const resp=await fetch("/api/lookup-food",{
         method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({imageBase64:base64})
+        body:JSON.stringify({foodName:foodName.trim()})
       });
       const data=await resp.json();
-      if(data.error){setScanError(data.error);setScanning(false);return}
-      incScanCount();
-      const items=data.items||[];
-      if(Array.isArray(items)&&items.length>0){
-        setScanResult(items.filter(i=>i.cal>0));
-        if(items[0].name==="No food detected")setScanError("No food detected in the image. Try pointing the camera at food.")
-      }else{setScanError("Could not identify food. Try a clearer photo.")}
-    }catch(e){console.error(e);setScanError("Scan failed. Check internet and try again.")}
-    setScanning(false)
+      if(data.error){setAiError(data.error);setAiLoading(false);return}
+      incAiLookupCount();
+      setAiResult(data.item);
+    }catch(e){setAiError("Lookup failed. Add food manually.")}
+    setAiLoading(false)
   };
+
+  // ── Accelerometer pedometer ──
+  const startPedometer=()=>{
+    if(!window.DeviceMotionEvent){alert("Step counter not supported on this device.");return}
+    // Request permission on iOS 13+
+    if(typeof DeviceMotionEvent.requestPermission==="function"){
+      DeviceMotionEvent.requestPermission().then(r=>{if(r==="granted")initPedometer();else alert("Motion sensor permission denied.")}).catch(()=>alert("Motion sensor permission error."));
+    }else{initPedometer()}
+  };
+  const initPedometer=()=>{
+    setPedoActive(true);setLiveSteps(0);
+    const ref=pedometerRef.current;ref.cooldown=0;ref.lastMag=9.8;
+    const handler=(e)=>{
+      const a=e.accelerationIncludingGravity;if(!a)return;
+      const mag=Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
+      const diff=Math.abs(mag-ref.lastMag);ref.lastMag=mag;
+      if(ref.cooldown>0){ref.cooldown--;return}
+      if(diff>ref.stepThreshold){setLiveSteps(s=>s+1);ref.cooldown=8}
+    };
+    window.addEventListener("devicemotion",handler);
+    pedometerRef.current.handler=handler;
+  };
+  const stopPedometer=()=>{
+    if(pedometerRef.current.handler)window.removeEventListener("devicemotion",pedometerRef.current.handler);
+    setPedoActive(false);
+    if(liveSteps>0)logAct("walk",liveSteps);
+  };
+
+  // ── GPS run tracker ──
+  const startRun=()=>{
+    if(!navigator.geolocation){alert("GPS not available.");return}
+    setRunActive(true);setRunDist(0);setRunTime(0);lastPosRef.current=null;
+    geoWatchRef.current=navigator.geolocation.watchPosition(
+      (pos)=>{
+        const{latitude:lat,longitude:lon}=pos.coords;
+        if(lastPosRef.current){
+          const d=haversine(lastPosRef.current.lat,lastPosRef.current.lon,lat,lon);
+          if(d>0.002&&d<0.5)setRunDist(r=>Math.round((r+d)*1000)/1000);
+        }
+        lastPosRef.current={lat,lon};
+      },
+      (err)=>console.warn("GPS error:",err),
+      {enableHighAccuracy:true,maximumAge:5000,timeout:10000}
+    );
+    runTimerRef.current=setInterval(()=>setRunTime(t=>t+1),1000);
+  };
+  const stopRun=()=>{
+    if(geoWatchRef.current)navigator.geolocation.clearWatch(geoWatchRef.current);
+    if(runTimerRef.current)clearInterval(runTimerRef.current);
+    setRunActive(false);
+    if(runDist>0)logAct("run",runDist);
+  };
+  const haversine=(lat1,lon1,lat2,lon2)=>{const R=6371;const dLat=(lat2-lat1)*Math.PI/180;const dLon=(lon2-lon1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))};
+  const fmtTime=(s)=>`${Math.floor(s/60)}:${(s%60).toString().padStart(2,"0")}`;
 
   // ── LOADING ──
   if(scr==="loading")return <div style={AS}><div style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}><div style={{textAlign:"center"}}><div style={{fontSize:48,marginBottom:12}}>{"\u26A1"}</div><p style={{color:"#888"}}>Loading FitStreak...</p></div></div></div>;
@@ -549,116 +578,98 @@ export default function App(){
     <button disabled={ri===REELS.length-1} onClick={()=>{setRi(i=>i+1);setRp(false);setReelExIdx(0)}} style={{...SB,opacity:ri===REELS.length-1?.3:1}}>{"\u2193"}</button>
   </div></div>};
 
-  // ── FOOD TRACKER WITH AI CAMERA SCANNER ──
-  const Food=()=>{const cats=["all","breakfast","lunch","snack","drink","sweet","fruit"];const ff=FOOD_DB.filter(f=>(fc==="all"||f.category===fc)&&(!fs||f.name.toLowerCase().includes(fs.toLowerCase())||f.region.toLowerCase().includes(fs.toLowerCase())));const tl=u.foodLog||[];const tots=tl.reduce((a,f)=>({cal:a.cal+f.cal,protein:a.protein+f.protein,carbs:a.carbs+f.carbs,fat:a.fat+f.fat}),{cal:0,protein:0,carbs:0,fat:0});
+  // ── FOOD TRACKER — Manual Entry + AI Lookup + Database ──
+  const Food=()=>{const cats=["all","breakfast","lunch","snack","drink","sweet","fruit"];const ff=FOOD_DB.filter(f=>(fc==="all"||f.category===fc)&&(!fs||f.name.toLowerCase().includes(fs.toLowerCase())||f.region.toLowerCase().includes(fs.toLowerCase())));const tl=u.foodLog||[];const tots=tl.reduce((a,f)=>({cal:a.cal+f.cal,protein:a.protein+(f.protein||0),carbs:a.carbs+(f.carbs||0),fat:a.fat+(f.fat||0)}),{cal:0,protein:0,carbs:0,fat:0});const aiUsed=getAiLookupCount()>=1;
   return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
-    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>{stopCam();setTab("home")}} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Food Tracker {"\u{1F37D}\uFE0F"}</h1></div>
+    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>setTab("home")} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Food Tracker {"\u{1F37D}\uFE0F"}</h1></div>
+    {/* Daily Summary */}
     <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.1}}>{"\u{1F37D}\uFE0F"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Intake</p><div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:10}}><span style={{fontSize:42,fontWeight:900,color:"#fff"}}>{tots.cal}</span><span style={{fontSize:15,color:"#ffffffcc"}}>/ 2000 kcal</span></div><div style={{background:"#ffffff30",borderRadius:6,height:8,marginBottom:12,overflow:"hidden"}}><div style={{width:`${Math.min((tots.cal/2e3)*100,100)}%`,height:"100%",background:"#fff",borderRadius:6,transition:"width .3s"}}/></div><div style={{display:"flex",gap:16}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Protein</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.protein}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Carbs</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.carbs}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Fat</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.fat}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Items</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tl.length}</p></div></div></div>
 
-    {/* AI Camera Scanner Section */}
-    <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:16,padding:2,marginBottom:18}}>
-      <div style={{background:"#0e0e18",borderRadius:14,padding:16}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <span style={{fontSize:20}}>{"\u{1F4F7}"}</span>
-            <div>
-              <p style={{fontSize:15,fontWeight:700,color:"#fff"}}>AI Food Scanner</p>
-              <p style={{fontSize:11,color:"#888"}}>Point camera at food to scan calories</p>
-            </div>
-          </div>
-          {!camOn && !capturedImg && <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <button onClick={startCam} style={{background:"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:10,padding:"8px 16px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>Scan {"\u{1F4F7}"}</button>
-            <span style={{fontSize:11,color:"#888"}}>{MAX_SCANS_PER_DAY - getScanCount()}/{MAX_SCANS_PER_DAY} scans left today</span>
-          </div>}
+    {/* AI Calorie Lookup (1/day) */}
+    <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:16,padding:2,marginBottom:14}}>
+      <div style={{background:"#0e0e18",borderRadius:14,padding:14}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{"\u{1F9E0}"} AI Calorie Lookup</p><p style={{fontSize:11,color:"#888"}}>Type any food — AI tells you the calories</p></div>
+          <span style={{fontSize:11,color:aiUsed?"#E94560":"#38ef7d",fontWeight:600}}>{aiUsed?"Used today":"1 free"}</span>
         </div>
-
-        {/* Camera View */}
-        {camOn && <div style={{position:"relative",borderRadius:12,overflow:"hidden",marginBottom:12,background:"#000"}}>
-          <video ref={videoRef} autoPlay playsInline muted style={{width:"100%",height:240,objectFit:"cover",display:"block",borderRadius:12}} />
-          <canvas ref={canvasRef} style={{display:"none"}} />
-          {/* Scan overlay frame */}
-          <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none"}}>
-            <div style={{width:"70%",height:"70%",border:"2px dashed #ffffff60",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"center"}}>
-              <p style={{color:"#ffffffaa",fontSize:12,fontWeight:600,textShadow:"0 1px 4px #000"}}>Position food here</p>
-            </div>
-          </div>
-          {/* Corner markers */}
-          <div style={{position:"absolute",top:30,left:"15%",width:20,height:20,borderTop:"3px solid #667eea",borderLeft:"3px solid #667eea",borderRadius:"4px 0 0 0"}} />
-          <div style={{position:"absolute",top:30,right:"15%",width:20,height:20,borderTop:"3px solid #667eea",borderRight:"3px solid #667eea",borderRadius:"0 4px 0 0"}} />
-          <div style={{position:"absolute",bottom:30,left:"15%",width:20,height:20,borderBottom:"3px solid #667eea",borderLeft:"3px solid #667eea",borderRadius:"0 0 0 4px"}} />
-          <div style={{position:"absolute",bottom:30,right:"15%",width:20,height:20,borderBottom:"3px solid #667eea",borderRight:"3px solid #667eea",borderRadius:"0 0 4px 0"}} />
-          {/* Scanning line animation */}
-          <div style={{position:"absolute",top:0,left:"15%",right:"15%",height:2,background:"linear-gradient(90deg,transparent,#667eea,transparent)",animation:"scanLine 2s ease-in-out infinite"}} />
-          <div style={{display:"flex",gap:8,position:"absolute",bottom:12,left:0,right:0,justifyContent:"center"}}>
-            <button onClick={scanFood} style={{background:"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:50,width:56,height:56,color:"#fff",fontSize:24,cursor:"pointer",boxShadow:"0 4px 20px #667eea60",display:"flex",alignItems:"center",justifyContent:"center"}}>{"\u{1F4F7}"}</button>
-            <button onClick={stopCam} style={{background:"#ffffff20",border:"1px solid #ffffff30",borderRadius:50,width:56,height:56,color:"#fff",fontSize:18,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{"\u2715"}</button>
-          </div>
+        <div style={{display:"flex",gap:6,marginBottom:8}}>
+          <input value={aiLookup} onChange={e=>setAiLookup(e.target.value)} placeholder="e.g. Paneer tikka masala 200g" type="text" style={{...IS,flex:1,fontSize:13,padding:"10px 12px"}} />
+          <button onClick={()=>lookupCalories(aiLookup)} disabled={aiUsed||aiLoading||!aiLookup.trim()} style={{background:aiUsed?"#333":"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:10,padding:"10px 16px",color:aiUsed?"#666":"#fff",fontSize:13,fontWeight:700,cursor:aiUsed?"default":"pointer",whiteSpace:"nowrap"}}>{aiLoading?"...":"Lookup"}</button>
+        </div>
+        {aiResult&&<div style={{background:"#1A1A2E",borderRadius:10,padding:12,border:"1px solid #667eea30",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{aiResult.name}</p><p style={{fontSize:11,color:"#888"}}>{aiResult.region} · P:{aiResult.protein}g C:{aiResult.carbs}g F:{aiResult.fat}g</p></div>
+          <div style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:15,fontWeight:800,color:"#667eea"}}>{aiResult.cal} kcal</span>
+          <button onClick={()=>{addFood(aiResult);setAiResult(null);setAiLookup("")}} style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",border:"none",borderRadius:8,width:32,height:32,color:"#0A0A0F",fontSize:16,fontWeight:800,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button></div>
         </div>}
-
-        {/* Captured image preview while scanning */}
-        {capturedImg && scanning && <div style={{position:"relative",borderRadius:12,overflow:"hidden",marginBottom:12}}>
-          <img src={capturedImg} alt="Captured food" style={{width:"100%",height:200,objectFit:"cover",borderRadius:12,opacity:0.6}} />
-          <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",background:"#00000060",borderRadius:12}}>
-            <div style={{width:40,height:40,border:"3px solid #667eea",borderTop:"3px solid transparent",borderRadius:"50%",animation:"spin 1s linear infinite",marginBottom:12}} />
-            <p style={{color:"#fff",fontSize:14,fontWeight:600}}>Analyzing food with AI...</p>
-            <p style={{color:"#ffffffaa",fontSize:12,marginTop:4}}>Identifying items & calories</p>
-          </div>
-        </div>}
-
-        {/* Scan Results */}
-        {scanResult && scanResult.length > 0 && <div style={{marginTop:4}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-            <p style={{fontSize:14,fontWeight:700,color:"#38ef7d"}}>{"\u2705"} Found {scanResult.length} item{scanResult.length>1?"s":""}</p>
-            <button onClick={()=>{setScanResult(null);setCapturedImg(null)}} style={{color:"#888",fontSize:12,background:"none",border:"none",cursor:"pointer"}}>Clear</button>
-          </div>
-          {capturedImg && <img src={capturedImg} alt="Scanned" style={{width:"100%",height:120,objectFit:"cover",borderRadius:10,marginBottom:10,border:"1px solid #ffffff15"}} />}
-          {scanResult.map((item,i)=> <div key={i} style={{background:"#1A1A2E",borderRadius:12,padding:12,marginBottom:8,border:"1px solid #667eea30"}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <div style={{flex:1,minWidth:0}}>
-                <p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{item.name}</p>
-                <p style={{fontSize:11,color:"#888",marginTop:2}}>{item.region} · P:{item.protein}g · C:{item.carbs}g · F:{item.fat}g</p>
-              </div>
-              <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
-                <span style={{fontSize:15,fontWeight:800,color:"#667eea"}}>{item.cal} kcal</span>
-                <button onClick={()=>{addFood(item);setScanResult(r=>r.filter((_,j)=>j!==i))}} style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",border:"none",borderRadius:8,width:32,height:32,color:"#0A0A0F",fontSize:16,fontWeight:800,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
-              </div>
-            </div>
-          </div>)}
-          <button onClick={()=>{scanResult.forEach(item=>{if(item.cal>0)addFood(item)});setScanResult(null);setCapturedImg(null)}} style={{...BP,width:"100%",marginTop:4,background:"linear-gradient(135deg,#667eea,#764ba2)",fontSize:13,padding:"10px 16px"}}>Add All Items ({scanResult.reduce((a,i)=>a+i.cal,0)} kcal) {"\u{1F4E5}"}</button>
-        </div>}
-
-        {/* Scan Error */}
-        {scanError && <div style={{background:"#E9456015",border:"1px solid #E9456030",borderRadius:10,padding:12,marginTop:8}}>
-          <p style={{fontSize:13,color:"#E94560"}}>{scanError}</p>
-          <button onClick={()=>{setScanError(null);setCapturedImg(null);startCam()}} style={{color:"#667eea",fontSize:12,fontWeight:600,background:"none",border:"none",cursor:"pointer",marginTop:6}}>Try Again {"\u2192"}</button>
-        </div>}
+        {aiError&&<p style={{fontSize:12,color:"#E94560",marginTop:4}}>{aiError}</p>}
       </div>
     </div>
 
-    <div style={{position:"relative",marginBottom:12}}><span style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",fontSize:16}}>{"\u{1F50D}"}</span><input value={fs} onChange={e=>setFs(e.target.value)} placeholder="Search food, region..." style={{...IS,paddingLeft:40}}/></div>
+    {/* Manual Food Entry */}
+    <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
+      <p style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:10}}>{"\u270D\uFE0F"} Add Food Manually</p>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginBottom:8}}>
+        <input value={manualFood.name} onChange={e=>setManualFood(f=>({...f,name:e.target.value}))} placeholder="Food name" type="text" style={{...IS,fontSize:13,padding:"8px 10px"}} />
+        <input value={manualFood.cuisine} onChange={e=>setManualFood(f=>({...f,cuisine:e.target.value}))} placeholder="Cuisine (optional)" type="text" style={{...IS,fontSize:13,padding:"8px 10px"}} />
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginBottom:8}}>
+        <input value={manualFood.grams} onChange={e=>setManualFood(f=>({...f,grams:e.target.value}))} placeholder="Grams" type="text" inputMode="numeric" pattern="[0-9]*" style={{...IS,fontSize:13,padding:"8px 10px"}} />
+        <input value={manualFood.cal} onChange={e=>setManualFood(f=>({...f,cal:e.target.value}))} placeholder="Calories (kcal)" type="text" inputMode="numeric" pattern="[0-9]*" style={{...IS,fontSize:13,padding:"8px 10px"}} />
+      </div>
+      <button onClick={()=>{if(manualFood.name&&manualFood.cal>0){addFood({name:`${manualFood.name}${manualFood.grams?` (${manualFood.grams}g)`:""}`,cal:Number(manualFood.cal),protein:0,carbs:0,fat:0,category:"snack",region:manualFood.cuisine||"Custom"});setManualFood({name:"",cuisine:"",grams:"",cal:""})}}} disabled={!manualFood.name||!manualFood.cal} style={{...BP,width:"100%",fontSize:13,padding:"10px",opacity:manualFood.name&&manualFood.cal?1:.4}}>Add to Log {"\u2795"}</button>
+    </div>
+
+    {/* Search Database */}
+    <div style={{position:"relative",marginBottom:12}}><span style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",fontSize:16}}>{"\u{1F50D}"}</span><input value={fs} onChange={e=>setFs(e.target.value)} placeholder="Search 200+ foods, region..." style={{...IS,paddingLeft:40}}/></div>
     <div style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:8,marginBottom:14}}>{cats.map(c=><button key={c} onClick={()=>setFc(c)} style={{background:fc===c?"#FF6B35":"#1A1A2E",border:"none",borderRadius:10,padding:"6px 14px",color:fc===c?"#fff":"#888",fontSize:12,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",flexShrink:0}}>{c==="all"?"All":c[0].toUpperCase()+c.slice(1)}</button>)}</div>
-    <div style={{maxHeight:320,overflowY:"auto"}}>{ff.slice(0,30).map((f,i)=><div key={i} style={{background:"#12121A",border:"1px solid #ffffff08",borderRadius:12,padding:12,marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center"}}><div style={{flex:1,minWidth:0}}><p style={{fontSize:14,fontWeight:600,color:"#fff",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.name}</p><p style={{fontSize:11,color:"#888",marginTop:2}}>{f.region} · P:{f.protein}g C:{f.carbs}g F:{f.fat}g</p></div><div style={{display:"flex",alignItems:"center",gap:10,flexShrink:0}}><span style={{fontSize:14,fontWeight:700,color:"#FF6B35"}}>{f.cal}</span><button onClick={()=>addFood(f)} style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",border:"none",borderRadius:8,width:32,height:32,color:"#fff",fontSize:16,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button></div></div>)}{ff.length===0&&<p style={{textAlign:"center",color:"#666",padding:32,fontSize:14}}>No foods found</p>}</div>
+    <div style={{maxHeight:300,overflowY:"auto"}}>{ff.slice(0,30).map((f,i)=><div key={i} style={{background:"#12121A",border:"1px solid #ffffff08",borderRadius:12,padding:12,marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center"}}><div style={{flex:1,minWidth:0}}><p style={{fontSize:14,fontWeight:600,color:"#fff",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{f.name}</p><p style={{fontSize:11,color:"#888",marginTop:2}}>{f.region} · P:{f.protein}g C:{f.carbs}g F:{f.fat}g</p></div><div style={{display:"flex",alignItems:"center",gap:10,flexShrink:0}}><span style={{fontSize:14,fontWeight:700,color:"#FF6B35"}}>{f.cal}</span><button onClick={()=>addFood(f)} style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",border:"none",borderRadius:8,width:32,height:32,color:"#fff",fontSize:16,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button></div></div>)}{ff.length===0&&<p style={{textAlign:"center",color:"#666",padding:32,fontSize:14}}>No foods found</p>}</div>
     {tl.length>0&&<div style={{marginTop:20}}><h3 style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:10}}>Today's Log ({tl.length})</h3>{tl.slice(0,10).map((f,i)=><div key={f.id||i} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid #ffffff08"}}><span style={{fontSize:13,color:"#ccc"}}>{f.name}</span><span style={{fontSize:13,color:"#FF6B35",fontWeight:600}}>{f.cal} kcal</span></div>)}</div>}
   </div>};
 
-  // ── ACTIVITY TRACKER ──
-  const Activity=()=>{const sl=u.sleepLog||[];
+  // ── ACTIVITY TRACKER — Sensors Enabled ──
+  const Activity=()=>{const sl=u.sleepLog||[];const totalSteps=(u.steps||0)+liveSteps;
   return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
-    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>setTab("home")} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Activity Tracker</h1></div>
+    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>{if(pedoActive)stopPedometer();if(runActive)stopRun();setTab("home")}} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Activity Tracker</h1></div>
     <div style={{display:"flex",gap:6,marginBottom:20}}>{[["walk","\u{1F6B6} Walk"],["run","\u{1F3C3} Run"],["sleep","\u{1F634} Sleep"]].map(([id,label])=><button key={id} onClick={()=>setAt(id)} style={{flex:1,background:at===id?(id==="walk"?"#38ef7d":id==="run"?"#FF6B35":"#667eea"):"#1A1A2E",border:"none",borderRadius:12,padding:"10px 4px",color:at===id?(id==="sleep"?"#fff":"#0A0A0F"):"#888",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>)}</div>
+
+    {/* WALK — Accelerometer Pedometer */}
     {at==="walk"&&<div>
-      <div style={{background:"linear-gradient(135deg,#11998e,#38ef7d)",borderRadius:20,padding:24,marginBottom:20,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F6B6}"}</div><p style={{fontSize:11,color:"#000000aa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Steps</p><div style={{fontSize:52,fontWeight:900,color:"#0A0A0F"}}>{(u.steps||0).toLocaleString()}</div><p style={{fontSize:14,color:"#0A0A0F99",marginBottom:12}}>Goal: 10,000</p><div style={{background:"#00000020",borderRadius:8,height:10,overflow:"hidden",maxWidth:260,margin:"0 auto"}}><div style={{width:`${Math.min(((u.steps||0)/1e4)*100,100)}%`,height:"100%",background:"#0A0A0F",borderRadius:8}}/></div><p style={{fontSize:12,color:"#0A0A0F88",marginTop:8}}>{"\u2248"} {((u.steps||0)*.000762).toFixed(1)} km · {"\u2248"} {Math.round((u.steps||0)*.04)} kcal</p></div>
+      <div style={{background:"linear-gradient(135deg,#11998e,#38ef7d)",borderRadius:20,padding:24,marginBottom:16,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F6B6}"}</div><p style={{fontSize:11,color:"#000000aa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Steps</p><div style={{fontSize:52,fontWeight:900,color:"#0A0A0F"}}>{totalSteps.toLocaleString()}</div><p style={{fontSize:14,color:"#0A0A0F99",marginBottom:12}}>Goal: 10,000</p><div style={{background:"#00000020",borderRadius:8,height:10,overflow:"hidden",maxWidth:260,margin:"0 auto"}}><div style={{width:`${Math.min((totalSteps/1e4)*100,100)}%`,height:"100%",background:"#0A0A0F",borderRadius:8}}/></div><p style={{fontSize:12,color:"#0A0A0F88",marginTop:8}}>{"\u2248"} {(totalSteps*.000762).toFixed(1)} km · {"\u2248"} {Math.round(totalSteps*.04)} kcal</p>
+      {pedoActive&&<div style={{marginTop:12,background:"#00000020",borderRadius:10,padding:8}}><p style={{fontSize:12,color:"#0A0A0F",fontWeight:700}}>{"\u{1F7E2}"} Counting live... {liveSteps} new steps</p></div>}
+      </div>
+      {/* Auto step counter */}
+      <div style={{marginBottom:16}}>
+        {!pedoActive?<button onClick={startPedometer} style={{...BP,width:"100%",background:"linear-gradient(135deg,#11998e,#38ef7d)",color:"#0A0A0F",fontSize:14,padding:"14px"}}>{"\u{1F6B6}"} Start Step Counter (Auto)</button>
+        :<button onClick={stopPedometer} style={{...BP,width:"100%",background:"#E94560",fontSize:14,padding:"14px"}}>{"\u23F9"} Stop & Save {liveSteps} Steps</button>}
+        <p style={{fontSize:11,color:"#666",marginTop:6,textAlign:"center"}}>Uses your phone's motion sensor to count steps automatically</p>
+      </div>
+      {/* Manual add */}
+      <p style={{fontSize:13,color:"#aaa",marginBottom:8}}>Or add manually:</p>
       <div style={{display:"flex",gap:8,marginBottom:14}}><input type="text" inputMode="numeric" pattern="[0-9]*" value={si} onChange={e=>setSi(e.target.value)} placeholder="Steps" style={{...IS,flex:1}}/><button onClick={()=>{if(si>0){logAct("walk",si);setSi("")}}} disabled={!si||si<=0} style={{...BP,opacity:si>0?1:.4,padding:"12px 20px"}}>+ Add</button></div>
       <div style={{display:"flex",flexWrap:"wrap",gap:6}}>{[1e3,2e3,5e3,8e3,1e4].map(v=><button key={v} onClick={()=>logAct("walk",v)} style={{background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"8px 14px",color:"#38ef7d",fontSize:12,fontWeight:600,cursor:"pointer"}}>{v.toLocaleString()}</button>)}</div>
     </div>}
+
+    {/* RUN — GPS Tracker */}
     {at==="run"&&<div>
-      <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:20,padding:24,marginBottom:20,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F3C3}"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Total Distance</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{(u.runKm||0).toFixed(1)}</div><p style={{fontSize:16,color:"#ffffffcc"}}>km</p><p style={{fontSize:12,color:"#ffffffaa",marginTop:8}}>{"\u2248"} {Math.round((u.runKm||0)*62)} kcal burned</p></div>
+      <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:20,padding:24,marginBottom:16,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F3C3}"}</div>
+      {runActive?<><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>{"\u{1F7E2}"} Run in Progress</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{runDist.toFixed(2)}</div><p style={{fontSize:16,color:"#ffffffcc"}}>km</p><div style={{display:"flex",justifyContent:"center",gap:20,marginTop:10}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Time</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{fmtTime(runTime)}</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Pace</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{runDist>0?(runTime/60/runDist).toFixed(1):"--"} min/km</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Calories</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{Math.round(runDist*62)}</p></div></div></>
+      :<><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Total Distance</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{(u.runKm||0).toFixed(1)}</div><p style={{fontSize:16,color:"#ffffffcc"}}>km</p><p style={{fontSize:12,color:"#ffffffaa",marginTop:8}}>{"\u2248"} {Math.round((u.runKm||0)*62)} kcal burned</p></>}
+      </div>
+      {/* GPS run tracker */}
+      <div style={{marginBottom:16}}>
+        {!runActive?<button onClick={startRun} style={{...BP,width:"100%",background:"linear-gradient(135deg,#FF6B35,#E94560)",fontSize:14,padding:"14px"}}>{"\u{1F3C3}"} Start Run (GPS Tracking)</button>
+        :<button onClick={stopRun} style={{...BP,width:"100%",background:"#E94560",fontSize:14,padding:"14px"}}>{"\u23F9"} Stop & Save Run ({runDist.toFixed(2)} km)</button>}
+        <p style={{fontSize:11,color:"#666",marginTop:6,textAlign:"center"}}>Uses GPS to track your running distance in real-time</p>
+      </div>
+      <p style={{fontSize:13,color:"#aaa",marginBottom:8}}>Or add manually:</p>
       <div style={{display:"flex",gap:8,marginBottom:14}}><input type="text" inputMode="decimal" pattern="[0-9.]*" value={rni} onChange={e=>setRni(e.target.value)} placeholder="km" style={{...IS,flex:1}}/><button onClick={()=>{if(rni>0){logAct("run",rni);setRni("")}}} disabled={!rni||rni<=0} style={{...BP,opacity:rni>0?1:.4,padding:"12px 20px"}}>+ Add</button></div>
       <div style={{display:"flex",flexWrap:"wrap",gap:6}}>{[1,2,3,5,10].map(v=><button key={v} onClick={()=>logAct("run",v)} style={{background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"8px 14px",color:"#FF6B35",fontSize:12,fontWeight:600,cursor:"pointer"}}>{v} km</button>)}</div>
     </div>}
+
+    {/* SLEEP — Manual with history */}
     {at==="sleep"&&<div>
       <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:20,padding:24,marginBottom:20,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F634}"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Last Night</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{u.sleepHours||0}</div><p style={{fontSize:16,color:"#ffffffcc"}}>hours</p><p style={{fontSize:12,color:"#ffffffaa",marginTop:8}}>{(u.sleepHours||0)>=8?"\u2705 Goal met!":((8-(u.sleepHours||0)).toFixed(1)+"h short")}</p></div>
-      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="text" inputMode="decimal" pattern="[0-9.]*" value={sli} onChange={e=>setSli(e.target.value)} placeholder="Hours" style={{...IS,flex:1}}/><button onClick={()=>{if(sli>0){logAct("sleep",sli);setSli("")}}} disabled={!sli||sli<=0} style={{...BP,opacity:sli>0?1:.4,padding:"12px 20px",background:"linear-gradient(135deg,#667eea,#764ba2)"}}>Log</button></div>
+      <div style={{display:"flex",gap:8,marginBottom:14}}><input type="text" inputMode="decimal" pattern="[0-9.]*" value={sli} onChange={e=>setSli(e.target.value)} placeholder="Hours slept" style={{...IS,flex:1}}/><button onClick={()=>{if(sli>0){logAct("sleep",sli);setSli("")}}} disabled={!sli||sli<=0} style={{...BP,opacity:sli>0?1:.4,padding:"12px 20px",background:"linear-gradient(135deg,#667eea,#764ba2)"}}>Log</button></div>
       <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:20}}>{[4,5,6,7,8,9].map(v=><button key={v} onClick={()=>logAct("sleep",v)} style={{background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"8px 14px",color:"#667eea",fontSize:12,fontWeight:600,cursor:"pointer"}}>{v}h</button>)}</div>
       {sl.length>0&&<div><h3 style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:10}}>Sleep History</h3><div style={{display:"flex",gap:6,alignItems:"flex-end",height:120,padding:"0 4px"}}>{sl.slice(0,7).reverse().map((s,i)=>{const pc=(s.value/12)*100;return <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4}}><span style={{fontSize:10,color:"#aaa"}}>{s.value}h</span><div style={{width:"100%",height:`${pc}%`,minHeight:8,background:s.value>=8?"linear-gradient(to top,#667eea,#764ba2)":"linear-gradient(to top,#E94560,#E9456080)",borderRadius:6}}/><span style={{fontSize:9,color:"#666"}}>{new Date(s.date).toLocaleDateString([],{weekday:"short"})}</span></div>})}</div></div>}
     </div>}
@@ -701,8 +712,8 @@ export default function App(){
 
   return <div style={AS}><style>{`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{background:#0A0A0F;overflow-x:hidden}input:focus{outline:none}button:active{transform:scale(.97)}@keyframes xpFloat{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(1.3)}}@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes scanLine{0%{top:15%;opacity:0}50%{opacity:1}100%{top:85%;opacity:0}}::-webkit-scrollbar{display:none}`}</style>
     <div style={G1}/><div style={G2}/>
-    {tab==="home"&&<Home/>}{tab==="explore"&&<Explore/>}{tab==="challenges"&&<Challenges/>}{tab==="stats"&&<Stats/>}{tab==="wo"&&<Workout/>}{tab==="ft"&&<FTest/>}{tab==="food"&&<Food/>}{tab==="activity"&&<Activity/>}
-    <Nav/><Popup/>
+    {tab==="home"&&Home()}{tab==="explore"&&Explore()}{tab==="challenges"&&Challenges()}{tab==="stats"&&Stats()}{tab==="wo"&&Workout()}{tab==="ft"&&FTest()}{tab==="food"&&Food()}{tab==="activity"&&Activity()}
+    {Nav()}{Popup()}
     {xpa&&<div style={{position:"fixed",top:"40%",left:"50%",transform:"translate(-50%,-50%)",zIndex:200,animation:"xpFloat 2s ease-out forwards",pointerEvents:"none"}}><div style={{fontSize:32,fontWeight:900,color:"#FF6B35",textShadow:"0 0 30px #FF6B3560"}}>+{xpa} XP</div></div>}
   </div>
 }
