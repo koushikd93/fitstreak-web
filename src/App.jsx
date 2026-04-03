@@ -334,10 +334,6 @@ export default function App(){
   const[od,setOd]=useState({name:"",goal:"",level:"",duration:15});
   const[reelExIdx,setReelExIdx]=useState(0);
   const[manualFood,setManualFood]=useState({name:"",cuisine:"",grams:"",cal:""});
-  const[aiLookup,setAiLookup]=useState("");
-  const[aiResult,setAiResult]=useState(null);
-  const[aiLoading,setAiLoading]=useState(false);
-  const[aiError,setAiError]=useState(null);
   const[pedoActive,setPedoActive]=useState(false);
   const[liveSteps,setLiveSteps]=useState(0);
   const[runActive,setRunActive]=useState(false);
@@ -362,27 +358,6 @@ export default function App(){
   const addFood=f=>{setU(x=>{const nl=[{...f,date:new Date().toISOString(),id:Date.now()},...(x.foodLog||[])];const nb=[...x.badges];if(nl.length>=10&&!nb.includes("food_tracker"))nb.push("food_tracker");return{...x,foodLog:nl,foodLogTotal:(x.foodLogTotal||0)+f.cal,badges:nb}});axp(5);setPop({type:"food",f})};
 
   const logAct=(type,val)=>{const v=Number(val);const e={type,value:v,date:new Date().toISOString()};setU(x=>{const nl=[e,...(x.activityLog||[])];if(type==="walk")return{...x,steps:(x.steps||0)+v,activityLog:nl};if(type==="run")return{...x,runKm:Math.round(((x.runKm||0)+v)*100)/100,activityLog:nl};if(type==="sleep")return{...x,sleepHours:v,sleepLog:[e,...(x.sleepLog||[]).slice(0,6)],activityLog:nl};return x});axp(type==="sleep"?10:15)};
-
-  // ── Gemini calorie lookup (1/day free) ──
-  const getAiLookupCount=()=>{try{const d=JSON.parse(localStorage.getItem("fs-ai-limit")||"{}");if(d.date===new Date().toDateString())return d.count||0;return 0}catch{return 0}};
-  const incAiLookupCount=()=>{try{const today=new Date().toDateString();const d=JSON.parse(localStorage.getItem("fs-ai-limit")||"{}");const count=d.date===today?(d.count||0)+1:1;localStorage.setItem("fs-ai-limit",JSON.stringify({date:today,count}))}catch{}};
-
-  const lookupCalories=async(foodName)=>{
-    if(!foodName.trim()){setAiError("Enter a food name first.");return}
-    if(getAiLookupCount()>=1){setAiError("Daily AI lookup used. Add food manually or pick from the database below.");return}
-    setAiLoading(true);setAiError(null);setAiResult(null);
-    try{
-      const resp=await fetch("/api/lookup-food",{
-        method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({foodName:foodName.trim()})
-      });
-      const data=await resp.json();
-      if(data.error){setAiError(data.error);setAiLoading(false);return}
-      incAiLookupCount();
-      setAiResult(data.item);
-    }catch(e){setAiError("Lookup failed. Add food manually.")}
-    setAiLoading(false)
-  };
 
   // ── Accelerometer pedometer ──
   const startPedometer=()=>{
@@ -579,31 +554,11 @@ export default function App(){
   </div></div>};
 
   // ── FOOD TRACKER — Manual Entry + AI Lookup + Database ──
-  const Food=()=>{const cats=["all","breakfast","lunch","snack","drink","sweet","fruit"];const ff=FOOD_DB.filter(f=>(fc==="all"||f.category===fc)&&(!fs||f.name.toLowerCase().includes(fs.toLowerCase())||f.region.toLowerCase().includes(fs.toLowerCase())));const tl=u.foodLog||[];const tots=tl.reduce((a,f)=>({cal:a.cal+f.cal,protein:a.protein+(f.protein||0),carbs:a.carbs+(f.carbs||0),fat:a.fat+(f.fat||0)}),{cal:0,protein:0,carbs:0,fat:0});const aiUsed=getAiLookupCount()>=1;
+  const Food=()=>{const cats=["all","breakfast","lunch","snack","drink","sweet","fruit"];const ff=FOOD_DB.filter(f=>(fc==="all"||f.category===fc)&&(!fs||f.name.toLowerCase().includes(fs.toLowerCase())||f.region.toLowerCase().includes(fs.toLowerCase())));const tl=u.foodLog||[];const tots=tl.reduce((a,f)=>({cal:a.cal+f.cal,protein:a.protein+(f.protein||0),carbs:a.carbs+(f.carbs||0),fat:a.fat+(f.fat||0)}),{cal:0,protein:0,carbs:0,fat:0});
   return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
     <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>setTab("home")} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Food Tracker {"\u{1F37D}\uFE0F"}</h1></div>
     {/* Daily Summary */}
     <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.1}}>{"\u{1F37D}\uFE0F"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Intake</p><div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:10}}><span style={{fontSize:42,fontWeight:900,color:"#fff"}}>{tots.cal}</span><span style={{fontSize:15,color:"#ffffffcc"}}>/ 2000 kcal</span></div><div style={{background:"#ffffff30",borderRadius:6,height:8,marginBottom:12,overflow:"hidden"}}><div style={{width:`${Math.min((tots.cal/2e3)*100,100)}%`,height:"100%",background:"#fff",borderRadius:6,transition:"width .3s"}}/></div><div style={{display:"flex",gap:16}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Protein</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.protein}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Carbs</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.carbs}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Fat</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.fat}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Items</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tl.length}</p></div></div></div>
-
-    {/* AI Calorie Lookup (1/day) */}
-    <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:16,padding:2,marginBottom:14}}>
-      <div style={{background:"#0e0e18",borderRadius:14,padding:14}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{"\u{1F9E0}"} AI Calorie Lookup</p><p style={{fontSize:11,color:"#888"}}>Type any food — AI tells you the calories</p></div>
-          <span style={{fontSize:11,color:aiUsed?"#E94560":"#38ef7d",fontWeight:600}}>{aiUsed?"Used today":"1 free"}</span>
-        </div>
-        <div style={{display:"flex",gap:6,marginBottom:8}}>
-          <input value={aiLookup} onChange={e=>setAiLookup(e.target.value)} placeholder="e.g. Paneer tikka masala 200g" type="text" style={{...IS,flex:1,fontSize:13,padding:"10px 12px"}} />
-          <button onClick={()=>lookupCalories(aiLookup)} disabled={aiUsed||aiLoading||!aiLookup.trim()} style={{background:aiUsed?"#333":"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:10,padding:"10px 16px",color:aiUsed?"#666":"#fff",fontSize:13,fontWeight:700,cursor:aiUsed?"default":"pointer",whiteSpace:"nowrap"}}>{aiLoading?"...":"Lookup"}</button>
-        </div>
-        {aiResult&&<div style={{background:"#1A1A2E",borderRadius:10,padding:12,border:"1px solid #667eea30",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{aiResult.name}</p><p style={{fontSize:11,color:"#888"}}>{aiResult.region} · P:{aiResult.protein}g C:{aiResult.carbs}g F:{aiResult.fat}g</p></div>
-          <div style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:15,fontWeight:800,color:"#667eea"}}>{aiResult.cal} kcal</span>
-          <button onClick={()=>{addFood(aiResult);setAiResult(null);setAiLookup("")}} style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",border:"none",borderRadius:8,width:32,height:32,color:"#0A0A0F",fontSize:16,fontWeight:800,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button></div>
-        </div>}
-        {aiError&&<p style={{fontSize:12,color:"#E94560",marginTop:4}}>{aiError}</p>}
-      </div>
-    </div>
 
     {/* Manual Food Entry */}
     <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
