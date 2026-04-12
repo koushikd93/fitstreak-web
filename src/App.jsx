@@ -339,6 +339,21 @@ export default function App(){
   const[runActive,setRunActive]=useState(false);
   const[runDist,setRunDist]=useState(0);
   const[runTime,setRunTime]=useState(0);
+  // Pro plan state
+  const[isPro,setIsPro]=useState(()=>{try{return localStorage.getItem("fs-pro")==="1"}catch{return false}});
+  const[showPaywall,setShowPaywall]=useState(false);
+  const[paywallFeature,setPaywallFeature]=useState("");
+  const[chatMessages,setChatMessages]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-chat")||"[]")}catch{return[]}});
+  const[chatInput,setChatInput]=useState("");
+  const[chatLoading,setChatLoading]=useState(false);
+  const[dailyReport,setDailyReport]=useState(null);
+  const[weeklyReport,setWeeklyReport]=useState(null);
+  const[reportLoading,setReportLoading]=useState(false);
+  const[workoutAnalysis,setWorkoutAnalysis]=useState(null);
+  const[heartRate,setHeartRate]=useState({resting:"",max:""});
+  const[bodyMeasurements,setBodyMeasurements]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-measurements")||"{}")}catch{return{}}});
+  const[goalTarget,setGoalTarget]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-goal")||"null")}catch{return null}});
+  const[proView,setProView]=useState("home");
   const pedometerRef=useRef({lastMag:0,stepThreshold:1.2,cooldown:0});
   const geoWatchRef=useRef(null);
   const runTimerRef=useRef(null);
@@ -413,6 +428,171 @@ export default function App(){
   };
   const haversine=(lat1,lon1,lat2,lon2)=>{const R=6371;const dLat=(lat2-lat1)*Math.PI/180;const dLon=(lon2-lon1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))};
   const fmtTime=(s)=>`${Math.floor(s/60)}:${(s%60).toString().padStart(2,"0")}`;
+
+  // ── PRO FEATURE GATING ──
+  const requirePro=(featureName)=>{
+    if(isPro)return true;
+    setPaywallFeature(featureName);
+    setShowPaywall(true);
+    return false;
+  };
+
+  // ── RAZORPAY PAYMENT (with demo mode) ──
+  // Set RAZORPAY_ENABLED=true after creating Razorpay account and adding key
+  const RAZORPAY_ENABLED=false;
+  const RAZORPAY_KEY="rzp_test_YOUR_KEY_HERE"; // Replace with real key from razorpay.com
+  
+  const handlePayment=async(plan)=>{
+    if(!RAZORPAY_ENABLED){
+      // Demo mode: show waitlist message
+      alert(`🎉 You're on the waitlist for FitStreak Pro!\n\nWe'll email you the moment Pro launches with a 50% early-bird discount.\n\nFor now, all your progress is saved. Keep building that streak!`);
+      // For demo: actually grant Pro access so user can test features
+      setIsPro(true);
+      try{localStorage.setItem("fs-pro","1")}catch{}
+      setShowPaywall(false);
+      return;
+    }
+    // Real Razorpay integration
+    if(!window.Razorpay){
+      const script=document.createElement("script");
+      script.src="https://checkout.razorpay.com/v1/checkout.js";
+      script.onload=()=>processPayment(plan);
+      document.body.appendChild(script);
+    }else{
+      processPayment(plan);
+    }
+  };
+  
+  const processPayment=async(plan)=>{
+    const amount=plan==="monthly"?9900:59900; // in paise
+    try{
+      // In production, create order on backend first
+      const resp=await fetch("/api/create-order",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({amount,plan})
+      });
+      const order=await resp.json();
+      if(!order.id){alert("Payment setup failed. Try again.");return}
+      const options={
+        key:RAZORPAY_KEY,
+        amount,
+        currency:"INR",
+        name:"FitStreak Pro",
+        description:plan==="monthly"?"Monthly Pro Subscription":"Annual Pro Subscription",
+        order_id:order.id,
+        handler:(response)=>{
+          // Payment successful
+          setIsPro(true);
+          try{localStorage.setItem("fs-pro","1")}catch{}
+          setShowPaywall(false);
+          alert("🎉 Welcome to FitStreak Pro! All AI features unlocked.");
+        },
+        prefill:{name:u.name},
+        theme:{color:"#FF6B35"}
+      };
+      const rzp=new window.Razorpay(options);
+      rzp.open();
+    }catch(e){alert("Payment failed. Try again.")}
+  };
+
+  // ── AI COACH CHAT ──
+  const sendChatMessage=async(message)=>{
+    if(!message.trim()||chatLoading)return;
+    const userMsg={role:"user",content:message,time:Date.now()};
+    const newMessages=[...chatMessages,userMsg];
+    setChatMessages(newMessages);
+    setChatInput("");
+    setChatLoading(true);
+    try{localStorage.setItem("fs-chat",JSON.stringify(newMessages))}catch{}
+    try{
+      const userContext=`User context: Name=${u.name||"User"}, Goal=${u.goal||"general fitness"}, Level=${u.level||"beginner"}, Streak=${u.streak||0} days, Total XP=${u.xp||0}, Today's steps=${u.steps||0}, Today's calories=${u.foodLogTotal||0}`;
+      const resp=await fetch("/api/ai-coach",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message,context:userContext,history:newMessages.slice(-6).map(m=>({role:m.role,content:m.content}))})
+      });
+      const data=await resp.json();
+      if(data.error){
+        const errMsg={role:"assistant",content:"Sorry, I'm having trouble right now. Try again in a moment.",time:Date.now()};
+        setChatMessages([...newMessages,errMsg]);
+      }else{
+        const aiMsg={role:"assistant",content:data.reply,time:Date.now()};
+        const updated=[...newMessages,aiMsg];
+        setChatMessages(updated);
+        try{localStorage.setItem("fs-chat",JSON.stringify(updated))}catch{}
+      }
+    }catch(e){
+      const errMsg={role:"assistant",content:"Connection failed. Check your internet and try again.",time:Date.now()};
+      setChatMessages([...newMessages,errMsg]);
+    }
+    setChatLoading(false);
+  };
+
+  // ── DAILY/WEEKLY REPORT GENERATOR ──
+  const generateReport=async(type)=>{
+    setReportLoading(true);
+    try{
+      const userData={
+        name:u.name,goal:u.goal,level:u.level,
+        streak:u.streak,xp:u.xp,
+        steps:u.steps||0,runKm:u.runKm||0,sleepHours:u.sleepHours||0,
+        caloriesEaten:u.foodLogTotal||0,
+        workoutsCompleted:u.workoutsCompleted||0,
+        recentFoods:(u.foodLog||[]).slice(0,5).map(f=>f.name),
+        recentActivities:(u.activityLog||[]).slice(0,7).map(a=>`${a.type}:${a.value}`),
+        heartRateResting:heartRate.resting,heartRateMax:heartRate.max,
+        measurements:bodyMeasurements
+      };
+      const resp=await fetch("/api/generate-report",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({type,userData})
+      });
+      const data=await resp.json();
+      if(data.error){
+        if(type==="daily")setDailyReport({error:data.error});
+        else setWeeklyReport({error:data.error});
+      }else{
+        if(type==="daily")setDailyReport(data.report);
+        else setWeeklyReport(data.report);
+      }
+    }catch(e){
+      const errReport={error:"Could not generate report. Try again."};
+      if(type==="daily")setDailyReport(errReport);
+      else setWeeklyReport(errReport);
+    }
+    setReportLoading(false);
+  };
+
+  // ── WORKOUT ANALYSIS ──
+  const analyzeWorkout=async(workout)=>{
+    try{
+      const resp=await fetch("/api/analyze-workout",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          workoutName:workout.name,
+          exercises:workout.exercises.map(e=>e.name),
+          duration:workout.duration,
+          difficulty:workout.difficulty,
+          userLevel:u.level,
+          userGoal:u.goal,
+          totalWorkoutsCompleted:u.workoutsCompleted||0
+        })
+      });
+      const data=await resp.json();
+      if(data.analysis)setWorkoutAnalysis(data.analysis);
+    }catch(e){console.error(e)}
+  };
+
+  // Save measurements
+  const saveMeasurements=(m)=>{
+    setBodyMeasurements(m);
+    try{localStorage.setItem("fs-measurements",JSON.stringify(m))}catch{}
+  };
+
+  // Save goal
+  const saveGoal=(g)=>{
+    setGoalTarget(g);
+    try{localStorage.setItem("fs-goal",JSON.stringify(g))}catch{}
+  };
 
   // ── LOADING ──
   if(scr==="loading")return <div style={AS}><div style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}><div style={{textAlign:"center"}}><div style={{fontSize:48,marginBottom:12}}>{"\u26A1"}</div><p style={{color:"#b0b0b8"}}>Loading FitStreak...</p></div></div></div>;
@@ -632,6 +812,246 @@ export default function App(){
     {(u.activityLog||[]).length>0&&<div style={{marginTop:24}}><h3 style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:10}}>Recent</h3>{(u.activityLog||[]).slice(0,8).map((a,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:"1px solid #ffffff08"}}><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:16}}>{a.type==="walk"?"\u{1F6B6}":a.type==="run"?"\u{1F3C3}":"\u{1F634}"}</span><span style={{fontSize:13,color:"#ccc"}}>{a.type==="walk"?Number(a.value).toLocaleString()+" steps":a.type==="run"?a.value+" km":a.value+"h sleep"}</span></div><span style={{fontSize:11,color:"#9a9aa2"}}>{new Date(a.date).toLocaleDateString()}</span></div>)}</div>}
   </div>};
 
+  // ── PRO TAB — AI FEATURES HUB ──
+  const Pro=()=>{
+    return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
+        <button onClick={()=>{setTab("home");setProView("home")}} style={BB}>{"\u2190"}</button>
+        <h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>FitStreak Pro {isPro?"\u{1F451}":"\u{1F512}"}</h1>
+      </div>
+      
+      {!isPro && <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F451}"}</div>
+        <p style={{fontSize:11,color:"#ffffffcc",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Unlock AI Power</p>
+        <h2 style={{fontSize:24,fontWeight:900,color:"#fff",marginBottom:8}}>FitStreak Pro</h2>
+        <p style={{fontSize:13,color:"#ffffffdd",marginBottom:14}}>AI Coach • Smart Reports • Workout Analysis • Body Tracking</p>
+        <button onClick={()=>{setPaywallFeature("Pro Plan");setShowPaywall(true)}} style={{background:"#fff",border:"none",borderRadius:12,padding:"12px 24px",color:"#FF6B35",fontSize:14,fontWeight:800,cursor:"pointer"}}>Upgrade to Pro {"\u2192"}</button>
+      </div>}
+      
+      {isPro && <div style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",borderRadius:18,padding:18,marginBottom:18,textAlign:"center"}}>
+        <p style={{fontSize:12,color:"#0A0A0Faa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5}}>{"\u{1F451}"} Pro Member</p>
+        <p style={{fontSize:18,fontWeight:800,color:"#0A0A0F",marginTop:4}}>All features unlocked</p>
+      </div>}
+
+      {proView==="home" && <div>
+        {/* Feature Grid */}
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:18}}>
+          <button onClick={()=>{if(requirePro("AI Coach"))setProView("chat")}} style={{background:"#12121A",border:"1px solid #667eea30",borderRadius:14,padding:14,textAlign:"left",cursor:"pointer"}}>
+            <div style={{fontSize:28,marginBottom:8}}>{"\u{1F4AC}"}</div>
+            <p style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:2}}>AI Coach</p>
+            <p style={{fontSize:11,color:"#b0b0b8"}}>Ask anything about fitness</p>
+          </button>
+          <button onClick={()=>{if(requirePro("Daily Report"))setProView("daily")}} style={{background:"#12121A",border:"1px solid #FF6B3530",borderRadius:14,padding:14,textAlign:"left",cursor:"pointer"}}>
+            <div style={{fontSize:28,marginBottom:8}}>{"\u{1F4CA}"}</div>
+            <p style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:2}}>Daily Report</p>
+            <p style={{fontSize:11,color:"#b0b0b8"}}>AI analysis of your day</p>
+          </button>
+          <button onClick={()=>{if(requirePro("Weekly Report"))setProView("weekly")}} style={{background:"#12121A",border:"1px solid #38ef7d30",borderRadius:14,padding:14,textAlign:"left",cursor:"pointer"}}>
+            <div style={{fontSize:28,marginBottom:8}}>{"\u{1F4C8}"}</div>
+            <p style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:2}}>Weekly Report</p>
+            <p style={{fontSize:11,color:"#b0b0b8"}}>Track weekly progress</p>
+          </button>
+          <button onClick={()=>{if(requirePro("Body Tracking"))setProView("body")}} style={{background:"#12121A",border:"1px solid #f093fb30",borderRadius:14,padding:14,textAlign:"left",cursor:"pointer"}}>
+            <div style={{fontSize:28,marginBottom:8}}>{"\u{1F4AA}"}</div>
+            <p style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:2}}>Body Stats</p>
+            <p style={{fontSize:11,color:"#b0b0b8"}}>Heart rate & measurements</p>
+          </button>
+          <button onClick={()=>{if(requirePro("Goal Tracker"))setProView("goal")}} style={{background:"#12121A",border:"1px solid #FFD70030",borderRadius:14,padding:14,textAlign:"left",cursor:"pointer"}}>
+            <div style={{fontSize:28,marginBottom:8}}>{"\u{1F3AF}"}</div>
+            <p style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:2}}>Goal Tracker</p>
+            <p style={{fontSize:11,color:"#b0b0b8"}}>Set & achieve targets</p>
+          </button>
+          <button onClick={()=>{if(isPro)alert("You have 3 freeze tokens!");else{setPaywallFeature("Streak Freeze");setShowPaywall(true)}}} style={{background:"#12121A",border:"1px solid #11998e30",borderRadius:14,padding:14,textAlign:"left",cursor:"pointer"}}>
+            <div style={{fontSize:28,marginBottom:8}}>{"\u{1F9CA}"}</div>
+            <p style={{fontSize:14,fontWeight:700,color:"#fff",marginBottom:2}}>Streak Freeze</p>
+            <p style={{fontSize:11,color:"#b0b0b8"}}>3 tokens/month</p>
+          </button>
+        </div>
+      </div>}
+
+      {/* AI Coach Chat */}
+      {proView==="chat" && <div>
+        <button onClick={()=>setProView("home")} style={{...BB,marginBottom:14}}>{"\u2190"} Back</button>
+        <div style={{background:"#12121A",borderRadius:14,padding:14,minHeight:400,maxHeight:480,overflowY:"auto",marginBottom:14,border:"1px solid #ffffff08"}}>
+          {chatMessages.length===0 && <div style={{textAlign:"center",padding:"40px 20px"}}>
+            <div style={{fontSize:48,marginBottom:12}}>{"\u{1F4AC}"}</div>
+            <p style={{fontSize:15,color:"#fff",fontWeight:600,marginBottom:8}}>Hi {u.name||"there"}! I'm your AI Coach.</p>
+            <p style={{fontSize:13,color:"#b0b0b8",lineHeight:1.5}}>Ask me anything about workouts, diet, recovery, or fitness goals.</p>
+            <div style={{marginTop:16,display:"flex",flexDirection:"column",gap:6}}>
+              {["How do I build muscle fast?","Best diet for fat loss?","Why am I not losing weight?","Suggest a workout for today"].map((q,i)=>
+                <button key={i} onClick={()=>sendChatMessage(q)} style={{background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"8px 12px",color:"#b0b0b8",fontSize:12,cursor:"pointer",textAlign:"left"}}>{"\u{1F4A1}"} {q}</button>
+              )}
+            </div>
+          </div>}
+          {chatMessages.map((m,i)=><div key={i} style={{marginBottom:12,display:"flex",justifyContent:m.role==="user"?"flex-end":"flex-start"}}>
+            <div style={{maxWidth:"85%",background:m.role==="user"?"linear-gradient(135deg,#FF6B35,#E94560)":"#1A1A2E",color:"#fff",borderRadius:14,padding:"10px 14px",fontSize:13,lineHeight:1.5,whiteSpace:"pre-wrap"}}>{m.content}</div>
+          </div>)}
+          {chatLoading && <div style={{display:"flex",justifyContent:"flex-start"}}>
+            <div style={{background:"#1A1A2E",borderRadius:14,padding:"10px 14px",fontSize:13,color:"#b0b0b8"}}>{"\u{1F914}"} Thinking...</div>
+          </div>}
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          <input value={chatInput} onChange={e=>setChatInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter")sendChatMessage(chatInput)}} placeholder="Ask your AI coach..." type="text" style={{...IS,flex:1,fontSize:14}} />
+          <button onClick={()=>sendChatMessage(chatInput)} disabled={!chatInput.trim()||chatLoading} style={{...BP,padding:"12px 18px",opacity:chatInput.trim()&&!chatLoading?1:.5}}>{"\u2192"}</button>
+        </div>
+        {chatMessages.length>0 && <button onClick={()=>{setChatMessages([]);try{localStorage.removeItem("fs-chat")}catch{}}} style={{marginTop:10,background:"none",border:"none",color:"#9a9aa2",fontSize:11,cursor:"pointer"}}>Clear chat history</button>}
+      </div>}
+
+      {/* Daily Report */}
+      {proView==="daily" && <div>
+        <button onClick={()=>setProView("home")} style={{...BB,marginBottom:14}}>{"\u2190"} Back</button>
+        <h2 style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:6}}>{"\u{1F4CA}"} Daily Smart Report</h2>
+        <p style={{fontSize:12,color:"#b0b0b8",marginBottom:14}}>AI analyzes your day and gives you actionable insights for tomorrow</p>
+        {!dailyReport && <button onClick={()=>generateReport("daily")} disabled={reportLoading} style={{...BP,width:"100%",padding:"14px"}}>{reportLoading?"Generating report...":"Generate Today's Report \u{1F9E0}"}</button>}
+        {dailyReport && dailyReport.error && <div style={{background:"#E9456015",border:"1px solid #E9456030",borderRadius:12,padding:14}}><p style={{color:"#E94560",fontSize:13}}>{dailyReport.error}</p><button onClick={()=>generateReport("daily")} style={{...BP,marginTop:10,width:"100%"}}>Try Again</button></div>}
+        {dailyReport && !dailyReport.error && <div>
+          <div style={{background:"linear-gradient(135deg,#1A1A2E,#0F3460)",borderRadius:16,padding:18,marginBottom:14,border:"1px solid #ffffff10"}}>
+            <p style={{fontSize:11,color:"#FF6B35",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Your Day</p>
+            <p style={{fontSize:14,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{dailyReport.summary}</p>
+          </div>
+          <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:10,border:"1px solid #38ef7d20"}}>
+            <p style={{fontSize:13,fontWeight:700,color:"#38ef7d",marginBottom:8}}>{"\u2705"} What's Working</p>
+            <p style={{fontSize:13,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{dailyReport.wins}</p>
+          </div>
+          <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:10,border:"1px solid #FF6B3520"}}>
+            <p style={{fontSize:13,fontWeight:700,color:"#FF6B35",marginBottom:8}}>{"\u26A1"} Areas to Improve</p>
+            <p style={{fontSize:13,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{dailyReport.improvements}</p>
+          </div>
+          <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:10,border:"1px solid #667eea20"}}>
+            <p style={{fontSize:13,fontWeight:700,color:"#667eea",marginBottom:8}}>{"\u{1F3AF}"} Tomorrow's Plan</p>
+            <p style={{fontSize:13,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{dailyReport.tomorrow}</p>
+          </div>
+          <button onClick={()=>setDailyReport(null)} style={{...BS,width:"100%",marginTop:10}}>Generate New Report</button>
+        </div>}
+      </div>}
+
+      {/* Weekly Report */}
+      {proView==="weekly" && <div>
+        <button onClick={()=>setProView("home")} style={{...BB,marginBottom:14}}>{"\u2190"} Back</button>
+        <h2 style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:6}}>{"\u{1F4C8}"} Weekly Progress Report</h2>
+        <p style={{fontSize:12,color:"#b0b0b8",marginBottom:14}}>Comprehensive AI analysis of your week's progress and trends</p>
+        {!weeklyReport && <button onClick={()=>generateReport("weekly")} disabled={reportLoading} style={{...BP,width:"100%",padding:"14px"}}>{reportLoading?"Analyzing your week...":"Generate Weekly Report \u{1F4CA}"}</button>}
+        {weeklyReport && weeklyReport.error && <div style={{background:"#E9456015",border:"1px solid #E9456030",borderRadius:12,padding:14}}><p style={{color:"#E94560",fontSize:13}}>{weeklyReport.error}</p><button onClick={()=>generateReport("weekly")} style={{...BP,marginTop:10,width:"100%"}}>Try Again</button></div>}
+        {weeklyReport && !weeklyReport.error && <div>
+          <div style={{background:"linear-gradient(135deg,#1A1A2E,#0F3460)",borderRadius:16,padding:18,marginBottom:14,border:"1px solid #ffffff10"}}>
+            <p style={{fontSize:11,color:"#38ef7d",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:8}}>Week Overview</p>
+            <p style={{fontSize:14,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{weeklyReport.summary}</p>
+          </div>
+          <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:10,border:"1px solid #38ef7d20"}}>
+            <p style={{fontSize:13,fontWeight:700,color:"#38ef7d",marginBottom:8}}>{"\u{1F3C6}"} Key Achievements</p>
+            <p style={{fontSize:13,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{weeklyReport.wins}</p>
+          </div>
+          <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:10,border:"1px solid #667eea20"}}>
+            <p style={{fontSize:13,fontWeight:700,color:"#667eea",marginBottom:8}}>{"\u{1F4CA}"} Trends & Patterns</p>
+            <p style={{fontSize:13,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{weeklyReport.trends}</p>
+          </div>
+          <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:10,border:"1px solid #FF6B3520"}}>
+            <p style={{fontSize:13,fontWeight:700,color:"#FF6B35",marginBottom:8}}>{"\u{1F3AF}"} Next Week's Focus</p>
+            <p style={{fontSize:13,color:"#fff",lineHeight:1.6,whiteSpace:"pre-wrap"}}>{weeklyReport.nextWeek}</p>
+          </div>
+          <button onClick={()=>setWeeklyReport(null)} style={{...BS,width:"100%",marginTop:10}}>Generate New Report</button>
+        </div>}
+      </div>}
+
+      {/* Body Stats */}
+      {proView==="body" && <div>
+        <button onClick={()=>setProView("home")} style={{...BB,marginBottom:14}}>{"\u2190"} Back</button>
+        <h2 style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:14}}>{"\u{1F4AA}"} Body Stats</h2>
+        
+        <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
+          <p style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:10}}>{"\u2764\uFE0F"} Heart Rate</p>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            <div>
+              <p style={{fontSize:11,color:"#b0b0b8",marginBottom:4}}>Resting (BPM)</p>
+              <input value={heartRate.resting} onChange={e=>setHeartRate(h=>({...h,resting:e.target.value}))} placeholder="60" type="text" inputMode="numeric" style={{...IS,fontSize:14,padding:"10px"}} />
+            </div>
+            <div>
+              <p style={{fontSize:11,color:"#b0b0b8",marginBottom:4}}>Max during workout</p>
+              <input value={heartRate.max} onChange={e=>setHeartRate(h=>({...h,max:e.target.value}))} placeholder="160" type="text" inputMode="numeric" style={{...IS,fontSize:14,padding:"10px"}} />
+            </div>
+          </div>
+        </div>
+
+        <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
+          <p style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:10}}>{"\u{1F4CF}"} Body Measurements (cm)</p>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            {[["chest","Chest"],["waist","Waist"],["hips","Hips"],["arms","Arms"],["thighs","Thighs"],["weight","Weight (kg)"]].map(([k,l])=>
+              <div key={k}>
+                <p style={{fontSize:11,color:"#b0b0b8",marginBottom:4}}>{l}</p>
+                <input value={bodyMeasurements[k]||""} onChange={e=>saveMeasurements({...bodyMeasurements,[k]:e.target.value})} type="text" inputMode="decimal" style={{...IS,fontSize:14,padding:"10px"}} />
+              </div>
+            )}
+          </div>
+        </div>
+        <p style={{fontSize:11,color:"#9a9aa2",textAlign:"center"}}>Update weekly to track muscle growth & progress</p>
+      </div>}
+
+      {/* Goal Tracker */}
+      {proView==="goal" && <div>
+        <button onClick={()=>setProView("home")} style={{...BB,marginBottom:14}}>{"\u2190"} Back</button>
+        <h2 style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:14}}>{"\u{1F3AF}"} Goal Tracker</h2>
+        
+        {!goalTarget && <div style={{background:"#12121A",borderRadius:14,padding:14,border:"1px solid #ffffff08"}}>
+          <p style={{fontSize:13,color:"#b0b0b8",marginBottom:14}}>What's your fitness goal?</p>
+          {["Lose 5kg in 60 days","Gain 3kg muscle in 90 days","Run a 5K in 30 days","Do 50 push-ups in 30 days","Build daily workout habit"].map(g=>
+            <button key={g} onClick={()=>saveGoal({title:g,startDate:new Date().toISOString(),progress:0})} style={{display:"block",width:"100%",background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"12px 14px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",marginBottom:8,textAlign:"left"}}>{"\u{1F3AF}"} {g}</button>
+          )}
+        </div>}
+        
+        {goalTarget && <div>
+          <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:16,padding:18,marginBottom:14}}>
+            <p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Current Goal</p>
+            <p style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:10}}>{goalTarget.title}</p>
+            <div style={{background:"#ffffff20",borderRadius:8,height:8,overflow:"hidden"}}>
+              <div style={{width:`${goalTarget.progress||0}%`,height:"100%",background:"#fff",borderRadius:8}}/>
+            </div>
+            <p style={{fontSize:12,color:"#ffffffcc",marginTop:6}}>{goalTarget.progress||0}% complete · Started {new Date(goalTarget.startDate).toLocaleDateString()}</p>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            <button onClick={()=>saveGoal({...goalTarget,progress:Math.min((goalTarget.progress||0)+10,100)})} style={{...BP,padding:"12px"}}>+10% Done</button>
+            <button onClick={()=>{saveGoal(null);setProView("goal")}} style={{...BS,padding:"12px"}}>Change Goal</button>
+          </div>
+        </div>}
+      </div>}
+    </div>;
+  };
+
+  // ── PAYWALL MODAL ──
+  const Paywall=()=>{
+    if(!showPaywall)return null;
+    return <div style={{position:"fixed",inset:0,background:"#000000dd",display:"flex",alignItems:"center",justifyContent:"center",zIndex:200,padding:16}}>
+      <div style={{background:"#0e0e18",borderRadius:20,padding:24,maxWidth:380,width:"100%",border:"1px solid #FF6B3530",position:"relative"}}>
+        <button onClick={()=>setShowPaywall(false)} style={{position:"absolute",top:12,right:12,background:"#1A1A2E",border:"none",borderRadius:8,width:32,height:32,color:"#fff",fontSize:18,cursor:"pointer"}}>{"\u2715"}</button>
+        <div style={{textAlign:"center",marginBottom:18}}>
+          <div style={{fontSize:48,marginBottom:8}}>{"\u{1F451}"}</div>
+          <h2 style={{fontSize:22,fontWeight:900,color:"#fff",marginBottom:4}}>Unlock {paywallFeature}</h2>
+          <p style={{fontSize:13,color:"#b0b0b8"}}>Upgrade to FitStreak Pro</p>
+        </div>
+        
+        <div style={{background:"#12121A",borderRadius:12,padding:14,marginBottom:14}}>
+          <p style={{fontSize:12,color:"#b0b0b8",marginBottom:10,fontWeight:600}}>EVERYTHING IN PRO:</p>
+          {["\u{1F4AC} AI Coach Chat (unlimited)","\u{1F4CA} Daily Smart Reports","\u{1F4C8} Weekly Progress Reports","\u{1F4AA} Body Measurement Tracking","\u{1F3AF} Custom Goal Tracker","\u2764\uFE0F Heart Rate Logging","\u{1F9CA} 3 Streak Freeze tokens/month","\u{1F6AB} Ad-free experience","\u{1F451} Exclusive Pro badge"].map((f,i)=>
+            <p key={i} style={{fontSize:12,color:"#fff",marginBottom:6,display:"flex",alignItems:"center",gap:6}}><span style={{color:"#38ef7d"}}>{"\u2713"}</span> {f}</p>
+          )}
+        </div>
+
+        {/* Pricing options */}
+        <button onClick={()=>handlePayment("yearly")} style={{display:"block",width:"100%",background:"linear-gradient(135deg,#FF6B35,#E94560)",border:"none",borderRadius:14,padding:"14px",cursor:"pointer",marginBottom:8,position:"relative"}}>
+          <div style={{position:"absolute",top:-8,right:12,background:"#38ef7d",color:"#0A0A0F",fontSize:10,fontWeight:800,padding:"3px 8px",borderRadius:8}}>BEST VALUE • 50% OFF</div>
+          <p style={{fontSize:11,color:"#ffffffcc",fontWeight:600,marginBottom:2}}>ANNUAL PLAN</p>
+          <p style={{fontSize:20,fontWeight:900,color:"#fff"}}>{"\u20B9"}599<span style={{fontSize:13,fontWeight:600,color:"#ffffffcc"}}>/year</span></p>
+          <p style={{fontSize:11,color:"#ffffffcc",marginTop:2}}>Just {"\u20B9"}1.64/day · Save {"\u20B9"}589</p>
+        </button>
+        <button onClick={()=>handlePayment("monthly")} style={{display:"block",width:"100%",background:"#1A1A2E",border:"1px solid #ffffff20",borderRadius:14,padding:"14px",cursor:"pointer",marginBottom:10}}>
+          <p style={{fontSize:11,color:"#b0b0b8",fontWeight:600,marginBottom:2}}>MONTHLY PLAN</p>
+          <p style={{fontSize:18,fontWeight:800,color:"#fff"}}>{"\u20B9"}99<span style={{fontSize:13,fontWeight:600,color:"#b0b0b8"}}>/month</span></p>
+        </button>
+        
+        <p style={{fontSize:10,color:"#9a9aa2",textAlign:"center",lineHeight:1.5}}>{!RAZORPAY_ENABLED?"\u{1F389} Pre-launch: Join the waitlist and get instant access to test all Pro features for free!":"Secure payment via Razorpay \u2022 Cancel anytime"}</p>
+      </div>
+    </div>;
+  };
+
   // ── CHALLENGES ──
   const Challenges=()=><div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
     <h1 style={{fontSize:24,fontWeight:800,color:"#fff",marginBottom:4}}>Challenges</h1><p style={{fontSize:13,color:"#b0b0b8",marginBottom:20}}>Compete & earn XP</p>
@@ -664,7 +1084,7 @@ export default function App(){
     {pop.type==="food"&&<><div style={{fontSize:44}}>{"\u{1F37D}\uFE0F"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Food Logged! +5 XP</h2><p style={{fontSize:13,color:"#FF6B35",fontWeight:600}}>{pop.f?.name} — {pop.f?.cal} kcal</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>Close</button></>}
   </div></div>};
 
-  const Nav=()=>{if(["wo","ft","food","activity"].includes(tab))return null;return <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:"#0A0A0Fee",backdropFilter:"blur(12px)",borderTop:"1px solid #ffffff08",display:"flex",justifyContent:"space-around",padding:"6px 0 10px",zIndex:50}}>{[{id:"home",i:"\u{1F3E0}",l:"Home"},{id:"explore",i:"\u{1F3AC}",l:"Explore"},{id:"challenges",i:"\u{1F3C6}",l:"Compete"},{id:"stats",i:"\u{1F4CA}",l:"Profile"}].map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:1,padding:"4px 12px"}}><span style={{fontSize:20,filter:tab===t.id?"none":"grayscale(1)",opacity:tab===t.id?1:.5,transition:"all .2s"}}>{t.i}</span><span style={{fontSize:9,fontWeight:600,color:tab===t.id?"#FF6B35":"#b0b0b8"}}>{t.l}</span></button>)}</div>};
+  const Nav=()=>{if(["wo","ft","food","activity","pro"].includes(tab))return null;return <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:"#0A0A0Fee",backdropFilter:"blur(12px)",borderTop:"1px solid #ffffff08",display:"flex",justifyContent:"space-around",padding:"6px 0 10px",zIndex:50}}>{[{id:"home",i:"\u{1F3E0}",l:"Home"},{id:"explore",i:"\u{1F3AC}",l:"Explore"},{id:"pro",i:"\u{1F451}",l:"Pro AI"},{id:"challenges",i:"\u{1F3C6}",l:"Compete"},{id:"stats",i:"\u{1F4CA}",l:"Profile"}].map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:1,padding:"4px 10px"}}><span style={{fontSize:20,filter:tab===t.id?"none":"grayscale(1)",opacity:tab===t.id?1:.5,transition:"all .2s"}}>{t.i}</span><span style={{fontSize:9,fontWeight:600,color:tab===t.id?"#FF6B35":"#b0b0b8"}}>{t.l}</span></button>)}</div>};
 
   // Swipe-right gesture for back navigation
   const handleTouchStart=(e)=>{const t=e.touches[0];touchStartRef.current={x:t.clientX,y:t.clientY,time:Date.now()}};
@@ -677,6 +1097,7 @@ export default function App(){
       if(tab==="wo"){setWa(null);setTab("home")}
       else if(tab==="ft"){setTab("home")}
       else if(tab==="food"){setTab("home")}
+      else if(tab==="pro"){if(proView!=="home")setProView("home");else setTab("home")}
       else if(tab==="activity"){if(pedoActive)stopPedometer();if(runActive)stopRun();setTab("home")}
       else if(tab!=="home"){setTab("home")}
     }
@@ -685,7 +1106,8 @@ export default function App(){
 
   return <div style={AS} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}><style>{`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{background:#0A0A0F;overflow-x:hidden}input:focus{outline:none}button:active{transform:scale(.97)}@keyframes xpFloat{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(1.3)}}@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes scanLine{0%{top:15%;opacity:0}50%{opacity:1}100%{top:85%;opacity:0}}::-webkit-scrollbar{display:none}`}</style>
     <div style={G1}/><div style={G2}/>
-    {tab==="home"&&Home()}{tab==="explore"&&Explore()}{tab==="challenges"&&Challenges()}{tab==="stats"&&Stats()}{tab==="wo"&&Workout()}{tab==="ft"&&FTest()}{tab==="food"&&Food()}{tab==="activity"&&Activity()}
+    {tab==="home"&&Home()}{tab==="explore"&&Explore()}{tab==="challenges"&&Challenges()}{tab==="stats"&&Stats()}{tab==="wo"&&Workout()}{tab==="ft"&&FTest()}{tab==="food"&&Food()}{tab==="activity"&&Activity()}{tab==="pro"&&Pro()}
+    {Paywall()}
     {Nav()}{Popup()}
     {xpa&&<div style={{position:"fixed",top:"40%",left:"50%",transform:"translate(-50%,-50%)",zIndex:200,animation:"xpFloat 2s ease-out forwards",pointerEvents:"none"}}><div style={{fontSize:32,fontWeight:900,color:"#FF6B35",textShadow:"0 0 30px #FF6B3560"}}>+{xpa} XP</div></div>}
   </div>
