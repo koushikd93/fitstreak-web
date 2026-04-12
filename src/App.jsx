@@ -359,6 +359,8 @@ export default function App(){
   const runTimerRef=useRef(null);
   const lastPosRef=useRef(null);
   const touchStartRef=useRef({x:0,y:0,time:0});
+  const wakeLockRef=useRef(null);
+  const runDistRef=useRef(0);
   const tmr=useRef(null);
 
   useEffect(()=>{(async()=>{const s=await load();if(s&&s.onboarded){const td=new Date().toDateString();const la=s.lastActiveDate?new Date(s.lastActiveDate).toDateString():null;const yd=new Date(Date.now()-864e5).toDateString();if(la&&la!==td&&la!==yd){s.freezeTokens>0?s.freezeTokens--:(s.streak=0)}const ll=s.foodLog?.[0]?.date;if(ll&&new Date(ll).toDateString()!==td){s.foodLog=[];s.foodLogTotal=0}setU({...DU,...s});setScr("app")}else setScr("onboarding")})()},[]);
@@ -375,6 +377,24 @@ export default function App(){
 
   const logAct=(type,val)=>{const v=Number(val);const e={type,value:v,date:new Date().toISOString()};setU(x=>{const nl=[e,...(x.activityLog||[])];if(type==="walk")return{...x,steps:(x.steps||0)+v,activityLog:nl};if(type==="run")return{...x,runKm:Math.round(((x.runKm||0)+v)*100)/100,activityLog:nl};if(type==="sleep")return{...x,sleepHours:v,sleepLog:[e,...(x.sleepLog||[]).slice(0,6)],activityLog:nl};return x});axp(type==="sleep"?10:15)};
 
+  // ── Wake Lock to keep screen on during tracking ──
+  const requestWakeLock=async()=>{
+    try{
+      if("wakeLock" in navigator){
+        wakeLockRef.current=await navigator.wakeLock.request("screen");
+        wakeLockRef.current.addEventListener("release",()=>{});
+      }
+    }catch(e){console.warn("Wake lock failed:",e)}
+  };
+  const releaseWakeLock=async()=>{
+    try{
+      if(wakeLockRef.current){
+        await wakeLockRef.current.release();
+        wakeLockRef.current=null;
+      }
+    }catch(e){}
+  };
+
   // ── Accelerometer pedometer ──
   const startPedometer=()=>{
     if(!window.DeviceMotionEvent){alert("Step counter not supported on this device.");return}
@@ -385,6 +405,7 @@ export default function App(){
   };
   const initPedometer=()=>{
     setPedoActive(true);setLiveSteps(0);
+    requestWakeLock(); // Keep screen on while counting
     const ref=pedometerRef.current;ref.cooldown=0;ref.lastMag=9.8;
     const handler=(e)=>{
       const a=e.accelerationIncludingGravity;if(!a)return;
@@ -398,33 +419,52 @@ export default function App(){
   };
   const stopPedometer=()=>{
     if(pedometerRef.current.handler)window.removeEventListener("devicemotion",pedometerRef.current.handler);
+    releaseWakeLock();
     setPedoActive(false);
-    if(liveSteps>0)logAct("walk",liveSteps);
+    setLiveSteps(currentSteps=>{
+      if(currentSteps>0)logAct("walk",currentSteps);
+      return 0;
+    });
   };
 
-  // ── GPS run tracker ──
+  // ── GPS run tracker — uses ref so distance stays accurate ──
   const startRun=()=>{
     if(!navigator.geolocation){alert("GPS not available.");return}
-    setRunActive(true);setRunDist(0);setRunTime(0);lastPosRef.current=null;
+    setRunActive(true);setRunDist(0);setRunTime(0);
+    runDistRef.current=0;lastPosRef.current=null;
+    requestWakeLock(); // Keep screen on during run
     geoWatchRef.current=navigator.geolocation.watchPosition(
       (pos)=>{
-        const{latitude:lat,longitude:lon}=pos.coords;
+        const{latitude:lat,longitude:lon,accuracy}=pos.coords;
+        // Skip very inaccurate readings (>50m accuracy)
+        if(accuracy>50)return;
         if(lastPosRef.current){
           const d=haversine(lastPosRef.current.lat,lastPosRef.current.lon,lat,lon);
-          if(d>0.002&&d<0.5)setRunDist(r=>Math.round((r+d)*1000)/1000);
+          // Accept movement between 1m and 200m per reading (filter GPS jitter and jumps)
+          if(d>0.001&&d<0.2){
+            runDistRef.current=Math.round((runDistRef.current+d)*1000)/1000;
+            setRunDist(runDistRef.current);
+          }
         }
         lastPosRef.current={lat,lon};
       },
-      (err)=>console.warn("GPS error:",err),
-      {enableHighAccuracy:true,maximumAge:5000,timeout:10000}
+      (err)=>{
+        console.warn("GPS error:",err);
+        if(err.code===1)alert("Location permission denied. Enable GPS in your browser settings.");
+        if(err.code===2)alert("GPS signal not available. Move to an open area.");
+      },
+      {enableHighAccuracy:true,maximumAge:0,timeout:15000}
     );
     runTimerRef.current=setInterval(()=>setRunTime(t=>t+1),1000);
   };
   const stopRun=()=>{
     if(geoWatchRef.current)navigator.geolocation.clearWatch(geoWatchRef.current);
     if(runTimerRef.current)clearInterval(runTimerRef.current);
+    releaseWakeLock();
     setRunActive(false);
-    if(runDist>0)logAct("run",runDist);
+    const finalDist=runDistRef.current;
+    if(finalDist>0)logAct("run",finalDist);
+    runDistRef.current=0;
   };
   const haversine=(lat1,lon1,lat2,lon2)=>{const R=6371;const dLat=(lat2-lat1)*Math.PI/180;const dLon=(lon2-lon1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))};
   const fmtTime=(s)=>`${Math.floor(s/60)}:${(s%60).toString().padStart(2,"0")}`;
@@ -771,7 +811,7 @@ export default function App(){
     {/* WALK — Accelerometer Pedometer */}
     {at==="walk"&&<div>
       <div style={{background:"linear-gradient(135deg,#11998e,#38ef7d)",borderRadius:20,padding:24,marginBottom:16,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F6B6}"}</div><p style={{fontSize:11,color:"#000000aa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Steps</p><div style={{fontSize:52,fontWeight:900,color:"#0A0A0F"}}>{totalSteps.toLocaleString()}</div><p style={{fontSize:14,color:"#0A0A0F99",marginBottom:12}}>Goal: 10,000</p><div style={{background:"#00000020",borderRadius:8,height:10,overflow:"hidden",maxWidth:260,margin:"0 auto"}}><div style={{width:`${Math.min((totalSteps/1e4)*100,100)}%`,height:"100%",background:"#0A0A0F",borderRadius:8}}/></div><p style={{fontSize:12,color:"#0A0A0F88",marginTop:8}}>{"\u2248"} {(totalSteps*.000762).toFixed(1)} km · {"\u2248"} {Math.round(totalSteps*.04)} kcal</p>
-      {pedoActive&&<div style={{marginTop:12,background:"#00000020",borderRadius:10,padding:8}}><p style={{fontSize:12,color:"#0A0A0F",fontWeight:700}}>{"\u{1F7E2}"} Counting live... {liveSteps} new steps</p></div>}
+      {pedoActive&&<div style={{marginTop:12,background:"#00000020",borderRadius:10,padding:8}}><p style={{fontSize:12,color:"#0A0A0F",fontWeight:700}}>{"\u{1F7E2}"} Counting live... {liveSteps} new steps</p><p style={{fontSize:10,color:"#0A0A0Faa",marginTop:2}}>{"\u{1F4F1}"} Keep app open. Screen will stay on automatically.</p></div>}
       </div>
       {/* Auto step counter */}
       <div style={{marginBottom:16}}>
@@ -788,7 +828,7 @@ export default function App(){
     {/* RUN — GPS Tracker */}
     {at==="run"&&<div>
       <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:20,padding:24,marginBottom:16,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F3C3}"}</div>
-      {runActive?<><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>{"\u{1F7E2}"} Run in Progress</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{runDist.toFixed(2)}</div><p style={{fontSize:16,color:"#ffffffcc"}}>km</p><div style={{display:"flex",justifyContent:"center",gap:20,marginTop:10}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Time</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{fmtTime(runTime)}</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Pace</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{runDist>0?(runTime/60/runDist).toFixed(1):"--"} min/km</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Calories</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{Math.round(runDist*62)}</p></div></div></>
+      {runActive?<><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>{"\u{1F7E2}"} Run in Progress</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{runDist.toFixed(2)}</div><p style={{fontSize:16,color:"#ffffffcc"}}>km</p><div style={{display:"flex",justifyContent:"center",gap:20,marginTop:10}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Time</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{fmtTime(runTime)}</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Pace</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{runDist>=0.1?(runTime/60/runDist).toFixed(1)+" min/km":"--"}</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Calories</span><p style={{fontSize:18,fontWeight:700,color:"#fff"}}>{Math.round(runDist*62)}</p></div></div><p style={{fontSize:11,color:"#ffffffaa",marginTop:10}}>{"\u{1F4F1}"} Keep app open & screen on</p></>
       :<><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Total Distance</p><div style={{fontSize:52,fontWeight:900,color:"#fff"}}>{(u.runKm||0).toFixed(1)}</div><p style={{fontSize:16,color:"#ffffffcc"}}>km</p><p style={{fontSize:12,color:"#ffffffaa",marginTop:8}}>{"\u2248"} {Math.round((u.runKm||0)*62)} kcal burned</p></>}
       </div>
       {/* GPS run tracker */}

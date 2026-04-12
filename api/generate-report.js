@@ -67,7 +67,7 @@ Return ONLY a valid JSON object (no markdown, no backticks) with these exact key
 Reference their actual numbers. If steps are low, suggest specifics. If sleep is short, give a wind-down tip. Keep total under 200 words.`;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
