@@ -217,6 +217,18 @@ const WORKOUTS_DB = [
   { id:4,name:"Leg Day Express",type:"strength",duration:15,difficulty:"beginner",equipment:"bodyweight",xp:75,exercises:[{name:"Bodyweight Squats",sets:4,reps:15,rest:15,tip:"Push knees out over toes",anim:"squat"},{name:"Lunges",sets:3,reps:12,rest:20,tip:"Front knee over ankle",anim:"hk"},{name:"Glute Bridges",sets:3,reps:15,rest:15,tip:"Squeeze glutes at top",anim:"plank"},{name:"Calf Raises",sets:3,reps:20,rest:10,tip:"Full range of motion",anim:"squat"},{name:"Wall Sit",sets:3,reps:"30s",rest:20,tip:"Thighs parallel to ground",anim:"plank"}]},
   { id:5,name:"Zen Flow",type:"flexibility",duration:10,difficulty:"beginner",equipment:"bodyweight",xp:50,exercises:[{name:"Cat-Cow Stretch",sets:1,reps:10,rest:5,tip:"Sync with breath",anim:"yoga"},{name:"Downward Dog",sets:1,reps:"30s",rest:5,tip:"Heels toward floor",anim:"yoga"},{name:"Pigeon Pose",sets:1,reps:"30s",rest:5,tip:"Keep hips square",anim:"yoga"},{name:"Forward Fold",sets:1,reps:"45s",rest:5,tip:"Hinge at hips",anim:"yoga"},{name:"Child's Pose",sets:1,reps:"60s",rest:0,tip:"Breathe deeply",anim:"yoga"}]},
   { id:6,name:"Cardio Blitz",type:"hiit",duration:20,difficulty:"advanced",equipment:"bodyweight",xp:100,exercises:[{name:"Burpee Tuck Jumps",sets:4,reps:8,rest:20,tip:"Tuck knees at peak",anim:"burpee"},{name:"Speed Skaters",sets:4,reps:20,rest:15,tip:"Land softly",anim:"hk"},{name:"Plyo Lunges",sets:4,reps:16,rest:20,tip:"Switch legs mid-air",anim:"hk"},{name:"Bear Crawl",sets:3,reps:"20s",rest:20,tip:"Keep hips low",anim:"mc"},{name:"Star Jumps",sets:4,reps:12,rest:15,tip:"Fully extend",anim:"jj"}]},
+  { id:7,name:"Morning Energizer",type:"hiit",duration:7,difficulty:"beginner",equipment:"bodyweight",xp:40,exercises:[{name:"Arm Circles",sets:2,reps:20,rest:10,tip:"Big circles, then small",anim:"jj"},{name:"Toe Touches",sets:2,reps:15,rest:10,tip:"Bend at hips",anim:"yoga"},{name:"Marching in Place",sets:2,reps:30,rest:10,tip:"Lift knees high",anim:"hk"},{name:"Jumping Jacks",sets:2,reps:20,rest:15,tip:"Stay light on feet",anim:"jj"}]},
+  { id:8,name:"Six-Pack Challenge",type:"strength",duration:15,difficulty:"intermediate",equipment:"bodyweight",xp:85,exercises:[{name:"Sit-Ups",sets:3,reps:20,rest:15,tip:"Engage core, not neck",anim:"crunch"},{name:"Reverse Crunches",sets:3,reps:15,rest:15,tip:"Lift hips toward ceiling",anim:"crunch"},{name:"Side Plank Left",sets:2,reps:"30s",rest:10,tip:"Hips up, body straight",anim:"plank"},{name:"Side Plank Right",sets:2,reps:"30s",rest:10,tip:"Hips up, body straight",anim:"plank"},{name:"V-Ups",sets:3,reps:12,rest:20,tip:"Touch toes at top",anim:"crunch"},{name:"Mountain Climbers",sets:3,reps:30,rest:15,tip:"Fast pace",anim:"mc"}]},
+  { id:9,name:"Glute Builder",type:"strength",duration:18,difficulty:"intermediate",equipment:"bodyweight",xp:90,exercises:[{name:"Sumo Squats",sets:4,reps:15,rest:15,tip:"Toes pointed out",anim:"squat"},{name:"Reverse Lunges",sets:3,reps:12,rest:20,tip:"Step back, drop knee",anim:"lunge"},{name:"Single Leg Glute Bridge",sets:3,reps:12,rest:15,tip:"Squeeze at the top",anim:"bridge"},{name:"Donkey Kicks",sets:3,reps:15,rest:10,tip:"Foot to ceiling",anim:"bridge"},{name:"Fire Hydrants",sets:3,reps:12,rest:10,tip:"Hip out to side",anim:"bridge"},{name:"Glute Bridges",sets:3,reps:20,rest:15,tip:"Drive through heels",anim:"bridge"}]},
+  { id:10,name:"Tabata Torch",type:"hiit",duration:8,difficulty:"advanced",equipment:"bodyweight",xp:75,exercises:[{name:"Burpees",sets:4,reps:"20s",rest:10,tip:"Maximum effort",anim:"burpee"},{name:"Squat Jumps",sets:4,reps:"20s",rest:10,tip:"Explode up",anim:"squat"},{name:"Push-Ups",sets:4,reps:"20s",rest:10,tip:"As many as possible",anim:"pu"},{name:"Mountain Climbers",sets:4,reps:"20s",rest:10,tip:"Fast feet",anim:"mc"}]},
+  { id:11,name:"Beginner Full Body",type:"strength",duration:12,difficulty:"beginner",equipment:"bodyweight",xp:55,exercises:[{name:"Bodyweight Squats",sets:2,reps:10,rest:20,tip:"Sit back into heels",anim:"squat"},{name:"Knee Push-Ups",sets:2,reps:8,rest:20,tip:"Body straight from knees",anim:"pu"},{name:"Glute Bridges",sets:2,reps:12,rest:15,tip:"Lift hips high",anim:"bridge"},{name:"Plank Hold",sets:2,reps:"20s",rest:15,tip:"Don't let hips sag",anim:"plank"},{name:"Marching in Place",sets:2,reps:30,rest:10,tip:"Knees to waist",anim:"hk"}]},
+  { id:12,name:"Lower Body Burn",type:"strength",duration:20,difficulty:"intermediate",equipment:"bodyweight",xp:95,exercises:[{name:"Bodyweight Squats",sets:4,reps:20,rest:20,tip:"Full depth",anim:"squat"},{name:"Forward Lunges",sets:3,reps:12,rest:20,tip:"Each leg",anim:"lunge"},{name:"Bulgarian Split Squat",sets:3,reps:10,rest:20,tip:"Back foot elevated",anim:"lunge"},{name:"Curtsy Lunges",sets:3,reps:12,rest:15,tip:"Cross behind",anim:"lunge"},{name:"Wall Sit",sets:2,reps:"45s",rest:30,tip:"Thighs parallel",anim:"plank"},{name:"Calf Raises",sets:3,reps:25,rest:10,tip:"Up on toes",anim:"squat"}]},
+  { id:13,name:"Total Body HIIT",type:"hiit",duration:25,difficulty:"advanced",equipment:"bodyweight",xp:120,exercises:[{name:"Jumping Jacks",sets:3,reps:30,rest:15,tip:"Warm up pace",anim:"jj"},{name:"Burpees",sets:4,reps:12,rest:20,tip:"Full body extension",anim:"burpee"},{name:"Push-Ups",sets:3,reps:15,rest:20,tip:"Chest to floor",anim:"pu"},{name:"Squat Jumps",sets:4,reps:15,rest:20,tip:"Land soft",anim:"squat"},{name:"Mountain Climbers",sets:3,reps:40,rest:15,tip:"Knees to chest",anim:"mc"},{name:"Plank to Push-Up",sets:3,reps:10,rest:20,tip:"Up up, down down",anim:"pu"}]},
+  { id:14,name:"Yoga Power Flow",type:"flexibility",duration:20,difficulty:"intermediate",equipment:"bodyweight",xp:70,exercises:[{name:"Sun Salutation A",sets:3,reps:5,rest:10,tip:"Flow with breath",anim:"yoga"},{name:"Warrior I",sets:2,reps:"45s",rest:5,tip:"Both legs",anim:"yoga"},{name:"Warrior II",sets:2,reps:"45s",rest:5,tip:"Hips open",anim:"yoga"},{name:"Triangle Pose",sets:2,reps:"30s",rest:5,tip:"Both sides",anim:"yoga"},{name:"Crow Pose",sets:2,reps:"15s",rest:10,tip:"Knees on triceps",anim:"yoga"},{name:"Savasana",sets:1,reps:"120s",rest:0,tip:"Total relaxation",anim:"yoga"}]},
+  { id:15,name:"Quick Sweat",type:"hiit",duration:5,difficulty:"beginner",equipment:"bodyweight",xp:30,exercises:[{name:"Jumping Jacks",sets:1,reps:30,rest:10,tip:"Steady pace",anim:"jj"},{name:"High Knees",sets:1,reps:30,rest:10,tip:"Knees up high",anim:"hk"},{name:"Squats",sets:1,reps:15,rest:10,tip:"Full range",anim:"squat"},{name:"Push-Ups",sets:1,reps:10,rest:10,tip:"Modify if needed",anim:"pu"}]},
+  { id:16,name:"Arm Sculptor",type:"strength",duration:15,difficulty:"intermediate",equipment:"bodyweight",xp:75,exercises:[{name:"Standard Push-Ups",sets:3,reps:12,rest:20,tip:"Slow and controlled",anim:"pu"},{name:"Diamond Push-Ups",sets:3,reps:8,rest:25,tip:"Triceps focus",anim:"pu"},{name:"Pike Push-Ups",sets:3,reps:10,rest:20,tip:"Shoulders work",anim:"pu"},{name:"Tricep Dips",sets:3,reps:12,rest:20,tip:"Use a chair/edge",anim:"pu"},{name:"Plank Up-Downs",sets:3,reps:10,rest:15,tip:"Forearm to hand",anim:"plank"}]},
+  { id:17,name:"Bedtime Stretch",type:"flexibility",duration:8,difficulty:"beginner",equipment:"bodyweight",xp:35,exercises:[{name:"Neck Rolls",sets:2,reps:5,rest:5,tip:"Each direction",anim:"yoga"},{name:"Shoulder Rolls",sets:2,reps:10,rest:5,tip:"Slow and deep",anim:"yoga"},{name:"Spinal Twist",sets:2,reps:"30s",rest:5,tip:"Both sides",anim:"yoga"},{name:"Hamstring Stretch",sets:2,reps:"30s",rest:5,tip:"Each leg",anim:"yoga"},{name:"Child's Pose",sets:1,reps:"60s",rest:0,tip:"Deep breathing",anim:"yoga"}]},
+  { id:18,name:"Plank Power",type:"strength",duration:10,difficulty:"intermediate",equipment:"bodyweight",xp:60,exercises:[{name:"Standard Plank",sets:3,reps:"45s",rest:20,tip:"Body straight line",anim:"plank"},{name:"Side Plank Left",sets:2,reps:"30s",rest:15,tip:"Stack feet",anim:"plank"},{name:"Side Plank Right",sets:2,reps:"30s",rest:15,tip:"Stack feet",anim:"plank"},{name:"Plank Shoulder Taps",sets:3,reps:20,rest:15,tip:"Hips stable",anim:"plank"},{name:"Forearm Plank",sets:3,reps:"40s",rest:20,tip:"Elbows under shoulders",anim:"plank"}]},
 ];
 
 const CHALLENGES_DB = [
@@ -247,12 +259,24 @@ const LEADERBOARD = [
 const MOTIV = ["\u{1F525} Your only competition is yesterday's you","\u{1F4AA} Sweat now, flex later","\u26A1 1% better every single day","\u{1F3C6} Champions train, losers complain","\u{1F48E} Pain today = strength tomorrow","\u2705 Don't stop when tired. Stop when done","\u{1F680} Small steps still move forward"];
 
 const REELS = [
-  {id:1,title:"5-Min Ab Burner",trainer:"MadFit",views:"24M",likes:"580K",gradient:"linear-gradient(135deg,#FF6B35,#E94560)",exercises:["Crunches x20","Plank 30s","Leg Raises x15","Twists x20"],duration:"5:00"},
-  {id:2,title:"No-Equipment HIIT",trainer:"growwithjo",views:"18M",likes:"320K",gradient:"linear-gradient(135deg,#667eea,#764ba2)",exercises:["Burpees x10","Jump Squats x15","High Knees 30s","Climbers x20"],duration:"15:00"},
-  {id:3,title:"Morning Yoga Flow",trainer:"Yoga With Adriene",views:"31M",likes:"410K",gradient:"linear-gradient(135deg,#11998e,#38ef7d)",exercises:["Sun Salutation x5","Warrior II 30s","Tree Pose 20s","Savasana 60s"],duration:"10:00"},
-  {id:4,title:"Upper Body No Equipment",trainer:"THENX",views:"12M",likes:"290K",gradient:"linear-gradient(135deg,#fc5c7d,#6a82fb)",exercises:["Push-Ups x15","Diamond x10","Dips x12","Shoulder Taps x20"],duration:"8:00"},
-  {id:5,title:"Leg Day at Home",trainer:"Pamela Reif",views:"19M",likes:"340K",gradient:"linear-gradient(135deg,#f093fb,#f5576c)",exercises:["Squats x20","Lunges x16","Bridges x15","Wall Sit 45s"],duration:"10:00"},
-  {id:6,title:"Full Body Fat Burn",trainer:"JERICH0",views:"42M",likes:"890K",gradient:"linear-gradient(135deg,#FA8BFF,#2BD2FF 50%,#2BFF88)",exercises:["Jumping Jacks x30","Squats x20","Push-Ups x15","Burpees x10"],duration:"20:00"},
+  {id:1,title:"5-Min Ab Burner",trainer:"MadFit",views:"24M",likes:"580K",gradient:"linear-gradient(135deg,#FF6B35,#E94560)",exercises:["Crunches x20","Plank 30s","Leg Raises x15","Twists x20"],duration:"5:00",workoutId:8},
+  {id:2,title:"No-Equipment HIIT",trainer:"growwithjo",views:"18M",likes:"320K",gradient:"linear-gradient(135deg,#667eea,#764ba2)",exercises:["Burpees x10","Jump Squats x15","High Knees 30s","Climbers x20"],duration:"15:00",workoutId:1},
+  {id:3,title:"Morning Yoga Flow",trainer:"Yoga With Adriene",views:"31M",likes:"410K",gradient:"linear-gradient(135deg,#11998e,#38ef7d)",exercises:["Sun Salutation x5","Warrior II 30s","Tree Pose 20s","Savasana 60s"],duration:"10:00",workoutId:14},
+  {id:4,title:"Upper Body No Equipment",trainer:"THENX",views:"12M",likes:"290K",gradient:"linear-gradient(135deg,#fc5c7d,#6a82fb)",exercises:["Push-Ups x15","Diamond x10","Dips x12","Shoulder Taps x20"],duration:"8:00",workoutId:16},
+  {id:5,title:"Leg Day at Home",trainer:"Pamela Reif",views:"19M",likes:"340K",gradient:"linear-gradient(135deg,#f093fb,#f5576c)",exercises:["Squats x20","Lunges x16","Bridges x15","Wall Sit 45s"],duration:"10:00",workoutId:12},
+  {id:6,title:"Full Body Fat Burn",trainer:"JERICH0",views:"42M",likes:"890K",gradient:"linear-gradient(135deg,#FA8BFF,#2BD2FF 50%,#2BFF88)",exercises:["Jumping Jacks x30","Squats x20","Push-Ups x15","Burpees x10"],duration:"20:00",workoutId:13},
+  {id:7,title:"Glute Builder Blast",trainer:"Krissy Cela",views:"15M",likes:"245K",gradient:"linear-gradient(135deg,#fa709a,#fee140)",exercises:["Sumo Squats x15","Lunges x12","Bridges x15","Donkey Kicks x15"],duration:"18:00",workoutId:9},
+  {id:8,title:"Tabata Torch",trainer:"FitnessBlender",views:"9M",likes:"180K",gradient:"linear-gradient(135deg,#a8edea,#fed6e3)",exercises:["Burpees 20s","Squat Jumps 20s","Push-Ups 20s","Climbers 20s"],duration:"8:00",workoutId:10},
+  {id:9,title:"Beginner's First Workout",trainer:"FitWithAnu",views:"7M",likes:"125K",gradient:"linear-gradient(135deg,#84fab0,#8fd3f4)",exercises:["Squats x10","Knee Push-Ups x8","Bridges x12","Plank 20s"],duration:"12:00",workoutId:11},
+  {id:10,title:"Six-Pack Challenge",trainer:"Athlean-X",views:"33M",likes:"510K",gradient:"linear-gradient(135deg,#f5576c,#f093fb)",exercises:["Sit-Ups x20","Reverse Crunches x15","Side Plank","V-Ups x12"],duration:"15:00",workoutId:8},
+  {id:11,title:"Lower Body Burn",trainer:"Heather Robertson",views:"21M",likes:"380K",gradient:"linear-gradient(135deg,#43e97b,#38f9d7)",exercises:["Squats x20","Forward Lunges x12","Bulgarian Split","Wall Sit 45s"],duration:"20:00",workoutId:12},
+  {id:12,title:"Total Body HIIT",trainer:"Self Magazine",views:"27M",likes:"460K",gradient:"linear-gradient(135deg,#fa8bff,#2bd2ff)",exercises:["Jumping Jacks x30","Burpees x12","Push-Ups x15","Squat Jumps x15"],duration:"25:00",workoutId:13},
+  {id:13,title:"Power Yoga Flow",trainer:"Boho Beautiful",views:"14M",likes:"230K",gradient:"linear-gradient(135deg,#48c6ef,#6f86d6)",exercises:["Sun Salutation x5","Warrior I","Triangle","Crow Pose"],duration:"20:00",workoutId:14},
+  {id:14,title:"Quick 5-Min Sweat",trainer:"FitWithRosie",views:"11M",likes:"195K",gradient:"linear-gradient(135deg,#fdfcfb,#e2d1c3)",exercises:["Jacks x30","High Knees x30","Squats x15","Push-Ups x10"],duration:"5:00",workoutId:15},
+  {id:15,title:"Arm Sculptor",trainer:"Madeleine Abeid",views:"8M",likes:"140K",gradient:"linear-gradient(135deg,#ff9a9e,#fad0c4)",exercises:["Push-Ups x12","Diamond x8","Pike x10","Tricep Dips x12"],duration:"15:00",workoutId:16},
+  {id:16,title:"Bedtime Stretch",trainer:"Yoga Strala",views:"6M",likes:"95K",gradient:"linear-gradient(135deg,#a18cd1,#fbc2eb)",exercises:["Neck Rolls x5","Spinal Twist","Hamstring","Child's Pose"],duration:"8:00",workoutId:17},
+  {id:17,title:"Plank Power Hour",trainer:"NerdFitness",views:"5M",likes:"82K",gradient:"linear-gradient(135deg,#ffecd2,#fcb69f)",exercises:["Plank 45s","Side Plank","Shoulder Taps x20","Forearm Plank"],duration:"10:00",workoutId:18},
+  {id:18,title:"Morning Energizer",trainer:"FitWithKavya",views:"4M",likes:"68K",gradient:"linear-gradient(135deg,#a1c4fd,#c2e9fb)",exercises:["Arm Circles","Toe Touches","Marching","Jumping Jacks"],duration:"7:00",workoutId:7},
 ];
 
 function ExAnim({type,size=200,showLabel=false,color="auto"}){
@@ -354,6 +378,11 @@ export default function App(){
   const[bodyMeasurements,setBodyMeasurements]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-measurements")||"{}")}catch{return{}}});
   const[goalTarget,setGoalTarget]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-goal")||"null")}catch{return null}});
   const[proView,setProView]=useState("home");
+  const[savedReels,setSavedReels]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-saved-reels")||"[]")}catch{return[]}});
+  const[likedReels,setLikedReels]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-liked-reels")||"[]")}catch{return[]}});
+  const[myRoutine,setMyRoutine]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-routine")||"[]")}catch{return[]}});
+  const[homeView,setHomeView]=useState("today");
+  const[showRoutine,setShowRoutine]=useState(false);
   const pedometerRef=useRef({lastMag:0,stepThreshold:1.2,cooldown:0});
   const geoWatchRef=useRef(null);
   const runTimerRef=useRef(null);
@@ -468,6 +497,50 @@ export default function App(){
   };
   const haversine=(lat1,lon1,lat2,lon2)=>{const R=6371;const dLat=(lat2-lat1)*Math.PI/180;const dLon=(lon2-lon1)*Math.PI/180;const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))};
   const fmtTime=(s)=>`${Math.floor(s/60)}:${(s%60).toString().padStart(2,"0")}`;
+
+  // ── Reels interactions: like, save, share, add to routine ──
+  const toggleLikeReel=(reel)=>{
+    setLikedReels(prev=>{
+      const exists=prev.includes(reel.id);
+      const next=exists?prev.filter(id=>id!==reel.id):[...prev,reel.id];
+      try{localStorage.setItem("fs-liked-reels",JSON.stringify(next))}catch{}
+      return next;
+    });
+    if(!likedReels.includes(reel.id))axp(2);
+  };
+  const toggleSaveReel=(reel)=>{
+    setSavedReels(prev=>{
+      const exists=prev.find(r=>r.id===reel.id);
+      const next=exists?prev.filter(r=>r.id!==reel.id):[...prev,reel];
+      try{localStorage.setItem("fs-saved-reels",JSON.stringify(next))}catch{}
+      return next;
+    });
+  };
+  const addReelToRoutine=(reel)=>{
+    setMyRoutine(prev=>{
+      if(prev.find(r=>r.id===reel.id)){setPop({type:"already",msg:"Already in your routine!"});return prev}
+      const next=[...prev,{...reel,addedAt:Date.now()}];
+      try{localStorage.setItem("fs-routine",JSON.stringify(next))}catch{}
+      setPop({type:"added",r:reel});
+      axp(5);
+      return next;
+    });
+  };
+  const removeFromRoutine=(reelId)=>{
+    setMyRoutine(prev=>{
+      const next=prev.filter(r=>r.id!==reelId);
+      try{localStorage.setItem("fs-routine",JSON.stringify(next))}catch{}
+      return next;
+    });
+  };
+  const shareReel=async(reel)=>{
+    const text=`Check out "${reel.title}" workout on FitStreak! 💪 ${reel.duration} • ${reel.trainer}`;
+    if(navigator.share){
+      try{await navigator.share({title:reel.title,text,url:window.location.href})}catch{}
+    }else{
+      try{await navigator.clipboard.writeText(text);setPop({type:"copied"})}catch{}
+    }
+  };
 
   // ── PRO FEATURE GATING ──
   const requirePro=(featureName)=>{
@@ -647,23 +720,185 @@ export default function App(){
     <div key="5" style={{...OS,textAlign:"center"}}><div style={{fontSize:64,marginBottom:16}}>{"\u{1F680}"}</div><h2 style={{fontSize:28,fontWeight:800,color:"#fff",marginBottom:8}}>You're set, {od.name}!</h2><p style={{color:"#b0b0b8",marginBottom:32,fontSize:15}}>Let's build an unbreakable streak.</p><button onClick={()=>{setU({...DU,...od,onboarded:true});setScr("app")}} style={BP}>Start My Journey {"\u26A1"}</button></div>,
   ];return <div style={AS}><div style={G1}/><div style={G2}/>{steps[os]}</div>}
 
-  // ── HOME ──
-  const Home=()=>{const h=new Date().getHours();const gr=h<12?"Good morning":h<17?"Good afternoon":"Good evening";const q=MOTIV[new Date().getDate()%MOTIV.length];const rec=WORKOUTS_DB.filter(w=>w.difficulty===u.level||w.difficulty==="beginner").slice(0,3);const tc=u.foodLogTotal||0;
-  return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:24}}><div><p style={{fontSize:14,color:"#9a9aa2",marginBottom:2}}>{gr}</p><h1 style={{fontSize:26,fontWeight:800,color:"#fff"}}>{u.name} {"\u270C\uFE0F"}</h1></div><div style={{display:"flex",gap:8}}><div style={SP}><span style={{fontSize:14}}>{"\u{1F525}"}</span><span style={{fontSize:15,fontWeight:700,color:"#FF6B35"}}>{u.streak}</span></div><div style={SP}><span style={{fontSize:14}}>{"\u26A1"}</span><span style={{fontSize:15,fontWeight:700,color:"#E94560"}}>{u.xp.toLocaleString()}</span></div></div></div>
-    <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:16,padding:18,marginBottom:18,border:"1px solid #ffffff08"}}><p style={{fontSize:14,color:"#ccc",lineHeight:1.6,fontStyle:"italic"}}>{q}</p></div>
-    <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:20,padding:22,marginBottom:18,position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-30,right:-30,fontSize:120,opacity:.1}}>{"\u{1F525}"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Current Streak</p><div style={{display:"flex",alignItems:"baseline",gap:6}}><span style={{fontSize:48,fontWeight:900,color:"#fff"}}>{u.streak}</span><span style={{fontSize:16,color:"#ffffffcc"}}>days</span></div><div style={{display:"flex",gap:16,marginTop:10}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Longest</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{u.longestStreak}d</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Freeze</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{u.freezeTokens}{"\u{1F9CA}"}</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Multi</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{u.streak>=30?"2x":u.streak>=7?"1.5x":"1x"}</p></div></div></div>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:18}}>
-      <button onClick={()=>setTab("activity")} style={MC}><span style={{fontSize:20}}>{"\u{1F6B6}"}</span><span style={{fontSize:18,fontWeight:800,color:"#38ef7d"}}>{(u.steps||0).toLocaleString()}</span><span style={{fontSize:10,color:"#b0b0b8"}}>steps</span><div style={{width:"100%",height:3,background:"#1A1A2E",borderRadius:2,marginTop:4}}><div style={{width:`${Math.min(((u.steps||0)/1e4)*100,100)}%`,height:"100%",background:"#38ef7d",borderRadius:2}}/></div></button>
-      <button onClick={()=>setTab("food")} style={MC}><span style={{fontSize:20}}>{"\u{1F37D}\uFE0F"}</span><span style={{fontSize:18,fontWeight:800,color:"#FF6B35"}}>{tc}</span><span style={{fontSize:10,color:"#b0b0b8"}}>kcal</span><div style={{width:"100%",height:3,background:"#1A1A2E",borderRadius:2,marginTop:4}}><div style={{width:`${Math.min((tc/2e3)*100,100)}%`,height:"100%",background:"#FF6B35",borderRadius:2}}/></div></button>
-      <button onClick={()=>{setTab("activity");setAt("sleep")}} style={MC}><span style={{fontSize:20}}>{"\u{1F634}"}</span><span style={{fontSize:18,fontWeight:800,color:"#667eea"}}>{u.sleepHours||0}h</span><span style={{fontSize:10,color:"#b0b0b8"}}>sleep</span><div style={{width:"100%",height:3,background:"#1A1A2E",borderRadius:2,marginTop:4}}><div style={{width:`${Math.min(((u.sleepHours||0)/8)*100,100)}%`,height:"100%",background:"#667eea",borderRadius:2}}/></div></button>
-    </div>
-    {u.fitnessAge===0?<button onClick={()=>{setFts(1);setFtd({});setTab("ft")}} style={{width:"100%",background:"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:16,padding:18,textAlign:"left",cursor:"pointer",marginBottom:18}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><p style={{fontSize:10,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5}}>Viral Challenge</p><p style={{fontSize:18,fontWeight:800,color:"#fff",marginTop:4}}>Check Your Fitness Age {"\u{1F9EC}"}</p><p style={{fontSize:12,color:"#ffffffbb",marginTop:2}}>60s test · Share with friends</p></div><span style={{fontSize:32}}>{"\u2192"}</span></div></button>:<div style={{background:"#1A1A2E",borderRadius:16,padding:18,marginBottom:18,border:"1px solid #ffffff08"}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><div><p style={{fontSize:11,color:"#b0b0b8",textTransform:"uppercase",letterSpacing:1}}>Fitness Age</p><div style={{display:"flex",alignItems:"baseline",gap:6,marginTop:2}}><span style={{fontSize:32,fontWeight:900,color:u.fitnessAge<u.realAge?"#38ef7d":"#E94560"}}>{u.fitnessAge}</span><span style={{fontSize:13,color:"#b0b0b8"}}>vs {u.realAge}</span></div></div><button onClick={()=>{setFts(1);setFtd({});setTab("ft")}} style={{background:"#ffffff10",border:"1px solid #ffffff15",borderRadius:10,padding:"6px 12px",color:"#aaa",fontSize:12,cursor:"pointer"}}>Retake →</button></div></div>}
-    <h2 style={{fontSize:17,fontWeight:700,color:"#fff",marginBottom:12}}>Recommended</h2>
-    {rec.map(w=><button key={w.id} onClick={()=>{setWa(w);setEi(0);setTab("wo")}} style={WR}><div><p style={{fontSize:15,fontWeight:700,color:"#fff"}}>{w.name}</p><p style={{fontSize:12,color:"#b0b0b8",marginTop:2}}>{w.duration}m · {w.difficulty} · +{w.xp}XP</p></div><div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:10,padding:"7px 14px"}}><span style={{color:"#fff",fontSize:12,fontWeight:700}}>Start</span></div></button>)}
-    <h2 style={{fontSize:17,fontWeight:700,color:"#fff",marginBottom:12,marginTop:20}}>All Workouts</h2>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>{WORKOUTS_DB.map(w=><button key={w.id} onClick={()=>{setWa(w);setEi(0);setTab("wo")}} style={WC}><div style={{fontSize:26,marginBottom:6}}>{w.type==="hiit"?"\u{1F525}":w.type==="strength"?"\u{1F4AA}":"\u{1F9D8}"}</div><p style={{fontSize:13,fontWeight:700,color:"#fff"}}>{w.name}</p><p style={{fontSize:11,color:"#b0b0b8",marginTop:2}}>{w.duration}m · +{w.xp}XP</p></button>)}</div>
-  </div>};
+  // ── HOME — with Today/Week/Month stat tabs ──
+  const Home=()=>{
+    const h=new Date().getHours();
+    const gr=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+    const q=MOTIV[new Date().getDate()%MOTIV.length];
+    const rec=WORKOUTS_DB.filter(w=>w.difficulty===u.level||w.difficulty==="beginner").slice(0,4);
+    const tc=u.foodLogTotal||0;
+    const today=new Date().toDateString();
+    
+    // Calculate stats based on viewMode (today/week/month)
+    const log=u.activityLog||[];
+    const now=Date.now();
+    const dayMs=86400000;
+    const periodMs=homeView==="today"?dayMs:homeView==="week"?dayMs*7:dayMs*30;
+    const cutoff=now-periodMs;
+    
+    const filteredLog=log.filter(a=>new Date(a.date).getTime()>=cutoff);
+    const periodSteps=homeView==="today"?(u.steps||0):filteredLog.filter(a=>a.type==="walk").reduce((sum,a)=>sum+Number(a.value||0),0);
+    const periodRun=homeView==="today"?(u.runKm||0):filteredLog.filter(a=>a.type==="run").reduce((sum,a)=>sum+Number(a.value||0),0);
+    const sleepEntries=filteredLog.filter(a=>a.type==="sleep");
+    const periodSleep=homeView==="today"?(u.sleepHours||0):sleepEntries.length>0?(sleepEntries.reduce((sum,a)=>sum+Number(a.value||0),0)/sleepEntries.length):0;
+    const periodCals=homeView==="today"?tc:filteredLog.length>0?(tc*(homeView==="week"?7:30)):0; // estimated
+    
+    const stepsGoal=homeView==="today"?10000:homeView==="week"?70000:300000;
+    const runGoal=homeView==="today"?5:homeView==="week"?25:100;
+    
+    return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+      {/* Header */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
+        <div>
+          <p style={{fontSize:13,color:"#9a9aa2",marginBottom:2}}>{gr}</p>
+          <h1 style={{fontSize:24,fontWeight:800,color:"#fff"}}>{u.name} {"\u270C\uFE0F"}</h1>
+        </div>
+        <div style={{display:"flex",gap:6}}>
+          <div style={SP}><span style={{fontSize:14}}>{"\u{1F525}"}</span><span style={{fontSize:14,fontWeight:700,color:"#FF6B35"}}>{u.streak}</span></div>
+          <div style={SP}><span style={{fontSize:14}}>{"\u26A1"}</span><span style={{fontSize:14,fontWeight:700,color:"#E94560"}}>{u.xp.toLocaleString()}</span></div>
+        </div>
+      </div>
+
+      {/* Streak Card */}
+      <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:20,padding:20,marginBottom:16,position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:-30,right:-30,fontSize:120,opacity:.1}}>{"\u{1F525}"}</div>
+        <p style={{fontSize:11,color:"#ffffffcc",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Current Streak</p>
+        <div style={{display:"flex",alignItems:"baseline",gap:6}}>
+          <span style={{fontSize:46,fontWeight:900,color:"#fff"}}>{u.streak}</span>
+          <span style={{fontSize:16,color:"#ffffffcc"}}>days</span>
+        </div>
+        <div style={{display:"flex",gap:14,marginTop:10}}>
+          <div><span style={{fontSize:11,color:"#ffffffcc"}}>Longest</span><p style={{fontSize:15,fontWeight:700,color:"#fff"}}>{u.longestStreak}d</p></div>
+          <div><span style={{fontSize:11,color:"#ffffffcc"}}>Freeze</span><p style={{fontSize:15,fontWeight:700,color:"#fff"}}>{u.freezeTokens}{"\u{1F9CA}"}</p></div>
+          <div><span style={{fontSize:11,color:"#ffffffcc"}}>Multiplier</span><p style={{fontSize:15,fontWeight:700,color:"#fff"}}>{u.streak>=30?"2x":u.streak>=7?"1.5x":"1x"}</p></div>
+        </div>
+      </div>
+
+      {/* TIME PERIOD TABS */}
+      <div style={{display:"flex",gap:6,marginBottom:12,background:"#12121A",padding:4,borderRadius:12,border:"1px solid #ffffff08"}}>
+        {[["today","Today"],["week","This Week"],["month","This Month"]].map(([id,label])=>
+          <button key={id} onClick={()=>setHomeView(id)} style={{flex:1,background:homeView===id?"linear-gradient(135deg,#FF6B35,#E94560)":"transparent",border:"none",borderRadius:8,padding:"8px 4px",color:homeView===id?"#fff":"#b0b0b8",fontSize:12,fontWeight:700,cursor:"pointer",transition:"all .2s"}}>{label}</button>
+        )}
+      </div>
+
+      {/* STATS GRID — adapts to selected period */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
+        {/* Steps */}
+        <button onClick={()=>setTab("activity")} style={{...MC,padding:"14px 12px",alignItems:"flex-start",textAlign:"left"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",marginBottom:4}}>
+            <span style={{fontSize:18}}>{"\u{1F6B6}"}</span>
+            <span style={{fontSize:9,color:"#b0b0b8",textTransform:"uppercase",fontWeight:600}}>{homeView}</span>
+          </div>
+          <span style={{fontSize:22,fontWeight:800,color:"#38ef7d"}}>{Math.round(periodSteps).toLocaleString()}</span>
+          <span style={{fontSize:10,color:"#b0b0b8",marginTop:2}}>steps · goal {(stepsGoal/1000)}K</span>
+          <div style={{width:"100%",height:4,background:"#1A1A2E",borderRadius:2,marginTop:6}}>
+            <div style={{width:`${Math.min((periodSteps/stepsGoal)*100,100)}%`,height:"100%",background:"#38ef7d",borderRadius:2}}/>
+          </div>
+        </button>
+        {/* Run */}
+        <button onClick={()=>{setTab("activity");setAt("run")}} style={{...MC,padding:"14px 12px",alignItems:"flex-start",textAlign:"left"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",marginBottom:4}}>
+            <span style={{fontSize:18}}>{"\u{1F3C3}"}</span>
+            <span style={{fontSize:9,color:"#b0b0b8",textTransform:"uppercase",fontWeight:600}}>{homeView}</span>
+          </div>
+          <span style={{fontSize:22,fontWeight:800,color:"#FF6B35"}}>{periodRun.toFixed(1)}</span>
+          <span style={{fontSize:10,color:"#b0b0b8",marginTop:2}}>km · goal {runGoal}km</span>
+          <div style={{width:"100%",height:4,background:"#1A1A2E",borderRadius:2,marginTop:6}}>
+            <div style={{width:`${Math.min((periodRun/runGoal)*100,100)}%`,height:"100%",background:"#FF6B35",borderRadius:2}}/>
+          </div>
+        </button>
+        {/* Sleep */}
+        <button onClick={()=>{setTab("activity");setAt("sleep")}} style={{...MC,padding:"14px 12px",alignItems:"flex-start",textAlign:"left"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",marginBottom:4}}>
+            <span style={{fontSize:18}}>{"\u{1F634}"}</span>
+            <span style={{fontSize:9,color:"#b0b0b8",textTransform:"uppercase",fontWeight:600}}>{homeView==="today"?"last":"avg"}</span>
+          </div>
+          <span style={{fontSize:22,fontWeight:800,color:"#667eea"}}>{periodSleep.toFixed(1)}h</span>
+          <span style={{fontSize:10,color:"#b0b0b8",marginTop:2}}>sleep · goal 8h</span>
+          <div style={{width:"100%",height:4,background:"#1A1A2E",borderRadius:2,marginTop:6}}>
+            <div style={{width:`${Math.min((periodSleep/8)*100,100)}%`,height:"100%",background:"#667eea",borderRadius:2}}/>
+          </div>
+        </button>
+        {/* Calories */}
+        <button onClick={()=>setTab("food")} style={{...MC,padding:"14px 12px",alignItems:"flex-start",textAlign:"left"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%",marginBottom:4}}>
+            <span style={{fontSize:18}}>{"\u{1F37D}\uFE0F"}</span>
+            <span style={{fontSize:9,color:"#b0b0b8",textTransform:"uppercase",fontWeight:600}}>{homeView}</span>
+          </div>
+          <span style={{fontSize:22,fontWeight:800,color:"#f093fb"}}>{Math.round(periodCals).toLocaleString()}</span>
+          <span style={{fontSize:10,color:"#b0b0b8",marginTop:2}}>kcal eaten</span>
+          <div style={{width:"100%",height:4,background:"#1A1A2E",borderRadius:2,marginTop:6}}>
+            <div style={{width:`${Math.min((periodCals/(2000*(homeView==="today"?1:homeView==="week"?7:30)))*100,100)}%`,height:"100%",background:"#f093fb",borderRadius:2}}/>
+          </div>
+        </button>
+      </div>
+
+      {/* Motivation */}
+      <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
+        <p style={{fontSize:13,color:"#ddd",lineHeight:1.5,fontStyle:"italic"}}>{q}</p>
+      </div>
+
+      {/* Fitness Age CTA */}
+      {u.fitnessAge===0?
+        <button onClick={()=>{setFts(1);setFtd({});setTab("ft")}} style={{width:"100%",background:"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:16,padding:16,textAlign:"left",cursor:"pointer",marginBottom:18}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <p style={{fontSize:10,color:"#ffffffcc",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5}}>Viral Challenge</p>
+              <p style={{fontSize:17,fontWeight:800,color:"#fff",marginTop:4}}>Check Your Fitness Age {"\u{1F9EC}"}</p>
+              <p style={{fontSize:12,color:"#ffffffcc",marginTop:2}}>60s test · Share with friends</p>
+            </div>
+            <span style={{fontSize:28}}>{"\u2192"}</span>
+          </div>
+        </button>
+      :<div style={{background:"#1A1A2E",borderRadius:14,padding:14,marginBottom:18,border:"1px solid #ffffff08"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div>
+            <p style={{fontSize:11,color:"#b0b0b8",textTransform:"uppercase",letterSpacing:1}}>Fitness Age</p>
+            <div style={{display:"flex",alignItems:"baseline",gap:6,marginTop:2}}>
+              <span style={{fontSize:30,fontWeight:900,color:u.fitnessAge<u.realAge?"#38ef7d":"#E94560"}}>{u.fitnessAge}</span>
+              <span style={{fontSize:13,color:"#b0b0b8"}}>vs {u.realAge}</span>
+            </div>
+          </div>
+          <button onClick={()=>{setFts(1);setFtd({});setTab("ft")}} style={{background:"#ffffff10",border:"1px solid #ffffff15",borderRadius:10,padding:"6px 12px",color:"#eaeaea",fontSize:12,cursor:"pointer"}}>Retake →</button>
+        </div>
+      </div>}
+
+      {/* Recommended Workouts */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>Recommended for You</h2>
+        <span style={{fontSize:11,color:"#b0b0b8"}}>{rec.length} workouts</span>
+      </div>
+      {rec.map(w=>
+        <button key={w.id} onClick={()=>{setWa(w);setEi(0);setTab("wo")}} style={WR}>
+          <div style={{flex:1,minWidth:0}}>
+            <p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{w.name}</p>
+            <p style={{fontSize:11,color:"#b0b0b8",marginTop:2}}>{w.duration}m · {w.difficulty} · +{w.xp}XP</p>
+          </div>
+          <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:10,padding:"7px 14px",flexShrink:0}}>
+            <span style={{color:"#fff",fontSize:12,fontWeight:700}}>Start</span>
+          </div>
+        </button>
+      )}
+      
+      {/* All Workouts */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,marginTop:20}}>
+        <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>All Workouts</h2>
+        <span style={{fontSize:11,color:"#b0b0b8"}}>{WORKOUTS_DB.length} total</span>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+        {WORKOUTS_DB.map(w=>
+          <button key={w.id} onClick={()=>{setWa(w);setEi(0);setTab("wo")}} style={{...WC,padding:14}}>
+            <div style={{fontSize:24,marginBottom:6}}>{w.type==="hiit"?"\u{1F525}":w.type==="strength"?"\u{1F4AA}":"\u{1F9D8}"}</div>
+            <p style={{fontSize:13,fontWeight:700,color:"#fff",lineHeight:1.3}}>{w.name}</p>
+            <p style={{fontSize:11,color:"#b0b0b8",marginTop:3}}>{w.duration}m · +{w.xp}XP</p>
+            <div style={{display:"flex",gap:4,marginTop:6}}>
+              <span style={{fontSize:9,background:w.difficulty==="beginner"?"#38ef7d20":w.difficulty==="intermediate"?"#FF6B3520":"#E9456020",color:w.difficulty==="beginner"?"#38ef7d":w.difficulty==="intermediate"?"#FF6B35":"#E94560",padding:"2px 6px",borderRadius:6,fontWeight:600}}>{w.difficulty}</span>
+            </div>
+          </button>
+        )}
+      </div>
+    </div>;
+  };
 
   // ── WORKOUT PLAYER ──
   const Workout=()=>{if(!wa){setTab("home");return null}const ex=wa.exercises[ei];const pr=((ei+1)/wa.exercises.length)*100;
@@ -705,74 +940,137 @@ export default function App(){
   </div>};
 
   // ── EXPLORE REELS — ANIMATED FOLLOW ALONG ──
-  const Explore=()=>{const r=REELS[ri];const anims=["jj","burpee","squat","mc","pu","plank","yoga","hk","crunch","lunge"];const reelAnim=anims[ri%anims.length];const currentEx=r.exercises[reelExIdx%r.exercises.length];
-  return <div style={{height:"100vh",position:"relative",overflow:"hidden"}}><div style={{height:"100%",background:r.gradient,display:"flex",flexDirection:"column",justifyContent:"flex-end",padding:24,paddingBottom:100,position:"relative"}}>
-    {/* Header */}
-    <div style={{position:"absolute",top:16,left:16,right:16,display:"flex",justifyContent:"space-between",alignItems:"center",zIndex:5}}><h3 style={{fontSize:16,fontWeight:800,color:"#fff"}}>Explore</h3><span style={{fontSize:12,color:"#ffffffaa"}}>{ri+1}/{REELS.length}</span></div>
-    <div style={{position:"absolute",top:50,right:16,background:"#00000050",borderRadius:8,padding:"4px 10px",zIndex:5}}><span style={{color:"#fff",fontSize:12,fontWeight:600}}>{"\u23F1"} {r.duration}</span></div>
-
-    {/* Main Content Area */}
-    <div style={{position:"absolute",top:"8%",left:0,right:0,display:"flex",flexDirection:"column",alignItems:"center",zIndex:3}}>
-      {rp ? (
-        <div style={{textAlign:"center",width:"90%",maxWidth:360}}>
-          {/* Large animated exercise demo */}
-          <div style={{background:"#00000030",borderRadius:20,padding:"16px 0",marginBottom:12,backdropFilter:"blur(8px)"}}>
-            <ExAnim type={anims[(ri+reelExIdx)%anims.length]} size={200} showLabel={false} />
-          </div>
-          {/* Current exercise indicator */}
-          <div style={{background:"#00000040",borderRadius:12,padding:12,marginBottom:10,backdropFilter:"blur(8px)"}}>
-            <p style={{fontSize:11,color:"#ffffffaa",textTransform:"uppercase",letterSpacing:1.5,marginBottom:4}}>Now Showing</p>
-            <p style={{fontSize:20,fontWeight:800,color:"#fff"}}>{currentEx}</p>
-          </div>
-          {/* Exercise list with active indicator */}
-          <div style={{textAlign:"left",padding:"0 8px"}}>
-            {r.exercises.map((ex,i) => (
-              <button key={i} onClick={()=>setReelExIdx(i)} style={{display:"flex",alignItems:"center",gap:8,marginBottom:6,width:"100%",background:i===reelExIdx%r.exercises.length?"#ffffff20":"transparent",borderRadius:8,padding:"6px 10px",border:"none",cursor:"pointer"}}>
-                <div style={{width:24,height:24,borderRadius:"50%",background:i===reelExIdx%r.exercises.length?"#fff":"#ffffff30",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                  <span style={{fontSize:11,fontWeight:700,color:i===reelExIdx%r.exercises.length?"#000":"#fff"}}>{i+1}</span>
+  const Explore=()=>{
+    const r=REELS[ri];const anims=["jj","burpee","squat","mc","pu","plank","yoga","hk","crunch","lunge"];
+    const currentEx=r.exercises[reelExIdx%r.exercises.length];
+    const isLiked=likedReels.includes(r.id);
+    const isSaved=savedReels.find(s=>s.id===r.id);
+    const inRoutine=myRoutine.find(rt=>rt.id===r.id);
+    
+    // Show My Routine view
+    if(showRoutine){
+      return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1,minHeight:"100vh"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
+          <button onClick={()=>setShowRoutine(false)} style={BB}>{"\u2190"}</button>
+          <h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>My Routine {"\u{1F4CB}"}</h1>
+        </div>
+        {myRoutine.length===0?<div style={{textAlign:"center",padding:"60px 20px"}}>
+          <div style={{fontSize:48,marginBottom:12}}>{"\u{1F4CB}"}</div>
+          <p style={{fontSize:15,color:"#fff",fontWeight:600,marginBottom:8}}>No workouts saved yet</p>
+          <p style={{fontSize:13,color:"#b0b0b8",marginBottom:20}}>Add workouts from Explore to build your routine</p>
+          <button onClick={()=>setShowRoutine(false)} style={{...BP,padding:"12px 24px"}}>Browse Workouts</button>
+        </div>:
+        <div>
+          <p style={{fontSize:13,color:"#b0b0b8",marginBottom:14}}>{myRoutine.length} workout{myRoutine.length>1?"s":""} in your routine</p>
+          {myRoutine.map((rt,idx)=>{
+            const linkedWorkout=WORKOUTS_DB.find(w=>w.id===rt.workoutId);
+            return <div key={rt.id} style={{background:"#12121A",border:"1px solid #ffffff10",borderRadius:14,padding:14,marginBottom:10}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                <div style={{flex:1,minWidth:0}}>
+                  <p style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:2}}>{rt.title}</p>
+                  <p style={{fontSize:11,color:"#b0b0b8"}}>{rt.duration} · @{rt.trainer}</p>
                 </div>
-                <span style={{color:i===reelExIdx%r.exercises.length?"#fff":"#ffffffcc",fontSize:14,fontWeight:i===reelExIdx%r.exercises.length?700:500}}>{ex}</span>
-              </button>
-            ))}
-          </div>
-          <button onClick={()=>setRp(false)} style={{marginTop:12,background:"#ffffff15",border:"1px solid #ffffff30",borderRadius:10,padding:"8px 20px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer"}}>Stop Demo</button>
+                <button onClick={()=>removeFromRoutine(rt.id)} style={{background:"#E9456020",border:"1px solid #E9456040",borderRadius:8,padding:"4px 10px",color:"#E94560",fontSize:11,cursor:"pointer"}}>Remove</button>
+              </div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:10}}>
+                {rt.exercises.slice(0,4).map((ex,i)=><span key={i} style={{background:"#1A1A2E",borderRadius:6,padding:"3px 8px",fontSize:10,color:"#b0b0b8"}}>{ex}</span>)}
+              </div>
+              {linkedWorkout&&<button onClick={()=>{setWa(linkedWorkout);setEi(0);setTab("wo");setShowRoutine(false)}} style={{...BP,width:"100%",fontSize:13,padding:"10px"}}>{"\u{1F4AA}"} Start This Workout</button>}
+            </div>
+          })}
+        </div>}
+      </div>;
+    }
+    
+    return <div style={{height:"100vh",position:"relative",overflow:"hidden"}}><div style={{height:"100%",background:r.gradient,display:"flex",flexDirection:"column",justifyContent:"flex-end",padding:24,paddingBottom:100,position:"relative"}}>
+      {/* Header with Back button */}
+      <div style={{position:"absolute",top:16,left:16,right:16,display:"flex",justifyContent:"space-between",alignItems:"center",zIndex:5}}>
+        <button onClick={()=>setTab("home")} style={{background:"#00000060",border:"1px solid #ffffff30",borderRadius:10,padding:"8px 12px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",backdropFilter:"blur(10px)",display:"flex",alignItems:"center",gap:4}}>{"\u2190"} Back</button>
+        <div style={{display:"flex",gap:6,alignItems:"center"}}>
+          <span style={{fontSize:11,color:"#ffffffcc",background:"#00000050",padding:"4px 8px",borderRadius:8}}>{ri+1}/{REELS.length}</span>
+          <button onClick={()=>setShowRoutine(true)} style={{background:"#00000060",border:"1px solid #ffffff30",borderRadius:8,padding:"5px 10px",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",backdropFilter:"blur(10px)"}}>{"\u{1F4CB}"} Routine ({myRoutine.length})</button>
         </div>
-      ) : (
-        <div style={{textAlign:"center",cursor:"pointer"}} onClick={()=>{setRp(true);setReelExIdx(0)}}>
-          {/* Preview mode with animation preview */}
-          <div style={{background:"#00000025",borderRadius:20,padding:20,marginBottom:12,backdropFilter:"blur(4px)",width:280,margin:"0 auto"}}>
-            <ExAnim type={anims[ri%anims.length]} size={180} showLabel={false} />
-          </div>
-          <div style={{display:"inline-flex",alignItems:"center",gap:8,background:"#ffffff25",borderRadius:50,padding:"10px 24px",backdropFilter:"blur(10px)",border:"1px solid #ffffff30"}}>
-            <span style={{fontSize:20}}>{"\u25B6"}</span>
-            <span style={{color:"#fff",fontSize:15,fontWeight:700}}>Follow Along</span>
-          </div>
-          <p style={{color:"#ffffffbb",fontSize:12,marginTop:8}}>Tap to see each exercise with proper form</p>
-        </div>
-      )}
-    </div>
+      </div>
+      <div style={{position:"absolute",top:60,right:16,background:"#00000060",borderRadius:8,padding:"4px 10px",zIndex:5,backdropFilter:"blur(10px)"}}>
+        <span style={{color:"#fff",fontSize:12,fontWeight:600}}>{"\u23F1"} {r.duration}</span>
+      </div>
 
-    {/* Bottom Info */}
-    <div style={{position:"relative",zIndex:4}}>
-      <h2 style={{fontSize:22,fontWeight:900,color:"#fff",marginBottom:3}}>{r.title}</h2>
-      <p style={{fontSize:13,color:"#ffffffcc",marginBottom:10}}>@{r.trainer} · {r.views} views</p>
-      <div style={{display:"flex",flexWrap:"wrap",gap:5,marginBottom:14}}>{r.exercises.map((ex,i) => <span key={i} style={{background:"#ffffff20",borderRadius:8,padding:"3px 8px",fontSize:11,color:"#fff"}}>{ex}</span>)}</div>
-      <div style={{display:"flex",gap:8}}>
-        <button onClick={()=>setPop({type:"added",r})} style={{background:"#ffffff20",backdropFilter:"blur(10px)",border:"1px solid #ffffff30",borderRadius:12,padding:"9px 18px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer"}}>+ Add to Routine</button>
-        <button onClick={()=>{setWa(WORKOUTS_DB[ri%WORKOUTS_DB.length]);setEi(0);setTab("wo")}} style={{background:"#ffffff40",backdropFilter:"blur(10px)",border:"1px solid #ffffff40",borderRadius:12,padding:"9px 18px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer"}}>{"\u{1F4AA}"} Start Workout</button>
+      {/* Main Content Area */}
+      <div style={{position:"absolute",top:"12%",left:0,right:0,display:"flex",flexDirection:"column",alignItems:"center",zIndex:3}}>
+        {rp ? (
+          <div style={{textAlign:"center",width:"90%",maxWidth:360}}>
+            <div style={{background:"#00000030",borderRadius:20,padding:"16px 0",marginBottom:12,backdropFilter:"blur(8px)"}}>
+              <ExAnim type={anims[(ri+reelExIdx)%anims.length]} size={180} showLabel={false} />
+            </div>
+            <div style={{background:"#00000040",borderRadius:12,padding:10,marginBottom:10,backdropFilter:"blur(8px)"}}>
+              <p style={{fontSize:11,color:"#ffffffaa",textTransform:"uppercase",letterSpacing:1.5,marginBottom:4}}>Now Showing</p>
+              <p style={{fontSize:18,fontWeight:800,color:"#fff"}}>{currentEx}</p>
+            </div>
+            <div style={{textAlign:"left",padding:"0 8px",maxHeight:120,overflowY:"auto"}}>
+              {r.exercises.map((ex,i) => (
+                <button key={i} onClick={()=>setReelExIdx(i)} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4,width:"100%",background:i===reelExIdx%r.exercises.length?"#ffffff20":"transparent",borderRadius:8,padding:"6px 10px",border:"none",cursor:"pointer"}}>
+                  <div style={{width:22,height:22,borderRadius:"50%",background:i===reelExIdx%r.exercises.length?"#fff":"#ffffff30",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                    <span style={{fontSize:11,fontWeight:700,color:i===reelExIdx%r.exercises.length?"#000":"#fff"}}>{i+1}</span>
+                  </div>
+                  <span style={{color:i===reelExIdx%r.exercises.length?"#fff":"#ffffffcc",fontSize:13,fontWeight:i===reelExIdx%r.exercises.length?700:500}}>{ex}</span>
+                </button>
+              ))}
+            </div>
+            <button onClick={()=>setRp(false)} style={{marginTop:10,background:"#ffffff15",border:"1px solid #ffffff30",borderRadius:10,padding:"8px 20px",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer"}}>Stop Demo</button>
+          </div>
+        ) : (
+          <div style={{textAlign:"center",cursor:"pointer"}} onClick={()=>{setRp(true);setReelExIdx(0)}}>
+            <div style={{background:"#00000025",borderRadius:20,padding:20,marginBottom:12,backdropFilter:"blur(4px)",width:260,margin:"0 auto"}}>
+              <ExAnim type={anims[ri%anims.length]} size={170} showLabel={false} />
+            </div>
+            <div style={{display:"inline-flex",alignItems:"center",gap:8,background:"#ffffff25",borderRadius:50,padding:"10px 24px",backdropFilter:"blur(10px)",border:"1px solid #ffffff30"}}>
+              <span style={{fontSize:18}}>{"\u25B6"}</span>
+              <span style={{color:"#fff",fontSize:14,fontWeight:700}}>Follow Along</span>
+            </div>
+            <p style={{color:"#ffffffbb",fontSize:11,marginTop:6}}>Tap to see exercises</p>
+          </div>
+        )}
+      </div>
+
+      {/* Bottom Info */}
+      <div style={{position:"relative",zIndex:4}}>
+        <h2 style={{fontSize:21,fontWeight:900,color:"#fff",marginBottom:3}}>{r.title}</h2>
+        <p style={{fontSize:12,color:"#ffffffcc",marginBottom:8}}>@{r.trainer} · {r.views} views</p>
+        <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:12}}>
+          {r.exercises.slice(0,3).map((ex,i) => <span key={i} style={{background:"#ffffff20",borderRadius:8,padding:"3px 8px",fontSize:10,color:"#fff"}}>{ex}</span>)}
+        </div>
+        <div style={{display:"flex",gap:6}}>
+          <button onClick={()=>addReelToRoutine(r)} disabled={!!inRoutine} style={{flex:1,background:inRoutine?"#38ef7d40":"#ffffff20",backdropFilter:"blur(10px)",border:`1px solid ${inRoutine?"#38ef7d80":"#ffffff30"}`,borderRadius:10,padding:"10px 12px",color:"#fff",fontSize:12,fontWeight:700,cursor:inRoutine?"default":"pointer"}}>{inRoutine?"\u2713 In Routine":"+ Add to Routine"}</button>
+          <button onClick={()=>{const w=WORKOUTS_DB.find(x=>x.id===r.workoutId)||WORKOUTS_DB[0];setWa(w);setEi(0);setTab("wo")}} style={{flex:1,background:"#ffffff40",backdropFilter:"blur(10px)",border:"1px solid #ffffff40",borderRadius:10,padding:"10px 12px",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer"}}>{"\u{1F4AA}"} Start</button>
+        </div>
+      </div>
+
+      {/* Side actions — all functional */}
+      <div style={{position:"absolute",right:12,bottom:130,display:"flex",flexDirection:"column",gap:14,alignItems:"center",zIndex:5}}>
+        <button onClick={()=>toggleLikeReel(r)} style={{background:"none",border:"none",cursor:"pointer",textAlign:"center"}}>
+          <div style={{fontSize:26,filter:isLiked?"none":"grayscale(0.3)"}}>{isLiked?"\u2764\uFE0F":"\u{1F90D}"}</div>
+          <span style={{fontSize:10,color:"#ffffffcc",fontWeight:600}}>{isLiked?(parseInt(r.likes)+1)+(r.likes.includes("M")?"M":"K"):r.likes}</span>
+        </button>
+        <button onClick={()=>setPop({type:"comments",r})} style={{background:"none",border:"none",cursor:"pointer",textAlign:"center"}}>
+          <div style={{fontSize:26}}>{"\u{1F4AC}"}</div>
+          <span style={{fontSize:10,color:"#ffffffcc",fontWeight:600}}>189</span>
+        </button>
+        <button onClick={()=>shareReel(r)} style={{background:"none",border:"none",cursor:"pointer",textAlign:"center"}}>
+          <div style={{fontSize:26}}>{"\u{1F4E4}"}</div>
+          <span style={{fontSize:10,color:"#ffffffcc",fontWeight:600}}>Share</span>
+        </button>
+        <button onClick={()=>toggleSaveReel(r)} style={{background:"none",border:"none",cursor:"pointer",textAlign:"center"}}>
+          <div style={{fontSize:26}}>{isSaved?"\u{1F516}":"\u{1F4D1}"}</div>
+          <span style={{fontSize:10,color:isSaved?"#FFD700":"#ffffffcc",fontWeight:600}}>{isSaved?"Saved":"Save"}</span>
+        </button>
       </div>
     </div>
-
-    {/* Side actions */}
-    <div style={{position:"absolute",right:14,bottom:120,display:"flex",flexDirection:"column",gap:18,alignItems:"center",zIndex:5}}>
-      {[["\u2764\uFE0F",r.likes],["\u{1F4AC}","189"],["\u{1F4E4}","Share"],["\u{1F516}","Save"]].map(([i,l]) => <div key={i} style={{textAlign:"center",cursor:"pointer"}}><div style={{fontSize:22}}>{i}</div><span style={{fontSize:10,color:"#ffffffaa"}}>{l}</span></div>)}
-    </div>
-  </div>
-  {/* Swipe navigation */}
-  <div style={{position:"absolute",bottom:75,left:0,right:0,display:"flex",justifyContent:"center",gap:10,zIndex:6}}>
-    <button disabled={ri===0} onClick={()=>{setRi(i=>i-1);setRp(false);setReelExIdx(0)}} style={{...SB,opacity:ri===0?.3:1}}>{"\u2191"}</button>
-    <button disabled={ri===REELS.length-1} onClick={()=>{setRi(i=>i+1);setRp(false);setReelExIdx(0)}} style={{...SB,opacity:ri===REELS.length-1?.3:1}}>{"\u2193"}</button>
-  </div></div>};
+    {/* Swipe navigation */}
+    <div style={{position:"absolute",bottom:75,left:0,right:0,display:"flex",justifyContent:"center",gap:10,zIndex:6}}>
+      <button disabled={ri===0} onClick={()=>{setRi(i=>i-1);setRp(false);setReelExIdx(0)}} style={{...SB,opacity:ri===0?.3:1}}>{"\u2191"}</button>
+      <button disabled={ri===REELS.length-1} onClick={()=>{setRi(i=>i+1);setRp(false);setReelExIdx(0)}} style={{...SB,opacity:ri===REELS.length-1?.3:1}}>{"\u2193"}</button>
+    </div></div>;
+  };
 
   // ── FOOD TRACKER — Manual Entry + AI Lookup + Database ──
   const Food=()=>{const cats=["all","breakfast","lunch","snack","drink","sweet","fruit"];const ff=FOOD_DB.filter(f=>(fc==="all"||f.category===fc)&&(!fs||f.name.toLowerCase().includes(fs.toLowerCase())||f.region.toLowerCase().includes(fs.toLowerCase())));const tl=u.foodLog||[];const tots=tl.reduce((a,f)=>({cal:a.cal+f.cal,protein:a.protein+(f.protein||0),carbs:a.carbs+(f.carbs||0),fat:a.fat+(f.fat||0)}),{cal:0,protein:0,carbs:0,fat:0});
@@ -1120,7 +1418,9 @@ export default function App(){
     {pop.type==="complete"&&<><div style={{fontSize:56}}>{"\u{1F389}"}</div><h2 style={{fontSize:22,fontWeight:900,color:"#fff",margin:"10px 0 6px"}}>Workout Complete!</h2><p style={{fontSize:13,color:"#b0b0b8",marginBottom:16}}>{pop.w.name} — +{pop.w.xp} XP</p><button onClick={()=>setPop(null)} style={{...BP,width:"100%"}}>Continue</button></>}
     {pop.type==="share"&&<><div style={{fontSize:56}}>{"\u{1F4E4}"}</div><h2 style={{fontSize:18,fontWeight:800,color:"#fff",margin:"10px 0"}}>Share Fitness Age!</h2><div style={{background:"linear-gradient(135deg,#1A1A2E,#0F3460)",borderRadius:16,padding:18,marginBottom:14}}><p style={{color:"#b0b0b8",fontSize:11}}>My Fitness Age</p><p style={{fontSize:44,fontWeight:900,color:"#38ef7d"}}>{pop.fa}</p><p style={{fontSize:12,color:"#aaa"}}>Beat me? {"\u{1F9EC}"}</p></div><p style={{fontSize:11,color:"#9a9aa2",marginBottom:14}}>Screenshot & share!</p><button onClick={()=>setPop(null)} style={{...BP,width:"100%"}}>Done</button></>}
     {pop.type==="copied"&&<><div style={{fontSize:44}}>{"\u2705"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Copied!</h2><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>Close</button></>}
-    {pop.type==="added"&&<><div style={{fontSize:44}}>{"\u2705"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Added to Routine!</h2><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>Close</button></>}
+    {pop.type==="added"&&<><div style={{fontSize:44}}>{"\u2705"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Added to Routine!</h2><p style={{fontSize:12,color:"#b0b0b8",marginBottom:8}}>{pop.r?.title} saved · +5 XP</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>Close</button></>}
+    {pop.type==="already"&&<><div style={{fontSize:44}}>{"\u{1F4CB}"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Already in Routine</h2><p style={{fontSize:12,color:"#b0b0b8"}}>{pop.msg||"This workout is already saved"}</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>OK</button></>}
+    {pop.type==="comments"&&<><div style={{fontSize:44}}>{"\u{1F4AC}"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Comments</h2><div style={{textAlign:"left",maxHeight:200,overflowY:"auto",marginBottom:12}}>{[{n:"Aarav K.",t:"This burned my legs! 🔥",a:"\u{1F3CB}\uFE0F"},{n:"Priya S.",t:"Done 3 times this week, feeling stronger",a:"\u{1F9D8}"},{n:"Rahul M.",t:"Great form tips, thanks!",a:"\u{1F4AA}"},{n:"Sneha R.",t:"Perfect for beginners 💪",a:"\u{1F3C3}"}].map((c,i)=><div key={i} style={{display:"flex",gap:8,padding:"8px 0",borderBottom:"1px solid #ffffff08"}}><span style={{fontSize:18}}>{c.a}</span><div style={{flex:1}}><p style={{fontSize:12,fontWeight:700,color:"#fff"}}>{c.n}</p><p style={{fontSize:11,color:"#b0b0b8"}}>{c.t}</p></div></div>)}</div><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:8}}>Close</button></>}
     {pop.type==="food"&&<><div style={{fontSize:44}}>{"\u{1F37D}\uFE0F"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Food Logged! +5 XP</h2><p style={{fontSize:13,color:"#FF6B35",fontWeight:600}}>{pop.f?.name} — {pop.f?.cal} kcal</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>Close</button></>}
   </div></div>};
 
