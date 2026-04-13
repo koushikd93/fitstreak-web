@@ -1,4 +1,4 @@
-// api/generate-report.js — Daily and Weekly AI fitness reports
+// api/generate-report.js — OpenAI Daily/Weekly fitness reports
 let dailyCount = 0;
 let dailyReset = Date.now();
 
@@ -11,11 +11,11 @@ export default async function handler(req, res) {
 
   const now = Date.now();
   if (now - dailyReset > 86400000) { dailyCount = 0; dailyReset = now; }
-  if (dailyCount >= 800) return res.status(429).json({ error: 'Daily limit reached. Try tomorrow.' });
+  if (dailyCount >= 500) return res.status(429).json({ error: 'Daily limit reached. Try tomorrow.' });
   dailyCount++;
 
-  const GEMINI_KEY = process.env.GEMINI_API_KEY;
-  if (!GEMINI_KEY) return res.status(500).json({ error: 'API key not configured' });
+  const OPENAI_KEY = process.env.OPENAI_API_KEY;
+  if (!OPENAI_KEY) return res.status(500).json({ error: 'OpenAI API key not configured' });
 
   try {
     const { type, userData } = req.body;
@@ -47,11 +47,11 @@ Return ONLY a valid JSON object (no markdown, no backticks) with these exact key
 {
   "summary": "2-3 sentence overview of their week",
   "wins": "3-4 specific achievements as bullet points (use • bullets)",
-  "trends": "Patterns observed in their data — what they're doing consistently, what's improving, what's declining (3-4 bullets)",
-  "nextWeek": "Specific, actionable focus areas for next week (3-4 bullets)"
+  "trends": "Patterns observed in their data (3-4 bullets with •)",
+  "nextWeek": "Specific, actionable focus areas for next week (3-4 bullets with •)"
 }
 
-Be specific. Reference actual numbers from their data. Mention Indian foods if recent foods are Indian. Keep total under 250 words.`
+Be specific. Reference actual numbers. Mention Indian foods if recent foods are Indian. Keep total under 250 words.`
       : `You are a fitness AI coach. Analyze this user's TODAY fitness data and generate a personalized daily report. Be specific, data-driven, and encouraging.
 
 ${userSummary}
@@ -64,26 +64,31 @@ Return ONLY a valid JSON object (no markdown, no backticks) with these exact key
   "tomorrow": "Concrete plan for tomorrow (3-4 actionable bullets with • prefix)"
 }
 
-Reference their actual numbers. If steps are low, suggest specifics. If sleep is short, give a wind-down tip. Keep total under 200 words.`;
+Reference their actual numbers. Keep total under 200 words.`;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { maxOutputTokens: 600, temperature: 0.5 }
-        })
-      }
-    );
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: 'You are a fitness AI coach. Always return valid JSON when requested.' },
+          { role: 'user', content: prompt }
+        ],
+        max_tokens: 600,
+        temperature: 0.5,
+        response_format: { type: 'json_object' }
+      })
+    });
 
     const data = await response.json();
-    if (data.error) return res.status(400).json({ error: data.error.message || 'AI error' });
+    if (data.error) return res.status(400).json({ error: data.error.message });
 
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '{}';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const report = JSON.parse(clean);
+    const text = data.choices?.[0]?.message?.content?.trim() || '{}';
+    const report = JSON.parse(text);
 
     return res.status(200).json({ report });
   } catch (error) {

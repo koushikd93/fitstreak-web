@@ -1,4 +1,4 @@
-// api/analyze-workout.js — AI workout form analysis and tips
+// api/analyze-workout.js — OpenAI workout analysis
 let dailyCount = 0;
 let dailyReset = Date.now();
 
@@ -14,8 +14,8 @@ export default async function handler(req, res) {
   if (dailyCount >= 500) return res.status(429).json({ error: 'Daily limit reached' });
   dailyCount++;
 
-  const GEMINI_KEY = process.env.GEMINI_API_KEY;
-  if (!GEMINI_KEY) return res.status(500).json({ error: 'API key not configured' });
+  const OPENAI_KEY = process.env.OPENAI_API_KEY;
+  if (!OPENAI_KEY) return res.status(500).json({ error: 'OpenAI API key not configured' });
 
   try {
     const { workoutName, exercises, duration, difficulty, userLevel, userGoal, totalWorkoutsCompleted } = req.body;
@@ -31,7 +31,7 @@ User level: ${userLevel || 'beginner'}
 User goal: ${userGoal || 'general fitness'}
 Total workouts completed: ${totalWorkoutsCompleted || 0}
 
-Give them a brief post-workout analysis. Return ONLY a JSON object (no markdown):
+Give them a brief post-workout analysis. Return ONLY a JSON object:
 {
   "encouragement": "1 sentence celebrating their effort",
   "muscles": "What muscles they worked (1 sentence)",
@@ -41,24 +41,29 @@ Give them a brief post-workout analysis. Return ONLY a JSON object (no markdown)
 
 Keep each field under 25 words. Be specific and actionable.`;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { maxOutputTokens: 300, temperature: 0.5 }
-        })
-      }
-    );
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${OPENAI_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: 'You are a fitness coach. Always return valid JSON.' },
+          { role: 'user', content: prompt }
+        ],
+        max_tokens: 300,
+        temperature: 0.5,
+        response_format: { type: 'json_object' }
+      })
+    });
 
     const data = await response.json();
     if (data.error) return res.status(400).json({ error: data.error.message });
 
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '{}';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const analysis = JSON.parse(clean);
+    const text = data.choices?.[0]?.message?.content?.trim() || '{}';
+    const analysis = JSON.parse(text);
 
     return res.status(200).json({ analysis });
   } catch (error) {
