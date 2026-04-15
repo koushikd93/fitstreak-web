@@ -229,6 +229,27 @@ const WORKOUTS_DB = [
   { id:16,name:"Arm Sculptor",type:"strength",duration:15,difficulty:"intermediate",equipment:"bodyweight",xp:75,exercises:[{name:"Standard Push-Ups",sets:3,reps:12,rest:20,tip:"Slow and controlled",anim:"pu"},{name:"Diamond Push-Ups",sets:3,reps:8,rest:25,tip:"Triceps focus",anim:"pu"},{name:"Pike Push-Ups",sets:3,reps:10,rest:20,tip:"Shoulders work",anim:"pu"},{name:"Tricep Dips",sets:3,reps:12,rest:20,tip:"Use a chair/edge",anim:"pu"},{name:"Plank Up-Downs",sets:3,reps:10,rest:15,tip:"Forearm to hand",anim:"plank"}]},
   { id:17,name:"Bedtime Stretch",type:"flexibility",duration:8,difficulty:"beginner",equipment:"bodyweight",xp:35,exercises:[{name:"Neck Rolls",sets:2,reps:5,rest:5,tip:"Each direction",anim:"yoga"},{name:"Shoulder Rolls",sets:2,reps:10,rest:5,tip:"Slow and deep",anim:"yoga"},{name:"Spinal Twist",sets:2,reps:"30s",rest:5,tip:"Both sides",anim:"yoga"},{name:"Hamstring Stretch",sets:2,reps:"30s",rest:5,tip:"Each leg",anim:"yoga"},{name:"Child's Pose",sets:1,reps:"60s",rest:0,tip:"Deep breathing",anim:"yoga"}]},
   { id:18,name:"Plank Power",type:"strength",duration:10,difficulty:"intermediate",equipment:"bodyweight",xp:60,exercises:[{name:"Standard Plank",sets:3,reps:"45s",rest:20,tip:"Body straight line",anim:"plank"},{name:"Side Plank Left",sets:2,reps:"30s",rest:15,tip:"Stack feet",anim:"plank"},{name:"Side Plank Right",sets:2,reps:"30s",rest:15,tip:"Stack feet",anim:"plank"},{name:"Plank Shoulder Taps",sets:3,reps:20,rest:15,tip:"Hips stable",anim:"plank"},{name:"Forearm Plank",sets:3,reps:"40s",rest:20,tip:"Elbows under shoulders",anim:"plank"}]},
+  // More Beginner workouts
+  { id:19,name:"Walking Warm-Up",type:"hiit",duration:5,difficulty:"beginner",equipment:"bodyweight",xp:25,exercises:[{name:"March in Place",sets:2,reps:30,rest:10,tip:"Lift knees high",anim:"hk"},{name:"Arm Swings",sets:2,reps:20,rest:10,tip:"Swing across chest",anim:"jj"},{name:"Side Steps",sets:2,reps:20,rest:10,tip:"Stay light on toes",anim:"hk"},{name:"Toe Touches",sets:2,reps:10,rest:10,tip:"Bend at hips",anim:"yoga"}]},
+  { id:20,name:"Gentle Core",type:"strength",duration:8,difficulty:"beginner",equipment:"bodyweight",xp:35,exercises:[{name:"Dead Bug",sets:2,reps:10,rest:15,tip:"Lower back flat",anim:"bridge"},{name:"Bird Dog",sets:2,reps:10,rest:15,tip:"Opposite arm and leg",anim:"plank"},{name:"Glute Bridges",sets:2,reps:12,rest:15,tip:"Squeeze glutes",anim:"bridge"},{name:"Modified Plank",sets:2,reps:"20s",rest:15,tip:"On knees is fine",anim:"plank"}]},
+  { id:21,name:"Stretchy Start",type:"flexibility",duration:10,difficulty:"beginner",equipment:"bodyweight",xp:30,exercises:[{name:"Neck Circles",sets:2,reps:8,rest:5,tip:"Slow circles",anim:"yoga"},{name:"Shoulder Rolls",sets:2,reps:10,rest:5,tip:"Forward then back",anim:"yoga"},{name:"Hip Circles",sets:2,reps:8,rest:5,tip:"Hands on hips",anim:"yoga"},{name:"Standing Quad Stretch",sets:2,reps:"20s",rest:5,tip:"Each leg",anim:"yoga"},{name:"Cat-Cow",sets:2,reps:8,rest:5,tip:"Breathe with movement",anim:"yoga"}]},
+  { id:22,name:"Easy Cardio",type:"hiit",duration:10,difficulty:"beginner",equipment:"bodyweight",xp:40,exercises:[{name:"Marching",sets:3,reps:30,rest:15,tip:"Pump arms",anim:"hk"},{name:"Step Jacks",sets:3,reps:20,rest:15,tip:"Like jumping jacks but step",anim:"jj"},{name:"Knee Raises",sets:3,reps:20,rest:15,tip:"Alternate legs",anim:"hk"},{name:"Arm Punches",sets:3,reps:30,rest:15,tip:"Jab, cross, repeat",anim:"pu"}]},
+  { id:23,name:"Chair Workout",type:"strength",duration:10,difficulty:"beginner",equipment:"bodyweight",xp:45,exercises:[{name:"Seated Leg Raises",sets:3,reps:12,rest:15,tip:"Sit on edge of chair",anim:"crunch"},{name:"Chair Squats",sets:3,reps:10,rest:15,tip:"Touch chair then stand",anim:"squat"},{name:"Incline Push-Ups",sets:3,reps:8,rest:20,tip:"Hands on chair seat",anim:"pu"},{name:"Tricep Dips",sets:3,reps:8,rest:20,tip:"Hands on chair edge",anim:"pu"},{name:"Step-Ups",sets:3,reps:10,rest:15,tip:"Each leg, use chair",anim:"lunge"}]},
+  // More Intermediate workouts
+  { id:24,name:"Athletic Circuit",type:"hiit",duration:20,difficulty:"intermediate",equipment:"bodyweight",xp:90,exercises:[{name:"High Knees",sets:4,reps:30,rest:15,tip:"Pump arms fast",anim:"hk"},{name:"Push-Ups",sets:3,reps:15,rest:20,tip:"Full range",anim:"pu"},{name:"Jump Squats",sets:3,reps:15,rest:20,tip:"Land soft",anim:"squat"},{name:"Bicycle Crunches",sets:3,reps:24,rest:15,tip:"Slow and controlled",anim:"crunch"},{name:"Lunges",sets:3,reps:16,rest:20,tip:"Alternate legs",anim:"lunge"},{name:"Burpees",sets:3,reps:8,rest:25,tip:"Full extension",anim:"burpee"}]},
+  { id:25,name:"Chest & Triceps",type:"strength",duration:15,difficulty:"intermediate",equipment:"bodyweight",xp:80,exercises:[{name:"Standard Push-Ups",sets:4,reps:12,rest:20,tip:"Chest to floor",anim:"pu"},{name:"Close-Grip Push-Ups",sets:3,reps:10,rest:20,tip:"Hands together",anim:"pu"},{name:"Wide Push-Ups",sets:3,reps:12,rest:20,tip:"Hands wide",anim:"pu"},{name:"Tricep Dips",sets:3,reps:12,rest:20,tip:"On chair or bench",anim:"pu"},{name:"Diamond Push-Ups",sets:3,reps:8,rest:25,tip:"Triangle hands",anim:"pu"}]},
+  { id:26,name:"Functional Fitness",type:"strength",duration:18,difficulty:"intermediate",equipment:"bodyweight",xp:85,exercises:[{name:"Bear Crawl",sets:3,reps:"20s",rest:20,tip:"Stay low",anim:"mc"},{name:"Crab Walk",sets:3,reps:"20s",rest:20,tip:"Hips high",anim:"bridge"},{name:"Inchworms",sets:3,reps:8,rest:20,tip:"Walk hands out",anim:"plank"},{name:"Single Leg Deadlift",sets:3,reps:10,rest:20,tip:"Each leg",anim:"yoga"},{name:"Pistol Squat Assist",sets:3,reps:6,rest:25,tip:"Hold wall",anim:"squat"}]},
+  { id:27,name:"Cardio Kickboxing",type:"hiit",duration:15,difficulty:"intermediate",equipment:"bodyweight",xp:80,exercises:[{name:"Jab-Cross Combo",sets:4,reps:20,rest:15,tip:"Rotate hips",anim:"pu"},{name:"Front Kicks",sets:3,reps:16,rest:15,tip:"Alternate legs",anim:"hk"},{name:"Uppercuts",sets:3,reps:20,rest:15,tip:"Drive from legs",anim:"pu"},{name:"Knee Strikes",sets:3,reps:16,rest:15,tip:"Pull hands down",anim:"hk"},{name:"Bob and Weave",sets:3,reps:20,rest:15,tip:"Duck and move",anim:"squat"}]},
+  // More Advanced workouts
+  { id:28,name:"Beast Mode HIIT",type:"hiit",duration:25,difficulty:"advanced",equipment:"bodyweight",xp:130,exercises:[{name:"Burpee Broad Jumps",sets:4,reps:8,rest:20,tip:"Jump forward",anim:"burpee"},{name:"Clapping Push-Ups",sets:3,reps:10,rest:25,tip:"Explosive push",anim:"pu"},{name:"Tuck Jumps",sets:4,reps:12,rest:20,tip:"Knees to chest",anim:"squat"},{name:"Mountain Climbers",sets:4,reps:40,rest:15,tip:"Fast and low",anim:"mc"},{name:"Pike Push-Ups",sets:3,reps:12,rest:25,tip:"Hips high, head to floor",anim:"pu"},{name:"Star Jumps",sets:4,reps:15,rest:15,tip:"Full extension",anim:"jj"}]},
+  { id:29,name:"Warrior Strength",type:"strength",duration:30,difficulty:"advanced",equipment:"bodyweight",xp:140,exercises:[{name:"Archer Push-Ups",sets:3,reps:8,rest:25,tip:"Extend one arm wide",anim:"pu"},{name:"Pistol Squats",sets:3,reps:6,rest:30,tip:"One leg, full depth",anim:"squat"},{name:"Handstand Hold",sets:3,reps:"20s",rest:30,tip:"Against wall",anim:"plank"},{name:"Dragon Flag",sets:3,reps:5,rest:30,tip:"Control the negative",anim:"crunch"},{name:"L-Sit Hold",sets:3,reps:"15s",rest:25,tip:"On dip bars or floor",anim:"plank"},{name:"One-Arm Push-Up Neg",sets:3,reps:4,rest:30,tip:"Slow down only",anim:"pu"}]},
+  { id:30,name:"Sprint Intervals",type:"hiit",duration:15,difficulty:"advanced",equipment:"bodyweight",xp:110,exercises:[{name:"Sprint in Place",sets:5,reps:"20s",rest:20,tip:"100% effort",anim:"hk"},{name:"Burpees",sets:4,reps:10,rest:20,tip:"No rest at top",anim:"burpee"},{name:"Jump Lunges",sets:4,reps:16,rest:20,tip:"Alternate mid-air",anim:"lunge"},{name:"Power Push-Ups",sets:3,reps:12,rest:20,tip:"Push off floor",anim:"pu"}]},
+  { id:31,name:"Plyometric Power",type:"hiit",duration:20,difficulty:"advanced",equipment:"bodyweight",xp:120,exercises:[{name:"Box Jumps",sets:4,reps:10,rest:20,tip:"Step up, jump down",anim:"squat"},{name:"Lateral Bounds",sets:4,reps:16,rest:15,tip:"Stick the landing",anim:"hk"},{name:"Depth Jumps",sets:3,reps:8,rest:25,tip:"Step off, explode up",anim:"squat"},{name:"Plyo Push-Ups",sets:3,reps:8,rest:25,tip:"Hands leave floor",anim:"pu"},{name:"Single-Leg Hops",sets:3,reps:10,rest:20,tip:"Each leg",anim:"hk"}]},
+  { id:32,name:"Core Annihilator",type:"strength",duration:15,difficulty:"advanced",equipment:"bodyweight",xp:100,exercises:[{name:"Ab Wheel Rollouts",sets:3,reps:10,rest:25,tip:"Full extension",anim:"plank"},{name:"Hanging Leg Raises",sets:3,reps:12,rest:25,tip:"Toes to bar",anim:"crunch"},{name:"Dragon Flags",sets:3,reps:6,rest:30,tip:"Straight body",anim:"crunch"},{name:"Human Flag Prep",sets:3,reps:"10s",rest:30,tip:"Side plank on pole",anim:"plank"},{name:"V-Sit Hold",sets:3,reps:"20s",rest:25,tip:"Legs and torso at 45°",anim:"crunch"}]},
+  { id:33,name:"Endurance Circuit",type:"hiit",duration:30,difficulty:"advanced",equipment:"bodyweight",xp:150,exercises:[{name:"Burpees",sets:5,reps:12,rest:15,tip:"Non-stop pace",anim:"burpee"},{name:"Mountain Climbers",sets:5,reps:40,rest:15,tip:"Drive knees fast",anim:"mc"},{name:"Jump Squats",sets:5,reps:20,rest:15,tip:"Quarter squat jump",anim:"squat"},{name:"Push-Up Variations",sets:5,reps:10,rest:15,tip:"Change width each set",anim:"pu"},{name:"High Knees Sprint",sets:5,reps:40,rest:15,tip:"Arms pumping",anim:"hk"},{name:"Plank Jacks",sets:4,reps:20,rest:15,tip:"Jump feet wide",anim:"plank"}]},
+  { id:34,name:"Flexibility Master",type:"flexibility",duration:25,difficulty:"advanced",equipment:"bodyweight",xp:90,exercises:[{name:"Deep Squat Hold",sets:3,reps:"60s",rest:15,tip:"Heels flat",anim:"squat"},{name:"Pigeon Pose",sets:2,reps:"60s",rest:10,tip:"Each side",anim:"yoga"},{name:"Pancake Stretch",sets:3,reps:"45s",rest:10,tip:"Legs wide, chest forward",anim:"yoga"},{name:"Bridge Hold",sets:3,reps:"30s",rest:15,tip:"Push hips high",anim:"bridge"},{name:"King Pigeon",sets:2,reps:"30s",rest:15,tip:"Grab back foot",anim:"yoga"},{name:"Splits Progression",sets:2,reps:"45s",rest:15,tip:"Use blocks for support",anim:"yoga"}]},
+  { id:35,name:"AMRAP Challenge",type:"hiit",duration:20,difficulty:"advanced",equipment:"bodyweight",xp:125,exercises:[{name:"Burpees",sets:1,reps:10,rest:0,tip:"No rest between moves",anim:"burpee"},{name:"Push-Ups",sets:1,reps:15,rest:0,tip:"Go go go",anim:"pu"},{name:"Air Squats",sets:1,reps:20,rest:0,tip:"Full depth",anim:"squat"},{name:"Sit-Ups",sets:1,reps:15,rest:0,tip:"Touch toes",anim:"crunch"},{name:"Repeat 4 rounds",sets:4,reps:1,rest:60,tip:"Rest 1 min between rounds",anim:"jj"}]},
+  { id:36,name:"Advanced Yoga",type:"flexibility",duration:20,difficulty:"advanced",equipment:"bodyweight",xp:85,exercises:[{name:"Sun Salutation B",sets:5,reps:3,rest:5,tip:"Flow with breath",anim:"yoga"},{name:"Crow to Tripod",sets:3,reps:5,rest:15,tip:"Shift weight forward",anim:"yoga"},{name:"Wheel Pose",sets:3,reps:"20s",rest:15,tip:"Push through shoulders",anim:"bridge"},{name:"Firefly Pose",sets:3,reps:"10s",rest:15,tip:"Lift hips high",anim:"yoga"},{name:"Handstand Practice",sets:3,reps:"15s",rest:20,tip:"Kick up against wall",anim:"plank"}]},
 ];
 
 const CHALLENGES_DB = [
@@ -256,7 +277,49 @@ const LEADERBOARD = [
   {name:"Aarav K.",xp:12450,streak:47,avatar:"\u{1F3CB}\uFE0F"},{name:"Priya S.",xp:11200,streak:42,avatar:"\u{1F9D8}"},{name:"Rahul M.",xp:9870,streak:38,avatar:"\u{1F4AA}"},{name:"Sneha R.",xp:8540,streak:33,avatar:"\u{1F3C3}"},{name:"Arjun D.",xp:7200,streak:28,avatar:"\u26A1"},{name:"Diya P.",xp:6800,streak:25,avatar:"\u{1F525}"},{name:"Karan V.",xp:5430,streak:21,avatar:"\u{1F3AF}"},{name:"Ananya G.",xp:4100,streak:17,avatar:"\u2728"},
 ];
 
-const MOTIV = ["\u{1F525} Your only competition is yesterday's you","\u{1F4AA} Sweat now, flex later","\u26A1 1% better every single day","\u{1F3C6} Champions train, losers complain","\u{1F48E} Pain today = strength tomorrow","\u2705 Don't stop when tired. Stop when done","\u{1F680} Small steps still move forward"];
+const MOTIV = {
+  cricket:[
+    "\u{1F3CF} Virat Kohli trains 5 days a week, 2-3 hours of intense gym sessions. He transformed his body and career through discipline.",
+    "\u{1F3CF} MS Dhoni does 1,500 skipping reps daily. He says, 'Fitness is the key to everything.'",
+    "\u{1F3CF} Rohit Sharma lost 12kg with cricket-specific cardio and clean eating. He runs 5km every morning before practice.",
+    "\u{1F3CF} Jasprit Bumrah's core workout includes 200 crunches and 5-minute planks. Bowling fast requires insane core strength.",
+    "\u{1F3CF} Sachin Tendulkar did 45 minutes of yoga every day throughout his career. Flexibility prevents injuries.",
+    "\u{1F3CF} Hardik Pandya bench presses 100kg and runs 2km in under 8 minutes. His comeback was built in the gym.",
+    "\u{1F3CF} KL Rahul starts every morning with 30 minutes of meditation and stretching before hitting the gym.",
+    "\u{1F3CF} Ravindra Jadeja's fitness test includes running 2km in 8:30 — he does it in under 8 minutes consistently.",
+    "\u{1F3CF} Rishabh Pant's comeback from injury included 6 months of rehab — 4 hours/day. Discipline beats talent.",
+    "\u{1F3CF} Australian cricket team does ice baths after every training session. Recovery is half the game.",
+    "\u{1F3CF} AB de Villiers could squat 180kg. His explosive power came from Olympic lifting, not just batting practice.",
+    "\u{1F3CF} Kohli's diet: no sugar, no gluten, no processed food. He eats clean 365 days. Your body is your investment.",
+    "\u{1F3CF} Glenn McGrath bowled 29,000+ deliveries in Tests. Consistency in training creates consistency in performance.",
+    "\u{1F3CF} Suryakumar Yadav does agility drills for 45 minutes daily. Quick feet in cricket start in the gym.",
+  ],
+  football:[
+    "\u26BD Cristiano Ronaldo sleeps 8 hours + five 90-min naps daily. He has 7% body fat at age 39.",
+    "\u26BD Messi does 20 minutes of focused core work before every training session. Small habits, big results.",
+    "\u26BD Kylian Mbappé sprints at 38 km/h — he trains speed 3x/week with resistance bands and hill sprints.",
+    "\u26BD Sunil Chhetri does 200 push-ups daily. India's greatest striker built his career on consistency.",
+    "\u26BD Neymar recovered from a broken back in 3 months through 6 hours of daily rehabilitation. Never give up.",
+    "\u26BD Erling Haaland eats 6,000 calories/day including raw liver and heart. Fuel your body right.",
+    "\u26BD Vinícius Jr does yoga twice a week for flexibility. The best dribblers have the most flexible hips.",
+    "\u26BD Marcus Rashford trains at 6 AM even on off-days. He says, 'The mornings belong to the champions.'",
+    "\u26BD Zlatan Ibrahimović has a black belt in Taekwondo. Cross-training makes you a better athlete.",
+    "\u26BD Mohamed Salah gained 5kg of muscle in one summer. He does compound lifts 4x/week during pre-season.",
+    "\u26BD Bukayo Saka does 30-minute ice baths after matches. Recovery is when growth happens.",
+    "\u26BD Robert Lewandowski's wife is a nutritionist — he hasn't eaten sugar in 8 years. Diet is 80% of fitness.",
+    "\u26BD Kevin De Bruyne runs 12.5 km per match. His off-season training includes 10km daily runs.",
+    "\u26BD Sandesh Jhingan does Olympic weightlifting to improve his heading power. Strength training helps every sport.",
+  ],
+  default:[
+    "\u{1F525} Your only competition is yesterday's you. Every rep counts.",
+    "\u{1F4AA} Sweat now, flex later. Consistency beats intensity.",
+    "\u26A1 1% better every single day. That's 37x better in a year.",
+    "\u{1F3C6} Champions train on the days they don't feel like it.",
+    "\u{1F48E} Pain today = strength tomorrow. Push through.",
+    "\u2705 Don't stop when tired. Stop when done.",
+    "\u{1F680} Small steps still move you forward. Keep going.",
+  ]
+};
 
 const REELS = [
   {id:1,title:"5-Min Ab Burner",trainer:"MadFit",views:"24M",likes:"580K",gradient:"linear-gradient(135deg,#FF6B35,#E94560)",exercises:["Crunches x20","Plank 30s","Leg Raises x15","Twists x20"],duration:"5:00",workoutId:8},
@@ -331,7 +394,7 @@ function ExAnim({type,size=200,showLabel=false,color="auto"}){
 
 const load=async()=>{try{const r=await window.storage.get("fs-v4");return r?JSON.parse(r.value):null}catch{return null}};
 const save=async s=>{try{await window.storage.set("fs-v4",JSON.stringify(s))}catch{}};
-const DU={name:"",goal:"",level:"",duration:15,xp:0,streak:0,longestStreak:0,freezeTokens:1,lastActiveDate:null,workoutsCompleted:0,totalMinutes:0,badges:["early_bird"],fitnessAge:0,realAge:0,joinedChallenges:[],shares:0,completedWorkoutIds:[],foodLog:[],foodLogTotal:0,steps:0,stepsGoal:10000,runKm:0,sleepHours:0,sleepGoal:8,sleepLog:[],activityLog:[],onboarded:false};
+const DU={name:"",goal:"",level:"",duration:15,gender:"",sport:"cricket",xp:0,streak:0,longestStreak:0,freezeTokens:1,lastActiveDate:null,workoutsCompleted:0,totalMinutes:0,badges:["early_bird"],fitnessAge:0,realAge:0,joinedChallenges:[],shares:0,completedWorkoutIds:[],foodLog:[],foodLogTotal:0,steps:0,stepsGoal:10000,runKm:0,sleepHours:0,sleepGoal:8,sleepLog:[],activityLog:[],onboarded:false};
 
 export default function App(){
   const[u,setU]=useState(DU);
@@ -383,6 +446,7 @@ export default function App(){
   const[myRoutine,setMyRoutine]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-routine")||"[]")}catch{return[]}});
   const[homeView,setHomeView]=useState("today");
   const[showRoutine,setShowRoutine]=useState(false);
+  const[wFilter,setWFilter]=useState("all");
   const pedometerRef=useRef({lastMag:0,stepThreshold:1.2,cooldown:0});
   const geoWatchRef=useRef(null);
   const runTimerRef=useRef(null);
@@ -392,7 +456,10 @@ export default function App(){
   const runDistRef=useRef(0);
   const tmr=useRef(null);
 
-  useEffect(()=>{(async()=>{const s=await load();if(s&&s.onboarded){const td=new Date().toDateString();const la=s.lastActiveDate?new Date(s.lastActiveDate).toDateString():null;const yd=new Date(Date.now()-864e5).toDateString();if(la&&la!==td&&la!==yd){s.freezeTokens>0?s.freezeTokens--:(s.streak=0)}const ll=s.foodLog?.[0]?.date;if(ll&&new Date(ll).toDateString()!==td){s.foodLog=[];s.foodLogTotal=0}setU({...DU,...s});setScr("app")}else setScr("onboarding")})()},[]);
+  useEffect(()=>{(async()=>{const s=await load();if(s&&s.onboarded){const td=new Date().toDateString();const la=s.lastActiveDate?new Date(s.lastActiveDate).toDateString():null;const yd=new Date(Date.now()-864e5).toDateString();if(la&&la!==td&&la!==yd){s.freezeTokens>0?s.freezeTokens--:(s.streak=0)}
+  // Reset daily counters at midnight
+  if(la&&la!==td){s.foodLog=[];s.foodLogTotal=0;s.steps=0;s.runKm=0;s.sleepHours=0}
+  setU({...DU,...s});setScr("app")}else setScr("onboarding")})()},[]);
   useEffect(()=>{if(u.onboarded)save(u)},[u]);
   useEffect(()=>{if(tr&&tm>0){tmr.current=setTimeout(()=>setTm(t=>t-1),1e3)}else if(tm===0&&tr)setTr(false);return()=>clearTimeout(tmr.current)},[tm,tr]);
 
@@ -724,7 +791,8 @@ export default function App(){
   const Home=()=>{
     const h=new Date().getHours();
     const gr=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
-    const q=MOTIV[new Date().getDate()%MOTIV.length];
+    const sportMotivs=MOTIV[u.sport]||MOTIV.default;
+    const q=sportMotivs[new Date().getDate()%sportMotivs.length];
     const rec=WORKOUTS_DB.filter(w=>w.difficulty===u.level||w.difficulty==="beginner").slice(0,4);
     const tc=u.foodLogTotal||0;
     const today=new Date().toDateString();
@@ -833,9 +901,13 @@ export default function App(){
         </button>
       </div>
 
-      {/* Motivation */}
+      {/* Daily Sport Motivation */}
       <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
-        <p style={{fontSize:13,color:"#ddd",lineHeight:1.5,fontStyle:"italic"}}>{q}</p>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+          <span style={{fontSize:10,color:"#667eea",fontWeight:700,textTransform:"uppercase",letterSpacing:1}}>Daily {u.sport==="cricket"?"Cricket":u.sport==="football"?"Football":"Fitness"} Motivation</span>
+          <span style={{fontSize:10,color:"#9a9aa2"}}>Day {new Date().getDate()}</span>
+        </div>
+        <p style={{fontSize:13,color:"#eaeaea",lineHeight:1.6}}>{q}</p>
       </div>
 
       {/* Fitness Age CTA */}
@@ -880,13 +952,18 @@ export default function App(){
         </button>
       )}
       
-      {/* All Workouts */}
+      {/* All Workouts — Categorized */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,marginTop:20}}>
         <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>All Workouts</h2>
         <span style={{fontSize:11,color:"#b0b0b8"}}>{WORKOUTS_DB.length} total</span>
       </div>
+      <div style={{display:"flex",gap:6,marginBottom:12,background:"#12121A",padding:4,borderRadius:12,border:"1px solid #ffffff08"}}>
+        {[["all","All"],["beginner","Beginner"],["intermediate","Intermediate"],["advanced","Advanced"]].map(([id,label])=>
+          <button key={id} onClick={()=>setWFilter(id)} style={{flex:1,background:wFilter===id?(id==="beginner"?"#38ef7d":id==="intermediate"?"linear-gradient(135deg,#FF6B35,#E94560)":id==="advanced"?"linear-gradient(135deg,#E94560,#764ba2)":"linear-gradient(135deg,#667eea,#764ba2)"):"transparent",border:"none",borderRadius:8,padding:"7px 2px",color:wFilter===id?(id==="beginner"?"#0A0A0F":"#fff"):"#b0b0b8",fontSize:11,fontWeight:700,cursor:"pointer"}}>{label}</button>
+        )}
+      </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-        {WORKOUTS_DB.map(w=>
+        {WORKOUTS_DB.filter(w=>wFilter==="all"||w.difficulty===wFilter).map(w=>
           <button key={w.id} onClick={()=>{setWa(w);setEi(0);setTab("wo")}} style={{...WC,padding:14}}>
             <div style={{fontSize:24,marginBottom:6}}>{w.type==="hiit"?"\u{1F525}":w.type==="strength"?"\u{1F4AA}":"\u{1F9D8}"}</div>
             <p style={{fontSize:13,fontWeight:700,color:"#fff",lineHeight:1.3}}>{w.name}</p>
@@ -1410,6 +1487,15 @@ export default function App(){
     <h3 style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:12}}>{"\u{1F3C5}"} Badges ({ub.length}/{BADGES_DB.length})</h3>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:20}}>{ub.map(b=><div key={b.id} style={{background:"#12121A",borderRadius:12,padding:12,textAlign:"center",border:"1px solid #FF6B3530"}}><div style={{fontSize:26,marginBottom:2}}>{b.icon}</div><p style={{fontSize:10,fontWeight:700,color:"#fff"}}>{b.name}</p></div>)}{lb.map(b=><div key={b.id} style={{background:"#0A0A0F",borderRadius:12,padding:12,textAlign:"center",border:"1px solid #ffffff08",opacity:.35}}><div style={{fontSize:26,marginBottom:2,filter:"grayscale(1)"}}>{b.icon}</div><p style={{fontSize:10,fontWeight:700,color:"#b0b0b8"}}>{b.name}</p></div>)}</div>
     <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:14,padding:18,marginBottom:18}}><h3 style={{fontSize:15,fontWeight:800,color:"#fff",marginBottom:4}}>Invite Friends {"\u2728"}</h3><p style={{fontSize:12,color:"#ffffffcc",marginBottom:10}}>5 invites = 1 month Pro free!</p><div style={{background:"#ffffff20",borderRadius:10,padding:10,display:"flex",justifyContent:"space-between",alignItems:"center"}}><span style={{fontSize:15,fontWeight:700,color:"#fff",letterSpacing:2}}>FITSTREAK-{u.name.toUpperCase().slice(0,4)}</span><button onClick={()=>setPop({type:"copied"})} style={{background:"#ffffff30",border:"none",borderRadius:8,padding:"5px 12px",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer"}}>Copy</button></div></div>
+    <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
+      <p style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:10}}>{"\u{1F3C3}"} Your Favorite Sport</p>
+      <p style={{fontSize:11,color:"#b0b0b8",marginBottom:10}}>Daily motivation based on your sport</p>
+      <div style={{display:"flex",gap:6}}>
+        {[["cricket","\u{1F3CF} Cricket"],["football","\u26BD Football"]].map(([id,label])=>
+          <button key={id} onClick={()=>setU(x=>({...x,sport:id}))} style={{flex:1,background:u.sport===id?"linear-gradient(135deg,#FF6B35,#E94560)":"#1A1A2E",border:u.sport===id?"none":"1px solid #ffffff15",borderRadius:10,padding:"10px 8px",color:u.sport===id?"#fff":"#b0b0b8",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>
+        )}
+      </div>
+    </div>
     <button onClick={()=>{if(confirm("Reset all data?")){setU({...DU});setScr("onboarding");setOs(0)}}} style={{width:"100%",background:"transparent",border:"1px solid #E9456030",borderRadius:12,padding:10,color:"#E94560",fontSize:12,cursor:"pointer"}}>Reset Account</button>
   </div>};
 
