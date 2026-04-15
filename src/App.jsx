@@ -279,36 +279,36 @@ const LEADERBOARD = [
 
 const MOTIV = {
   cricket:[
-    "\u{1F3CF} Virat Kohli trains 5 days a week, 2-3 hours of intense gym sessions. He transformed his body and career through discipline.",
-    "\u{1F3CF} MS Dhoni does 1,500 skipping reps daily. He says, 'Fitness is the key to everything.'",
-    "\u{1F3CF} Rohit Sharma lost 12kg with cricket-specific cardio and clean eating. He runs 5km every morning before practice.",
-    "\u{1F3CF} Jasprit Bumrah's core workout includes 200 crunches and 5-minute planks. Bowling fast requires insane core strength.",
-    "\u{1F3CF} Sachin Tendulkar did 45 minutes of yoga every day throughout his career. Flexibility prevents injuries.",
-    "\u{1F3CF} Hardik Pandya bench presses 100kg and runs 2km in under 8 minutes. His comeback was built in the gym.",
-    "\u{1F3CF} KL Rahul starts every morning with 30 minutes of meditation and stretching before hitting the gym.",
-    "\u{1F3CF} Ravindra Jadeja's fitness test includes running 2km in 8:30 — he does it in under 8 minutes consistently.",
-    "\u{1F3CF} Rishabh Pant's comeback from injury included 6 months of rehab — 4 hours/day. Discipline beats talent.",
-    "\u{1F3CF} Australian cricket team does ice baths after every training session. Recovery is half the game.",
-    "\u{1F3CF} AB de Villiers could squat 180kg. His explosive power came from Olympic lifting, not just batting practice.",
-    "\u{1F3CF} Kohli's diet: no sugar, no gluten, no processed food. He eats clean 365 days. Your body is your investment.",
-    "\u{1F3CF} Glenn McGrath bowled 29,000+ deliveries in Tests. Consistency in training creates consistency in performance.",
-    "\u{1F3CF} Suryakumar Yadav does agility drills for 45 minutes daily. Quick feet in cricket start in the gym.",
+    "\u{1F3CF} Virat Kohli transformed his physique after 2012 by quitting fried food, sweets, and adopting a strict gym routine. He's now known as one of the fittest cricketers in the world.",
+    "\u{1F3CF} MS Dhoni is famous for his fitness — he follows a vegetarian diet and has spoken publicly about the importance of cardio, strength training, and recovery.",
+    "\u{1F3CF} Sachin Tendulkar played international cricket for 24 years. His longevity came from disciplined training, mental focus, and respecting his body.",
+    "\u{1F3CF} Jasprit Bumrah works extensively on core strength and flexibility — essential for his unorthodox fast-bowling action and injury prevention.",
+    "\u{1F3CF} Hardik Pandya made a remarkable comeback after back surgery in 2019 through months of disciplined rehabilitation and strength training.",
+    "\u{1F3CF} Rohit Sharma transformed his fitness in his early 20s, dropping significant weight and improving his stamina through consistent training.",
+    "\u{1F3CF} The Indian cricket team uses the Yo-Yo test as a fitness benchmark. Players who don't pass aren't selected — fitness is non-negotiable.",
+    "\u{1F3CF} KL Rahul incorporates yoga and meditation into his routine. Mental fitness is just as important as physical fitness in elite cricket.",
+    "\u{1F3CF} Ravindra Jadeja maintains a horse-riding hobby that builds core strength and balance — cross-training pays off.",
+    "\u{1F3CF} Australian cricketers pioneered the use of cold water immersion (ice baths) for recovery — now a standard practice worldwide.",
+    "\u{1F3CF} AB de Villiers is known for his explosive power and 360-degree batting — built through years of strength training and agility work.",
+    "\u{1F3CF} Modern cricketers consume 3,000-4,000 calories per day during tours — fuel matters as much as training.",
+    "\u{1F3CF} Glenn McGrath built his Test wicket record through unmatched consistency. He believed in repeating perfect deliveries for hours.",
+    "\u{1F3CF} The BCCI introduced the Yo-Yo test in 2017 with a passing score of 16.5. It changed how Indian cricketers approached fitness forever.",
   ],
   football:[
-    "\u26BD Cristiano Ronaldo sleeps 8 hours + five 90-min naps daily. He has 7% body fat at age 39.",
-    "\u26BD Messi does 20 minutes of focused core work before every training session. Small habits, big results.",
-    "\u26BD Kylian Mbappé sprints at 38 km/h — he trains speed 3x/week with resistance bands and hill sprints.",
-    "\u26BD Sunil Chhetri does 200 push-ups daily. India's greatest striker built his career on consistency.",
-    "\u26BD Neymar recovered from a broken back in 3 months through 6 hours of daily rehabilitation. Never give up.",
-    "\u26BD Erling Haaland eats 6,000 calories/day including raw liver and heart. Fuel your body right.",
-    "\u26BD Vinícius Jr does yoga twice a week for flexibility. The best dribblers have the most flexible hips.",
-    "\u26BD Marcus Rashford trains at 6 AM even on off-days. He says, 'The mornings belong to the champions.'",
-    "\u26BD Zlatan Ibrahimović has a black belt in Taekwondo. Cross-training makes you a better athlete.",
-    "\u26BD Mohamed Salah gained 5kg of muscle in one summer. He does compound lifts 4x/week during pre-season.",
-    "\u26BD Bukayo Saka does 30-minute ice baths after matches. Recovery is when growth happens.",
-    "\u26BD Robert Lewandowski's wife is a nutritionist — he hasn't eaten sugar in 8 years. Diet is 80% of fitness.",
-    "\u26BD Kevin De Bruyne runs 12.5 km per match. His off-season training includes 10km daily runs.",
-    "\u26BD Sandesh Jhingan does Olympic weightlifting to improve his heading power. Strength training helps every sport.",
+    "\u26BD Cristiano Ronaldo is famous for his fitness regimen — he's known to maintain low body fat well into his late 30s through diet and training.",
+    "\u26BD Lionel Messi has spoken about strict dietary changes he made in his mid-20s, including reducing sugar and processed food, which extended his career.",
+    "\u26BD Sunil Chhetri is one of the highest-scoring active international footballers in the world. His fitness at age 39 is a testament to discipline.",
+    "\u26BD Kylian Mbappé is known for explosive sprint speed — among the fastest in professional football, built through years of speed training.",
+    "\u26BD Erling Haaland follows a high-calorie, high-protein diet to maintain his power and physique. Nutrition is critical for elite athletes.",
+    "\u26BD Neymar has returned from multiple serious injuries through dedicated rehabilitation. Recovery is part of every athlete's journey.",
+    "\u26BD Vinícius Jr is known for his agility and quick footwork — flexibility and core training are key to his dribbling style.",
+    "\u26BD Marcus Rashford has spoken about the importance of routine and discipline in maintaining peak performance throughout the season.",
+    "\u26BD Zlatan Ibrahimović is a black belt in Taekwondo — cross-training in martial arts has contributed to his physicality on the pitch.",
+    "\u26BD Mohamed Salah maintains a strict diet and rigorous training schedule — his transformation into a world-class striker took years of work.",
+    "\u26BD Top footballers cover an average of 10-12 km per match. That endurance is built through consistent off-season training.",
+    "\u26BD Recovery practices like ice baths, compression therapy, and massage are now standard in professional football clubs worldwide.",
+    "\u26BD Robert Lewandowski has openly credited his wife, a nutritionist, for helping him optimize his diet for performance and longevity.",
+    "\u26BD Kevin De Bruyne is known for his stamina and ability to maintain high-intensity play deep into matches — a result of elite conditioning.",
   ],
   default:[
     "\u{1F525} Your only competition is yesterday's you. Every rep counts.",
@@ -394,7 +394,7 @@ function ExAnim({type,size=200,showLabel=false,color="auto"}){
 
 const load=async()=>{try{const r=await window.storage.get("fs-v4");return r?JSON.parse(r.value):null}catch{return null}};
 const save=async s=>{try{await window.storage.set("fs-v4",JSON.stringify(s))}catch{}};
-const DU={name:"",goal:"",level:"",duration:15,gender:"",sport:"cricket",xp:0,streak:0,longestStreak:0,freezeTokens:1,lastActiveDate:null,workoutsCompleted:0,totalMinutes:0,badges:["early_bird"],fitnessAge:0,realAge:0,joinedChallenges:[],shares:0,completedWorkoutIds:[],foodLog:[],foodLogTotal:0,steps:0,stepsGoal:10000,runKm:0,sleepHours:0,sleepGoal:8,sleepLog:[],activityLog:[],onboarded:false};
+const DU={name:"",goal:"",level:"",duration:15,gender:"",sport:"cricket",xp:0,streak:0,longestStreak:0,freezeTokens:1,lastActiveDate:null,lastOpenedDate:null,workoutsCompleted:0,totalMinutes:0,badges:["early_bird"],fitnessAge:0,realAge:0,joinedChallenges:[],shares:0,completedWorkoutIds:[],foodLog:[],foodLogTotal:0,steps:0,stepsGoal:10000,runKm:0,sleepHours:0,sleepGoal:8,sleepLog:[],activityLog:[],onboarded:false};
 
 export default function App(){
   const[u,setU]=useState(DU);
@@ -456,10 +456,26 @@ export default function App(){
   const runDistRef=useRef(0);
   const tmr=useRef(null);
 
-  useEffect(()=>{(async()=>{const s=await load();if(s&&s.onboarded){const td=new Date().toDateString();const la=s.lastActiveDate?new Date(s.lastActiveDate).toDateString():null;const yd=new Date(Date.now()-864e5).toDateString();if(la&&la!==td&&la!==yd){s.freezeTokens>0?s.freezeTokens--:(s.streak=0)}
-  // Reset daily counters at midnight
-  if(la&&la!==td){s.foodLog=[];s.foodLogTotal=0;s.steps=0;s.runKm=0;s.sleepHours=0}
-  setU({...DU,...s});setScr("app")}else setScr("onboarding")})()},[]);
+  useEffect(()=>{(async()=>{const s=await load();if(s&&s.onboarded){
+    const td=new Date().toDateString();
+    const la=s.lastActiveDate?new Date(s.lastActiveDate).toDateString():null;
+    const lod=s.lastOpenedDate?new Date(s.lastOpenedDate).toDateString():null;
+    const yd=new Date(Date.now()-864e5).toDateString();
+    
+    // Streak logic: only based on workout completion date
+    if(la&&la!==td&&la!==yd){s.freezeTokens>0?s.freezeTokens--:(s.streak=0)}
+    
+    // Reset daily counters ONLY if last opened date differs from today
+    // This prevents resets on every refresh
+    if(lod&&lod!==td){
+      s.foodLog=[];s.foodLogTotal=0;s.steps=0;s.runKm=0;s.sleepHours=0;
+    }
+    
+    // Always update lastOpenedDate to today so next refresh won't reset
+    s.lastOpenedDate=new Date().toISOString();
+    
+    setU({...DU,...s});setScr("app");
+  }else setScr("onboarding")})()},[]);
   useEffect(()=>{if(u.onboarded)save(u)},[u]);
   useEffect(()=>{if(tr&&tm>0){tmr.current=setTimeout(()=>setTm(t=>t-1),1e3)}else if(tm===0&&tr)setTr(false);return()=>clearTimeout(tmr.current)},[tm,tr]);
 
