@@ -279,36 +279,112 @@ const LEADERBOARD = [
 
 const MOTIV = {
   cricket:[
-    "\u{1F3CF} Virat Kohli transformed his physique after 2012 by quitting fried food, sweets, and adopting a strict gym routine. He's now known as one of the fittest cricketers in the world.",
-    "\u{1F3CF} MS Dhoni is famous for his fitness — he follows a vegetarian diet and has spoken publicly about the importance of cardio, strength training, and recovery.",
-    "\u{1F3CF} Sachin Tendulkar played international cricket for 24 years. His longevity came from disciplined training, mental focus, and respecting his body.",
-    "\u{1F3CF} Jasprit Bumrah works extensively on core strength and flexibility — essential for his unorthodox fast-bowling action and injury prevention.",
-    "\u{1F3CF} Hardik Pandya made a remarkable comeback after back surgery in 2019 through months of disciplined rehabilitation and strength training.",
-    "\u{1F3CF} Rohit Sharma transformed his fitness in his early 20s, dropping significant weight and improving his stamina through consistent training.",
-    "\u{1F3CF} The Indian cricket team uses the Yo-Yo test as a fitness benchmark. Players who don't pass aren't selected — fitness is non-negotiable.",
-    "\u{1F3CF} KL Rahul incorporates yoga and meditation into his routine. Mental fitness is just as important as physical fitness in elite cricket.",
-    "\u{1F3CF} Ravindra Jadeja maintains a horse-riding hobby that builds core strength and balance — cross-training pays off.",
-    "\u{1F3CF} Australian cricketers pioneered the use of cold water immersion (ice baths) for recovery — now a standard practice worldwide.",
-    "\u{1F3CF} AB de Villiers is known for his explosive power and 360-degree batting — built through years of strength training and agility work.",
-    "\u{1F3CF} Modern cricketers consume 3,000-4,000 calories per day during tours — fuel matters as much as training.",
-    "\u{1F3CF} Glenn McGrath built his Test wicket record through unmatched consistency. He believed in repeating perfect deliveries for hours.",
-    "\u{1F3CF} The BCCI introduced the Yo-Yo test in 2017 with a passing score of 16.5. It changed how Indian cricketers approached fitness forever.",
+    "\u{1F3CF} \"I am not talented, I am obsessed.\" — Virat Kohli",
+    "\u{1F3CF} \"The process is more important than the result.\" — MS Dhoni",
+    "\u{1F3CF} \"People throw stones at you and you convert them into milestones.\" — Sachin Tendulkar",
+    "\u{1F3CF} \"I have always believed that process is more important than results.\" — Rahul Dravid",
+    "\u{1F3CF} \"Self-belief and hard work will always earn you success.\" — Virat Kohli",
+    "\u{1F3CF} \"You don't play for revenge, you play for respect.\" — MS Dhoni",
+    "\u{1F3CF} \"It's important to learn and not repeat the same mistakes.\" — Sachin Tendulkar",
+    "\u{1F3CF} \"I just keep it simple. Watch the ball and play the ball.\" — Sachin Tendulkar",
+    "\u{1F3CF} \"Fitness is not about being better than someone else. It's about being better than you used to be.\" — Virat Kohli",
+    "\u{1F3CF} \"When people start throwing stones at you, you turn them into milestones.\" — Sachin Tendulkar",
+    "\u{1F3CF} \"The best way to take wickets is to bowl well.\" — Glenn McGrath",
+    "\u{1F3CF} \"Cricket is a team game. If you want fame for yourself, go play an individual sport.\" — Sourav Ganguly",
+    "\u{1F3CF} \"If you keep your fitness, you don't need to worry about age.\" — Wasim Akram",
+    "\u{1F3CF} \"Age is just a number. It's your fitness and attitude that define you.\" — Sachin Tendulkar",
+    "\u{1F3CF} \"Hard work beats talent when talent doesn't work hard.\" — Rahul Dravid",
+    "\u{1F3CF} \"I believe in giving my best every single day in practice.\" — Rohit Sharma",
+    "\u{1F3CF} \"I want to be the fittest cricketer India has ever produced.\" — Virat Kohli",
+    "\u{1F3CF} \"Enjoy the game and chase your dreams.\" — Sachin Tendulkar",
+    "\u{1F3CF} \"When you aim for perfection, you discover it's a moving target.\" — Ben Stokes",
+    "\u{1F3CF} \"Discipline is the bridge between goals and accomplishment.\" — Ricky Ponting",
+    "\u{1F3CF} \"Stay hungry, stay foolish, stay fit.\" — Jasprit Bumrah on his training philosophy",
+    "\u{1F3CF} \"Cricket taught me the value of patience and persistence.\" — Anil Kumble",
+    "\u{1F3CF} \"Consistency comes from discipline, not motivation.\" — Steve Waugh",
+    "\u{1F3CF} \"If you don't have confidence, you'll always find a way not to win.\" — Carl Hooper",
+    "\u{1F3CF} \"Your body is your most important piece of equipment in cricket.\" — AB de Villiers",
   ],
   football:[
-    "\u26BD Cristiano Ronaldo is famous for his fitness regimen — he's known to maintain low body fat well into his late 30s through diet and training.",
-    "\u26BD Lionel Messi has spoken about strict dietary changes he made in his mid-20s, including reducing sugar and processed food, which extended his career.",
-    "\u26BD Sunil Chhetri is one of the highest-scoring active international footballers in the world. His fitness at age 39 is a testament to discipline.",
-    "\u26BD Kylian Mbappé is known for explosive sprint speed — among the fastest in professional football, built through years of speed training.",
-    "\u26BD Erling Haaland follows a high-calorie, high-protein diet to maintain his power and physique. Nutrition is critical for elite athletes.",
-    "\u26BD Neymar has returned from multiple serious injuries through dedicated rehabilitation. Recovery is part of every athlete's journey.",
-    "\u26BD Vinícius Jr is known for his agility and quick footwork — flexibility and core training are key to his dribbling style.",
-    "\u26BD Marcus Rashford has spoken about the importance of routine and discipline in maintaining peak performance throughout the season.",
-    "\u26BD Zlatan Ibrahimović is a black belt in Taekwondo — cross-training in martial arts has contributed to his physicality on the pitch.",
-    "\u26BD Mohamed Salah maintains a strict diet and rigorous training schedule — his transformation into a world-class striker took years of work.",
-    "\u26BD Top footballers cover an average of 10-12 km per match. That endurance is built through consistent off-season training.",
-    "\u26BD Recovery practices like ice baths, compression therapy, and massage are now standard in professional football clubs worldwide.",
-    "\u26BD Robert Lewandowski has openly credited his wife, a nutritionist, for helping him optimize his diet for performance and longevity.",
-    "\u26BD Kevin De Bruyne is known for his stamina and ability to maintain high-intensity play deep into matches — a result of elite conditioning.",
+    "\u26BD \"I'm not the best because of talent. I'm the best because of my mentality.\" — Cristiano Ronaldo",
+    "\u26BD \"You have to fight to reach your dream. You have to sacrifice and work hard for it.\" — Lionel Messi",
+    "\u26BD \"I don't have time for hobbies. At the end of the day, I treat my job as a hobby. It's something I love doing.\" — David Beckham",
+    "\u26BD \"I always want more. Whether it's a goal, an assist, I'm not satisfied.\" — Cristiano Ronaldo",
+    "\u26BD \"I start early, and I stay late, day after day, year after year.\" — Cristiano Ronaldo",
+    "\u26BD \"Impossible is nothing.\" — Pelé",
+    "\u26BD \"Success is no accident. It is hard work, perseverance, learning, studying, sacrifice.\" — Pelé",
+    "\u26BD \"The secret is to believe in your dreams; in your potential that you can be like your star.\" — Neymar",
+    "\u26BD \"Football is not just about scoring goals. It's about winning together.\" — Sunil Chhetri",
+    "\u26BD \"When you want to succeed as bad as you want to breathe, then you'll be successful.\" — Zlatan Ibrahimovi\u0107",
+    "\u26BD \"I am living my dream. Never stop dreaming.\" — Kylian Mbappé",
+    "\u26BD \"The more difficult the victory, the greater the happiness in winning.\" — Pelé",
+    "\u26BD \"Every season is a new opportunity.\" — Mohamed Salah",
+    "\u26BD \"A penalty is a cowardly way to score. — Pelé",
+    "\u26BD \"I've failed over and over again in my life and that is why I succeed.\" — Thierry Henry",
+    "\u26BD \"Talent without working hard is nothing.\" — Cristiano Ronaldo",
+    "\u26BD \"Your love makes me strong. Your hate makes me unstoppable.\" — Cristiano Ronaldo",
+    "\u26BD \"You can overcome anything, if and only if you love something enough.\" — Lionel Messi",
+    "\u26BD \"Football is a collective sport. One person alone cannot win.\" — Zinedine Zidane",
+    "\u26BD \"The ball is round, the game lasts 90 minutes, and everything else is just theory.\" — Sepp Herberger",
+    "\u26BD \"Dream big and never give up.\" — Sunil Chhetri to young Indian athletes",
+    "\u26BD \"It took me 17 years and 114 days to become an overnight success.\" — Lionel Messi",
+    "\u26BD \"I am proof that hard work can take you anywhere in the world.\" — Mohamed Salah",
+    "\u26BD \"I don't need the best hairstyle or the best body. Just give me a ball at my feet.\" — Lionel Messi",
+    "\u26BD \"If you want to be the best, you have to do things other people aren't willing to do.\" — Erling Haaland",
+  ],
+  tennis:[
+    "\u{1F3BE} \"I play each point like my life depends on it.\" — Rafael Nadal",
+    "\u{1F3BE} \"If you don't practice you don't deserve to win.\" — Andre Agassi",
+    "\u{1F3BE} \"There is no way around the hard work. Embrace it.\" — Roger Federer",
+    "\u{1F3BE} \"I fear no one, but I respect everyone.\" — Rafael Nadal",
+    "\u{1F3BE} \"I try to be the best version of myself, not the best version of anyone else.\" — Novak Djokovic",
+    "\u{1F3BE} \"You always want to quit when it's hard. Don't.\" — Serena Williams",
+    "\u{1F3BE} \"A champion is defined not by their wins but by how they recover when they fall.\" — Serena Williams",
+    "\u{1F3BE} \"The only way to do it is to do it.\" — Billie Jean King",
+    "\u{1F3BE} \"You have to believe in yourself when no one else does.\" — Serena Williams",
+    "\u{1F3BE} \"I've always considered myself the best and the top.\" — Novak Djokovic",
+    "\u{1F3BE} \"Just believe in yourself. Even if you don't, pretend that you do and at some point, you will.\" — Venus Williams",
+    "\u{1F3BE} \"What makes something special is not just what you have to gain, but what you feel there is to lose.\" — Andre Agassi",
+    "\u{1F3BE} \"I didn't have talent. I had tenacity.\" — Rafael Nadal",
+    "\u{1F3BE} \"As long as I keep working hard, the results will come.\" — Rafael Nadal",
+    "\u{1F3BE} \"Every match is a new beginning.\" — Roger Federer",
+    "\u{1F3BE} \"Concentration is the ability to think about absolutely nothing when it is absolutely necessary.\" — Roger Federer",
+    "\u{1F3BE} \"You just can't beat the person who never gives up.\" — Babe Ruth (shared by Djokovic)",
+    "\u{1F3BE} \"I've grown most not from victories, but from setbacks.\" — Roger Federer (Dartmouth speech 2024)",
+    "\u{1F3BE} \"Tennis is a mental game. Everyone is fit, everyone hits great shots.\" — Novak Djokovic",
+    "\u{1F3BE} \"The difference between a good player and a great one is mental strength.\" — Steffi Graf",
+    "\u{1F3BE} \"Nutrition and rest are as important as training itself.\" — Novak Djokovic",
+    "\u{1F3BE} \"Pressure is a privilege.\" — Billie Jean King",
+    "\u{1F3BE} \"The body achieves what the mind believes.\" — Sania Mirza",
+    "\u{1F3BE} \"I was born to play tennis.\" — Maria Sharapova",
+    "\u{1F3BE} \"My ambition is to do what I enjoy, and I enjoy winning.\" — Roger Federer",
+  ],
+  athletics:[
+    "\u{1F3C3} \"I don't think limits.\" — Usain Bolt",
+    "\u{1F3C3} \"Dreams are free. Goals have a cost.\" — Usain Bolt",
+    "\u{1F3C3} \"I trained 4 years to run 9 seconds and people give up when they don't see results in 2 months.\" — Usain Bolt",
+    "\u{1F3C3} \"The real purpose of running isn't to win a race. It's to test the limits of the human heart.\" — Bill Bowerman",
+    "\u{1F3C3} \"Run when you can, walk if you have to, crawl if you must; just never give up.\" — Dean Karnazes",
+    "\u{1F3C3} \"The miracle isn't that I finished. The miracle is that I had the courage to start.\" — John Bingham",
+    "\u{1F3C3} \"For me, losing a pet was harder than losing a gold medal.\" — P.T. Usha on priorities",
+    "\u{1F3C3} \"Gold medals aren't really made of gold. They're made of sweat, determination, and hard-to-find alloy called guts.\" — Dan Gable",
+    "\u{1F3C3} \"Pain is temporary. Quitting lasts forever.\" — Lance Armstrong (on running mindset)",
+    "\u{1F3C3} \"There is no shortcut to success. Just hard work and determination.\" — Neeraj Chopra",
+    "\u{1F3C3} \"If you want to become the best runner you can be, start now.\" — Carl Lewis",
+    "\u{1F3C3} \"Never underestimate the power of dreams and the influence of the human spirit.\" — Wilma Rudolph",
+    "\u{1F3C3} \"The body does not want you to do this. As you run, it tells you to stop but the mind clings on.\" — Eliud Kipchoge",
+    "\u{1F3C3} \"No human is limited.\" — Eliud Kipchoge",
+    "\u{1F3C3} \"Only the disciplined ones are free in life.\" — Eliud Kipchoge",
+    "\u{1F3C3} \"Make sure your worst enemy doesn't live between your own two ears.\" — Laird Hamilton",
+    "\u{1F3C3} \"I always loved running. It was something you could do by yourself and under your own power.\" — Jesse Owens",
+    "\u{1F3C3} \"Running is about finding your inner peace, and so is a life well lived.\" — Dean Karnazes",
+    "\u{1F3C3} \"Hard work has made it easy. That is my secret.\" — Nadia Comaneci",
+    "\u{1F3C3} \"My main aim is to enjoy my game and keep performing consistently.\" — Neeraj Chopra",
+    "\u{1F3C3} \"Champions keep playing until they get it right.\" — Billie Jean King",
+    "\u{1F3C3} \"You can't put a limit on anything.\" — Michael Johnson",
+    "\u{1F3C3} \"I hated every minute of training, but I said don't quit.\" — Muhammad Ali (on fitness discipline)",
+    "\u{1F3C3} \"Set your goals high, and don't stop till you get there.\" — Bo Jackson",
+    "\u{1F3C3} \"The will to win means nothing without the will to prepare.\" — Juma Ikangaa",
   ],
   default:[
     "\u{1F525} Your only competition is yesterday's you. Every rep counts.",
@@ -318,6 +394,9 @@ const MOTIV = {
     "\u{1F48E} Pain today = strength tomorrow. Push through.",
     "\u2705 Don't stop when tired. Stop when done.",
     "\u{1F680} Small steps still move you forward. Keep going.",
+    "\u{1F4AA} The only bad workout is the one that didn't happen.",
+    "\u{1F525} Discipline is choosing between what you want now and what you want most.",
+    "\u26A1 It's not about having time. It's about making time.",
   ]
 };
 
@@ -439,6 +518,11 @@ export default function App(){
   const[workoutAnalysis,setWorkoutAnalysis]=useState(null);
   const[heartRate,setHeartRate]=useState({resting:"",max:""});
   const[bodyMeasurements,setBodyMeasurements]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-measurements")||"{}")}catch{return{}}});
+  // AI Food Scanner + Posture Analyzer
+  const[scanLoading,setScanLoading]=useState(false);
+  const[scanResult,setScanResult]=useState(null);
+  const[postureResult,setPostureResult]=useState(null);
+  const[postureLoading,setPostureLoading]=useState(false);
   const[goalTarget,setGoalTarget]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-goal")||"null")}catch{return null}});
   const[proView,setProView]=useState("home");
   const[savedReels,setSavedReels]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-saved-reels")||"[]")}catch{return[]}});
@@ -446,7 +530,7 @@ export default function App(){
   const[myRoutine,setMyRoutine]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-routine")||"[]")}catch{return[]}});
   const[homeView,setHomeView]=useState("today");
   const[showRoutine,setShowRoutine]=useState(false);
-  const[wFilter,setWFilter]=useState("all");
+  const[wFilter,setWFilter]=useState("beginner");
   const pedometerRef=useRef({lastMag:0,stepThreshold:1.2,cooldown:0});
   const geoWatchRef=useRef(null);
   const runTimerRef=useRef(null);
@@ -790,6 +874,40 @@ export default function App(){
     try{localStorage.setItem("fs-goal",JSON.stringify(g))}catch{}
   };
 
+  // ── AI FOOD SCANNER — photo → calorie estimate ──
+  const scanFood=async(file)=>{
+    if(!file||scanLoading)return;
+    setScanLoading(true);setScanResult(null);
+    try{
+      const base64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
+      const resp=await fetch("/api/scan-food",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({image:base64,mimeType:file.type||"image/jpeg"})
+      });
+      const data=await resp.json();
+      if(data.error){setScanResult({error:data.error})}
+      else{setScanResult(data)}
+    }catch(e){setScanResult({error:"Scan failed. Try again."})}
+    setScanLoading(false);
+  };
+
+  // ── AI POSTURE ANALYZER — photo → form feedback ──
+  const analyzePosture=async(file,exerciseName)=>{
+    if(!file||postureLoading)return;
+    setPostureLoading(true);setPostureResult(null);
+    try{
+      const base64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
+      const resp=await fetch("/api/analyze-posture",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({image:base64,mimeType:file.type||"image/jpeg",exerciseName})
+      });
+      const data=await resp.json();
+      if(data.error){setPostureResult({error:data.error})}
+      else{setPostureResult(data)}
+    }catch(e){setPostureResult({error:"Analysis failed. Try again."})}
+    setPostureLoading(false);
+  };
+
   // ── LOADING ──
   if(scr==="loading")return <div style={AS}><div style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:"100vh"}}><div style={{textAlign:"center"}}><div style={{fontSize:48,marginBottom:12}}>{"\u26A1"}</div><p style={{color:"#b0b0b8"}}>Loading FitStreak...</p></div></div></div>;
 
@@ -841,6 +959,11 @@ export default function App(){
           <div style={SP}><span style={{fontSize:14}}>{"\u{1F525}"}</span><span style={{fontSize:14,fontWeight:700,color:"#FF6B35"}}>{u.streak}</span></div>
           <div style={SP}><span style={{fontSize:14}}>{"\u26A1"}</span><span style={{fontSize:14,fontWeight:700,color:"#E94560"}}>{u.xp.toLocaleString()}</span></div>
         </div>
+      </div>
+
+      {/* General Motivational Quote — rotates daily */}
+      <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:16,padding:16,marginBottom:16,border:"1px solid #ffffff08"}}>
+        <p style={{fontSize:14,color:"#eaeaea",lineHeight:1.6,fontStyle:"italic"}}>{MOTIV.default[new Date().getDate()%MOTIV.default.length]}</p>
       </div>
 
       {/* Streak Card */}
@@ -920,7 +1043,7 @@ export default function App(){
       {/* Daily Sport Motivation */}
       <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
-          <span style={{fontSize:10,color:"#667eea",fontWeight:700,textTransform:"uppercase",letterSpacing:1}}>Daily {u.sport==="cricket"?"Cricket":u.sport==="football"?"Football":"Fitness"} Motivation</span>
+          <span style={{fontSize:10,color:"#667eea",fontWeight:700,textTransform:"uppercase",letterSpacing:1}}>Daily {u.sport==="cricket"?"Cricket":u.sport==="football"?"Football":u.sport==="tennis"?"Tennis":u.sport==="athletics"?"Athletics":"Fitness"} Motivation</span>
           <span style={{fontSize:10,color:"#9a9aa2"}}>Day {new Date().getDate()}</span>
         </div>
         <p style={{fontSize:13,color:"#eaeaea",lineHeight:1.6}}>{q}</p>
@@ -969,17 +1092,16 @@ export default function App(){
       )}
       
       {/* All Workouts — Categorized */}
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10,marginTop:20}}>
+      <div style={{marginBottom:10,marginTop:20}}>
         <h2 style={{fontSize:17,fontWeight:700,color:"#fff"}}>All Workouts</h2>
-        <span style={{fontSize:11,color:"#b0b0b8"}}>{WORKOUTS_DB.length} total</span>
       </div>
       <div style={{display:"flex",gap:6,marginBottom:12,background:"#12121A",padding:4,borderRadius:12,border:"1px solid #ffffff08"}}>
-        {[["all","All"],["beginner","Beginner"],["intermediate","Intermediate"],["advanced","Advanced"]].map(([id,label])=>
-          <button key={id} onClick={()=>setWFilter(id)} style={{flex:1,background:wFilter===id?(id==="beginner"?"#38ef7d":id==="intermediate"?"linear-gradient(135deg,#FF6B35,#E94560)":id==="advanced"?"linear-gradient(135deg,#E94560,#764ba2)":"linear-gradient(135deg,#667eea,#764ba2)"):"transparent",border:"none",borderRadius:8,padding:"7px 2px",color:wFilter===id?(id==="beginner"?"#0A0A0F":"#fff"):"#b0b0b8",fontSize:11,fontWeight:700,cursor:"pointer"}}>{label}</button>
+        {[["beginner","Beginner"],["intermediate","Intermediate"],["advanced","Advanced"]].map(([id,label])=>
+          <button key={id} onClick={()=>setWFilter(id)} style={{flex:1,background:wFilter===id?(id==="beginner"?"#38ef7d":id==="intermediate"?"linear-gradient(135deg,#FF6B35,#E94560)":"linear-gradient(135deg,#E94560,#764ba2)"):"transparent",border:"none",borderRadius:8,padding:"8px 2px",color:wFilter===id?(id==="beginner"?"#0A0A0F":"#fff"):"#b0b0b8",fontSize:11,fontWeight:700,cursor:"pointer"}}>{label}</button>
         )}
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-        {WORKOUTS_DB.filter(w=>wFilter==="all"||w.difficulty===wFilter).map(w=>
+        {WORKOUTS_DB.filter(w=>w.difficulty===wFilter).map(w=>
           <button key={w.id} onClick={()=>{setWa(w);setEi(0);setTab("wo")}} style={{...WC,padding:14}}>
             <div style={{fontSize:24,marginBottom:6}}>{w.type==="hiit"?"\u{1F525}":w.type==="strength"?"\u{1F4AA}":"\u{1F9D8}"}</div>
             <p style={{fontSize:13,fontWeight:700,color:"#fff",lineHeight:1.3}}>{w.name}</p>
@@ -1011,6 +1133,24 @@ export default function App(){
       </div>
       <div style={{background:"#ffffff08",borderRadius:10,padding:10}}><p style={{fontSize:12,color:"#ccc"}}>{"\u{1F4A1}"} {ex.tip}</p></div>
         <a href={`https://m.youtube.com/results?search_query=how+to+do+${encodeURIComponent(ex.name)}+exercise+proper+form`} target="_blank" rel="noopener noreferrer" style={{display:"block",marginTop:10,background:"#FF000020",border:"1px solid #FF000040",borderRadius:10,padding:"8px 14px",textAlign:"center",textDecoration:"none",color:"#ff4444",fontSize:13,fontWeight:600}}>{"\u25B6"} Watch Exercise Demo on YouTube</a>
+        {/* AI Posture Analyzer */}
+        <div style={{marginTop:10}}>
+          <label style={{display:"block",background:isPro?"linear-gradient(135deg,#38ef7d,#11998e)":"#1A1A2E",borderRadius:10,padding:"10px 14px",textAlign:"center",cursor:isPro?"pointer":"default",border:isPro?"none":"1px solid #ffffff15"}}>
+            <span style={{color:isPro?"#0A0A0F":"#b0b0b8",fontSize:13,fontWeight:700}}>{postureLoading?"Analyzing form...":"\u{1F4F7} AI Form Check — Snap Your Posture"}</span>
+            {isPro&&<input type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])analyzePosture(e.target.files[0],ex.name)}} style={{display:"none"}}/>}
+            {!isPro&&<span onClick={e=>{e.preventDefault();requirePro("AI Posture Analysis")}} style={{display:"block",fontSize:10,color:"#9a9aa2",marginTop:2}}>Pro feature — tap to unlock</span>}
+          </label>
+          {postureResult&&!postureResult.error&&<div style={{marginTop:8,background:"#11998e15",border:"1px solid #11998e30",borderRadius:10,padding:12}}>
+            <p style={{fontSize:13,fontWeight:700,color:"#38ef7d",marginBottom:6}}>{"\u{1F3AF}"} Form Analysis: {postureResult.score}/10</p>
+            <p style={{fontSize:12,color:"#fff",lineHeight:1.5,marginBottom:6}}>{postureResult.feedback}</p>
+            {postureResult.corrections&&<div style={{background:"#FF6B3515",border:"1px solid #FF6B3530",borderRadius:8,padding:8,marginTop:6}}>
+              <p style={{fontSize:11,fontWeight:700,color:"#FF6B35",marginBottom:4}}>{"\u26A0\uFE0F"} Corrections:</p>
+              <p style={{fontSize:11,color:"#fff",lineHeight:1.5}}>{postureResult.corrections}</p>
+            </div>}
+            <button onClick={()=>setPostureResult(null)} style={{marginTop:8,background:"none",border:"none",color:"#9a9aa2",fontSize:11,cursor:"pointer"}}>Dismiss</button>
+          </div>}
+          {postureResult&&postureResult.error&&<p style={{fontSize:12,color:"#E94560",marginTop:6}}>{postureResult.error}</p>}
+        </div>
     </div>
     <div style={{textAlign:"center",marginBottom:20}}>{tr?<div><p style={{fontSize:13,color:"#b0b0b8",marginBottom:6}}>Rest Timer</p><span style={{fontSize:44,fontWeight:900,color:"#FF6B35"}}>{tm}s</span></div>:<button onClick={()=>{setTm(ex.rest);setTr(true)}} style={{background:"#1A1A2E",border:"1px solid #FF6B35",borderRadius:12,padding:"9px 22px",color:"#FF6B35",fontSize:13,fontWeight:600,cursor:"pointer"}}>Start Rest Timer ({ex.rest}s)</button>}</div>
     <div style={{display:"flex",gap:10}}>{ei>0&&<button onClick={()=>setEi(i=>i-1)} style={{...BS,flex:1}}>← Previous</button>}{ei<wa.exercises.length-1?<button onClick={()=>{setEi(i=>i+1);setTr(false)}} style={{...BP,flex:1}}>Next Exercise →</button>:<button onClick={()=>cw(wa)} style={{...BP,flex:1,background:"linear-gradient(135deg,#38ef7d,#11998e)"}}>Complete {"\u2705"}</button>}</div>
@@ -1171,6 +1311,32 @@ export default function App(){
     <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>setTab("home")} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Food Tracker {"\u{1F37D}\uFE0F"}</h1></div>
     {/* Daily Summary */}
     <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.1}}>{"\u{1F37D}\uFE0F"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Intake</p><div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:10}}><span style={{fontSize:42,fontWeight:900,color:"#fff"}}>{tots.cal}</span><span style={{fontSize:15,color:"#ffffffcc"}}>/ 2000 kcal</span></div><div style={{background:"#ffffff30",borderRadius:6,height:8,marginBottom:12,overflow:"hidden"}}><div style={{width:`${Math.min((tots.cal/2e3)*100,100)}%`,height:"100%",background:"#fff",borderRadius:6,transition:"width .3s"}}/></div><div style={{display:"flex",gap:16}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Protein</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.protein}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Carbs</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.carbs}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Fat</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.fat}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Items</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tl.length}</p></div></div></div>
+
+    {/* AI Food Scanner — Pro Feature */}
+    <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:16,padding:2,marginBottom:14}}>
+      <div style={{background:"#0e0e18",borderRadius:14,padding:14}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{"\u{1F4F7}"} AI Food Scanner</p><p style={{fontSize:11,color:"#b0b0b8"}}>Take a photo — AI calculates calories</p></div>
+          {!isPro&&<span style={{fontSize:10,color:"#667eea",fontWeight:600,background:"#667eea20",padding:"3px 8px",borderRadius:6}}>PRO</span>}
+        </div>
+        <label style={{display:"block",background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:10,padding:"12px 16px",textAlign:"center",cursor:isPro?"pointer":"default",opacity:isPro?1:.6}}>
+          <span style={{color:"#fff",fontSize:13,fontWeight:700}}>{scanLoading?"Analyzing...":"\u{1F4F8} Scan Your Food"}</span>
+          {isPro&&<input type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])scanFood(e.target.files[0])}} style={{display:"none"}}/>}
+          {!isPro&&<span onClick={e=>{e.preventDefault();requirePro("AI Food Scanner")}} style={{display:"block",fontSize:10,color:"#ffffffcc",marginTop:4}}>Tap to unlock</span>}
+        </label>
+        {scanResult&&!scanResult.error&&<div style={{marginTop:12,background:"#1A1A2E",borderRadius:12,padding:14,border:"1px solid #667eea30"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+            <div>
+              <p style={{fontSize:15,fontWeight:700,color:"#fff"}}>{scanResult.name}</p>
+              <p style={{fontSize:11,color:"#b0b0b8"}}>{scanResult.portion} · P:{scanResult.protein}g C:{scanResult.carbs}g F:{scanResult.fat}g</p>
+            </div>
+            <span style={{fontSize:18,fontWeight:800,color:"#667eea"}}>{scanResult.cal} kcal</span>
+          </div>
+          <button onClick={()=>{addFood({name:scanResult.name,cal:scanResult.cal,protein:scanResult.protein,carbs:scanResult.carbs,fat:scanResult.fat,region:"AI Scan"});setScanResult(null)}} style={{...BP,width:"100%",fontSize:13,padding:"10px"}}>{"\u2705"} Add to Food Log</button>
+        </div>}
+        {scanResult&&scanResult.error&&<p style={{fontSize:12,color:"#E94560",marginTop:8}}>{scanResult.error}</p>}
+      </div>
+    </div>
 
     {/* Manual Food Entry */}
     <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
@@ -1506,9 +1672,9 @@ export default function App(){
     <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
       <p style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:10}}>{"\u{1F3C3}"} Your Favorite Sport</p>
       <p style={{fontSize:11,color:"#b0b0b8",marginBottom:10}}>Daily motivation based on your sport</p>
-      <div style={{display:"flex",gap:6}}>
-        {[["cricket","\u{1F3CF} Cricket"],["football","\u26BD Football"]].map(([id,label])=>
-          <button key={id} onClick={()=>setU(x=>({...x,sport:id}))} style={{flex:1,background:u.sport===id?"linear-gradient(135deg,#FF6B35,#E94560)":"#1A1A2E",border:u.sport===id?"none":"1px solid #ffffff15",borderRadius:10,padding:"10px 8px",color:u.sport===id?"#fff":"#b0b0b8",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>
+      <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+        {[["cricket","\u{1F3CF} Cricket"],["football","\u26BD Football"],["tennis","\u{1F3BE} Tennis"],["athletics","\u{1F3C3} Athletics"]].map(([id,label])=>
+          <button key={id} onClick={()=>setU(x=>({...x,sport:id}))} style={{flex:"1 0 45%",background:u.sport===id?"linear-gradient(135deg,#FF6B35,#E94560)":"#1A1A2E",border:u.sport===id?"none":"1px solid #ffffff15",borderRadius:10,padding:"10px 8px",color:u.sport===id?"#fff":"#b0b0b8",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>
         )}
       </div>
     </div>
