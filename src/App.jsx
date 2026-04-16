@@ -703,10 +703,12 @@ export default function App(){
   const shareReel=async(reel)=>{
     const text=`Check out "${reel.title}" workout on FitStreak! 💪 ${reel.duration} • ${reel.trainer}`;
     if(navigator.share){
-      try{await navigator.share({title:reel.title,text,url:window.location.href})}catch{}
-    }else{
-      try{await navigator.clipboard.writeText(text);setPop({type:"copied"})}catch{}
+      try{await navigator.share({title:reel.title,text,url:window.location.href});return}catch{}
     }
+    if(window.ReactNativeWebView){
+      try{window.ReactNativeWebView.postMessage(JSON.stringify({type:"share",title:reel.title,text,url:window.location.href}));return}catch{}
+    }
+    try{await navigator.clipboard.writeText(text);setPop({type:"copied"})}catch{setPop({type:"copied"})}
   };
 
   // ── PRO FEATURE GATING ──
