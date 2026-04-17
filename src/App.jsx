@@ -711,6 +711,52 @@ export default function App(){
     try{await navigator.clipboard.writeText(text);setPop({type:"copied"})}catch{setPop({type:"copied"})}
   };
 
+  // ── NATIVE BRIDGE: open external URL (YouTube etc) ──
+  const openExternal=(url)=>{
+    if(window.ReactNativeWebView){
+      window.ReactNativeWebView.postMessage(JSON.stringify({type:"openExternal",url}));
+    }else{
+      window.open(url,"_blank");
+    }
+  };
+
+  // ── NATIVE BRIDGE: open camera for AI scanning ──
+  // When inside native app, we ask native to open camera via expo-image-picker
+  // Native sends base64 back via window.postMessage which we listen for
+  const openCameraForScan=(purpose,exerciseName)=>{
+    if(window.ReactNativeWebView){
+      // Ask native to open camera
+      window.ReactNativeWebView.postMessage(JSON.stringify({type:"openCamera",purpose,exerciseName:exerciseName||""}));
+    }else{
+      // In browser: use file input fallback (trigger hidden input)
+      const input=document.getElementById(purpose==="food"?"food-camera-input":"posture-camera-input");
+      if(input)input.click();
+    }
+  };
+
+  // Listen for native camera results
+  useEffect(()=>{
+    const handler=(event)=>{
+      try{
+        const data=typeof event.data==="string"?JSON.parse(event.data):event.data;
+        if(data.type==="cameraResult"&&data.base64){
+          // Convert base64 to File-like object and call scanner
+          const byteString=atob(data.base64);
+          const ab=new ArrayBuffer(byteString.length);
+          const ia=new Uint8Array(ab);
+          for(let i=0;i<byteString.length;i++)ia[i]=byteString.charCodeAt(i);
+          const blob=new Blob([ab],{type:"image/jpeg"});
+          const file=new File([blob],"camera.jpg",{type:"image/jpeg"});
+          if(data.purpose==="food")scanFood(file);
+          if(data.purpose==="posture")analyzePosture(file,data.exerciseName||"");
+        }
+      }catch{}
+    };
+    window.addEventListener("message",handler);
+    document.addEventListener("message",handler); // Android WebView uses document
+    return()=>{window.removeEventListener("message",handler);document.removeEventListener("message",handler)};
+  },[]);
+
   // ── PRO FEATURE GATING ──
   const requirePro=(featureName)=>{
     if(isPro)return true;
@@ -1134,14 +1180,15 @@ export default function App(){
         <div><span style={{fontSize:22,fontWeight:800,color:"#667eea"}}>{ex.rest}s</span><p style={{fontSize:11,color:"#b0b0b8"}}>Rest</p></div>
       </div>
       <div style={{background:"#ffffff08",borderRadius:10,padding:10}}><p style={{fontSize:12,color:"#ccc"}}>{"\u{1F4A1}"} {ex.tip}</p></div>
-        <a href={`https://m.youtube.com/results?search_query=how+to+do+${encodeURIComponent(ex.name)}+exercise+proper+form`} target="_blank" rel="noopener noreferrer" style={{display:"block",marginTop:10,background:"#FF000020",border:"1px solid #FF000040",borderRadius:10,padding:"8px 14px",textAlign:"center",textDecoration:"none",color:"#ff4444",fontSize:13,fontWeight:600}}>{"\u25B6"} Watch Exercise Demo on YouTube</a>
+        <button onClick={()=>openExternal(`https://m.youtube.com/results?search_query=how+to+do+${encodeURIComponent(ex.name)}+exercise+proper+form`)} style={{display:"block",width:"100%",marginTop:10,background:"#FF000020",border:"1px solid #FF000040",borderRadius:10,padding:"8px 14px",textAlign:"center",color:"#ff4444",fontSize:13,fontWeight:600,cursor:"pointer"}}>{"\u25B6"} Watch Exercise Demo on YouTube</button>
         {/* AI Posture Analyzer */}
         <div style={{marginTop:10}}>
-          <label style={{display:"block",background:isPro?"linear-gradient(135deg,#38ef7d,#11998e)":"#1A1A2E",borderRadius:10,padding:"10px 14px",textAlign:"center",cursor:isPro?"pointer":"default",border:isPro?"none":"1px solid #ffffff15"}}>
+          <button onClick={()=>{if(!isPro){requirePro("AI Posture Analysis");return}openCameraForScan("posture",ex.name)}} disabled={postureLoading} style={{display:"block",width:"100%",background:isPro?"linear-gradient(135deg,#38ef7d,#11998e)":"#1A1A2E",borderRadius:10,padding:"10px 14px",textAlign:"center",cursor:isPro?"pointer":"default",border:isPro?"none":"1px solid #ffffff15"}}>
             <span style={{color:isPro?"#0A0A0F":"#b0b0b8",fontSize:13,fontWeight:700}}>{postureLoading?"Analyzing form...":"\u{1F4F7} AI Form Check — Snap Your Posture"}</span>
-            {isPro&&<input type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])analyzePosture(e.target.files[0],ex.name)}} style={{display:"none"}}/>}
-            {!isPro&&<span onClick={e=>{e.preventDefault();requirePro("AI Posture Analysis")}} style={{display:"block",fontSize:10,color:"#9a9aa2",marginTop:2}}>Pro feature — tap to unlock</span>}
-          </label>
+            {!isPro&&<span style={{display:"block",fontSize:10,color:"#9a9aa2",marginTop:2}}>Pro feature — tap to unlock</span>}
+          </button>
+          {/* Hidden file input for browser fallback */}
+          <input id="posture-camera-input" type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])analyzePosture(e.target.files[0],ex.name)}} style={{display:"none"}}/>
           {postureResult&&!postureResult.error&&<div style={{marginTop:8,background:"#11998e15",border:"1px solid #11998e30",borderRadius:10,padding:12}}>
             <p style={{fontSize:13,fontWeight:700,color:"#38ef7d",marginBottom:6}}>{"\u{1F3AF}"} Form Analysis: {postureResult.score}/10</p>
             <p style={{fontSize:12,color:"#fff",lineHeight:1.5,marginBottom:6}}>{postureResult.feedback}</p>
@@ -1321,11 +1368,12 @@ export default function App(){
           <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{"\u{1F4F7}"} AI Food Scanner</p><p style={{fontSize:11,color:"#b0b0b8"}}>Take a photo — AI calculates calories</p></div>
           {!isPro&&<span style={{fontSize:10,color:"#667eea",fontWeight:600,background:"#667eea20",padding:"3px 8px",borderRadius:6}}>PRO</span>}
         </div>
-        <label style={{display:"block",background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:10,padding:"12px 16px",textAlign:"center",cursor:isPro?"pointer":"default",opacity:isPro?1:.6}}>
+        <button onClick={()=>{if(!isPro){requirePro("AI Food Scanner");return}openCameraForScan("food")}} disabled={scanLoading} style={{display:"block",width:"100%",background:isPro?"linear-gradient(135deg,#667eea,#764ba2)":"#333",borderRadius:10,padding:"12px 16px",textAlign:"center",cursor:isPro?"pointer":"default",opacity:isPro?1:.6,border:"none"}}>
           <span style={{color:"#fff",fontSize:13,fontWeight:700}}>{scanLoading?"Analyzing...":"\u{1F4F8} Scan Your Food"}</span>
-          {isPro&&<input type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])scanFood(e.target.files[0])}} style={{display:"none"}}/>}
-          {!isPro&&<span onClick={e=>{e.preventDefault();requirePro("AI Food Scanner")}} style={{display:"block",fontSize:10,color:"#ffffffcc",marginTop:4}}>Tap to unlock</span>}
-        </label>
+          {!isPro&&<span style={{display:"block",fontSize:10,color:"#ffffffcc",marginTop:4}}>Tap to unlock</span>}
+        </button>
+        {/* Hidden file input for browser fallback */}
+        <input id="food-camera-input" type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])scanFood(e.target.files[0])}} style={{display:"none"}}/>
         {scanResult&&!scanResult.error&&<div style={{marginTop:12,background:"#1A1A2E",borderRadius:12,padding:14,border:"1px solid #667eea30"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
             <div>
