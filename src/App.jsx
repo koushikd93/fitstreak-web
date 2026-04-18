@@ -506,7 +506,60 @@ export default function App(){
   const[runDist,setRunDist]=useState(0);
   const[runTime,setRunTime]=useState(0);
   // Pro plan state
-  const[isPro,setIsPro]=useState(()=>{try{return localStorage.getItem("fs-pro")==="1"}catch{return false}});
+  // Pro plan state — supports trial + paid
+  // fs-pro values: "trial" (7 days free) | "paid" (subscribed) | "expired" (needs to pay)
+  // fs-pro-start: timestamp when trial/paid began
+  const[proStatus,setProStatus]=useState(()=>{
+    try{
+      const status=localStorage.getItem("fs-pro")||"";
+      const startStr=localStorage.getItem("fs-pro-start");
+      const start=startStr?parseInt(startStr):0;
+      
+      // Grandfather: if user has old fs-pro="1", give them permanent paid status
+      if(status==="1"){
+        localStorage.setItem("fs-pro","paid");
+        localStorage.setItem("fs-pro-start",String(Date.now()));
+        return{tier:"paid",start:Date.now(),grandfathered:true};
+      }
+      
+      if(status==="paid")return{tier:"paid",start,grandfathered:false};
+      
+      if(status==="trial"){
+        // Check if trial expired (7 days = 604800000 ms)
+        const now=Date.now();
+        const elapsed=now-start;
+        if(elapsed>7*86400000){
+          localStorage.setItem("fs-pro","expired");
+          return{tier:"expired",start,grandfathered:false};
+        }
+        return{tier:"trial",start,grandfathered:false};
+      }
+      
+      if(status==="expired")return{tier:"expired",start,grandfathered:false};
+      
+      // First time user — auto-start 7-day trial
+      const now=Date.now();
+      localStorage.setItem("fs-pro","trial");
+      localStorage.setItem("fs-pro-start",String(now));
+      return{tier:"trial",start:now,grandfathered:false};
+    }catch{return{tier:"expired",start:0,grandfathered:false}}
+  });
+  
+  // Compatibility: isPro is true if tier is trial OR paid
+  const isPro=proStatus.tier==="trial"||proStatus.tier==="paid";
+  const setIsPro=(val)=>{
+    if(val){
+      const now=Date.now();
+      setProStatus({tier:"paid",start:now,grandfathered:false});
+      try{localStorage.setItem("fs-pro","paid");localStorage.setItem("fs-pro-start",String(now))}catch{}
+    }else{
+      setProStatus({tier:"expired",start:0,grandfathered:false});
+      try{localStorage.setItem("fs-pro","expired")}catch{}
+    }
+  };
+  
+  // Trial days remaining (0 if not trialing)
+  const trialDaysLeft=proStatus.tier==="trial"?Math.max(0,Math.ceil((7*86400000-(Date.now()-proStatus.start))/86400000)):0;
   const[showPaywall,setShowPaywall]=useState(false);
   const[paywallFeature,setPaywallFeature]=useState("");
   const[chatMessages,setChatMessages]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-chat")||"[]")}catch{return[]}});
@@ -772,11 +825,9 @@ export default function App(){
   
   const handlePayment=async(plan)=>{
     if(!RAZORPAY_ENABLED){
-      // Demo mode: show waitlist message
-      alert(`🎉 You're on the waitlist for FitStreak Pro!\n\nWe'll email you the moment Pro launches with a 50% early-bird discount.\n\nFor now, all your progress is saved. Keep building that streak!`);
-      // For demo: actually grant Pro access so user can test features
+      // Demo mode: grant paid status directly (no duplicate localStorage write needed, setIsPro handles it)
+      alert(`🎉 You're on the waitlist for FitStreak Pro!\n\nWe'll email you the moment Pro launches with a 50% early-bird discount.\n\nFor now, you get FREE Pro access during our launch. Enjoy!`);
       setIsPro(true);
-      try{localStorage.setItem("fs-pro","1")}catch{}
       setShowPaywall(false);
       return;
     }
@@ -809,9 +860,8 @@ export default function App(){
         description:plan==="monthly"?"Monthly Pro Subscription":"Annual Pro Subscription",
         order_id:order.id,
         handler:(response)=>{
-          // Payment successful
+          // Payment successful — setIsPro handles localStorage
           setIsPro(true);
-          try{localStorage.setItem("fs-pro","1")}catch{}
           setShowPaywall(false);
           alert("🎉 Welcome to FitStreak Pro! All AI features unlocked.");
         },
@@ -1009,6 +1059,16 @@ export default function App(){
         </div>
       </div>
 
+      {/* Trial Status Banner (Home page) */}
+      {proStatus.tier==="trial"&&trialDaysLeft<=3&&<button onClick={()=>setTab("pro")} style={{width:"100%",background:"linear-gradient(135deg,#667eea,#764ba2)",border:"none",borderRadius:12,padding:"10px 14px",marginBottom:12,cursor:"pointer",textAlign:"left",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div><p style={{fontSize:12,color:"#fff",fontWeight:700}}>{"\u23F3"} Pro trial: {trialDaysLeft} day{trialDaysLeft!==1?"s":""} left</p><p style={{fontSize:10,color:"#ffffffcc",marginTop:2}}>Subscribe to keep AI features</p></div>
+        <span style={{fontSize:18,color:"#fff"}}>{"\u2192"}</span>
+      </button>}
+      {proStatus.tier==="expired"&&<button onClick={()=>setTab("pro")} style={{width:"100%",background:"linear-gradient(135deg,#FF6B35,#E94560)",border:"none",borderRadius:12,padding:"10px 14px",marginBottom:12,cursor:"pointer",textAlign:"left",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div><p style={{fontSize:12,color:"#fff",fontWeight:700}}>{"\u{1F512}"} Trial Expired</p><p style={{fontSize:10,color:"#ffffffcc",marginTop:2}}>Subscribe to unlock AI features</p></div>
+        <span style={{fontSize:18,color:"#fff"}}>{"\u2192"}</span>
+      </button>}
+
       {/* General Motivational Quote — rotates daily */}
       <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:16,padding:16,marginBottom:16,border:"1px solid #ffffff08"}}>
         <p style={{fontSize:14,color:"#eaeaea",lineHeight:1.6,fontStyle:"italic"}}>{MOTIV.default[new Date().getDate()%MOTIV.default.length]}</p>
@@ -1181,11 +1241,13 @@ export default function App(){
       </div>
       <div style={{background:"#ffffff08",borderRadius:10,padding:10}}><p style={{fontSize:12,color:"#ccc"}}>{"\u{1F4A1}"} {ex.tip}</p></div>
         <button onClick={()=>openExternal(`https://m.youtube.com/results?search_query=how+to+do+${encodeURIComponent(ex.name)}+exercise+proper+form`)} style={{display:"block",width:"100%",marginTop:10,background:"#FF000020",border:"1px solid #FF000040",borderRadius:10,padding:"8px 14px",textAlign:"center",color:"#ff4444",fontSize:13,fontWeight:600,cursor:"pointer"}}>{"\u25B6"} Watch Exercise Demo on YouTube</button>
-        {/* AI Posture Analyzer */}
-        <div style={{marginTop:10}}>
+        {/* AI Posture Analyzer — Peak Form Photo */}
+        <div style={{marginTop:10,background:"#11998e08",border:"1px solid #11998e20",borderRadius:10,padding:10}}>
+          <p style={{fontSize:11,color:"#38ef7d",fontWeight:700,marginBottom:4}}>{"\u{1F4F8}"} AI Form Check {!isPro&&"(Pro)"}</p>
+          <p style={{fontSize:11,color:"#b0b0b8",lineHeight:1.5,marginBottom:8}}>Have someone take a photo from the <b style={{color:"#fff"}}>side view</b> while you hold the hardest position (bottom of squat, plank, etc.). AI checks your alignment.</p>
           <button onClick={()=>{if(!isPro){requirePro("AI Posture Analysis");return}openCameraForScan("posture",ex.name)}} disabled={postureLoading} style={{display:"block",width:"100%",background:isPro?"linear-gradient(135deg,#38ef7d,#11998e)":"#1A1A2E",borderRadius:10,padding:"10px 14px",textAlign:"center",cursor:isPro?"pointer":"default",border:isPro?"none":"1px solid #ffffff15"}}>
-            <span style={{color:isPro?"#0A0A0F":"#b0b0b8",fontSize:13,fontWeight:700}}>{postureLoading?"Analyzing form...":"\u{1F4F7} AI Form Check — Snap Your Posture"}</span>
-            {!isPro&&<span style={{display:"block",fontSize:10,color:"#9a9aa2",marginTop:2}}>Pro feature — tap to unlock</span>}
+            <span style={{color:isPro?"#0A0A0F":"#b0b0b8",fontSize:13,fontWeight:700}}>{postureLoading?"Analyzing form...":"\u{1F4F7} Snap Peak Form Photo"}</span>
+            {!isPro&&<span style={{display:"block",fontSize:10,color:"#9a9aa2",marginTop:2}}>Pro feature \u2014 tap to unlock</span>}
           </button>
           {/* Hidden file input for browser fallback */}
           <input id="posture-camera-input" type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])analyzePosture(e.target.files[0],ex.name)}} style={{display:"none"}}/>
@@ -1467,17 +1529,29 @@ export default function App(){
         <h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>FitStreak Pro {isPro?"\u{1F451}":"\u{1F512}"}</h1>
       </div>
       
-      {!isPro && <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}>
+      {/* Expired / Never had Pro */}
+      {proStatus.tier==="expired" && <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F451}"}</div>
-        <p style={{fontSize:11,color:"#ffffffcc",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Unlock AI Power</p>
-        <h2 style={{fontSize:24,fontWeight:900,color:"#fff",marginBottom:8}}>FitStreak Pro</h2>
-        <p style={{fontSize:13,color:"#ffffffdd",marginBottom:14}}>AI Coach • Smart Reports • Workout Analysis • Body Tracking</p>
-        <button onClick={()=>{setPaywallFeature("Pro Plan");setShowPaywall(true)}} style={{background:"#fff",border:"none",borderRadius:12,padding:"12px 24px",color:"#FF6B35",fontSize:14,fontWeight:800,cursor:"pointer"}}>Upgrade to Pro {"\u2192"}</button>
+        <p style={{fontSize:11,color:"#ffffffcc",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Trial Expired</p>
+        <h2 style={{fontSize:22,fontWeight:900,color:"#fff",marginBottom:6}}>Continue with Pro</h2>
+        <p style={{fontSize:13,color:"#ffffffdd",marginBottom:14}}>Your 7-day trial ended. Subscribe to keep AI features.</p>
+        <button onClick={()=>{setPaywallFeature("Pro Plan");setShowPaywall(true)}} style={{background:"#fff",border:"none",borderRadius:12,padding:"12px 24px",color:"#FF6B35",fontSize:14,fontWeight:800,cursor:"pointer"}}>Subscribe Now {"\u2192"}</button>
       </div>}
       
-      {isPro && <div style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",borderRadius:18,padding:18,marginBottom:18,textAlign:"center"}}>
-        <p style={{fontSize:12,color:"#0A0A0Faa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5}}>{"\u{1F451}"} Pro Member</p>
+      {/* Active Trial */}
+      {proStatus.tier==="trial" && <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:18,padding:18,marginBottom:18,textAlign:"center",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.12}}>{"\u{1F381}"}</div>
+        <p style={{fontSize:11,color:"#ffffffcc",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5}}>{"\u{1F381}"} Free Trial Active</p>
+        <p style={{fontSize:22,fontWeight:800,color:"#fff",marginTop:4}}>{trialDaysLeft} day{trialDaysLeft!==1?"s":""} remaining</p>
+        <p style={{fontSize:12,color:"#ffffffcc",marginTop:4,marginBottom:12}}>All AI features unlocked. Subscribe before trial ends to keep access.</p>
+        <button onClick={()=>{setPaywallFeature("Pro Plan");setShowPaywall(true)}} style={{background:"#fff",border:"none",borderRadius:10,padding:"10px 20px",color:"#667eea",fontSize:13,fontWeight:800,cursor:"pointer"}}>Subscribe for \u20B9599/yr</button>
+      </div>}
+      
+      {/* Paid Subscriber */}
+      {proStatus.tier==="paid" && <div style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",borderRadius:18,padding:18,marginBottom:18,textAlign:"center"}}>
+        <p style={{fontSize:12,color:"#0A0A0Faa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5}}>{"\u{1F451}"} {proStatus.grandfathered?"Founding Member":"Pro Member"}</p>
         <p style={{fontSize:18,fontWeight:800,color:"#0A0A0F",marginTop:4}}>All features unlocked</p>
+        {proStatus.grandfathered&&<p style={{fontSize:11,color:"#0A0A0Faa",marginTop:4}}>Lifetime access \u2014 thanks for being an early supporter!</p>}
       </div>}
 
       {proView==="home" && <div>
