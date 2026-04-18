@@ -818,24 +818,25 @@ export default function App(){
     return false;
   };
 
-  // ── RAZORPAY PAYMENT (with demo mode) ──
-  // Set RAZORPAY_ENABLED=true after creating Razorpay account and adding key
-  const RAZORPAY_ENABLED=false;
-  const RAZORPAY_KEY="rzp_test_YOUR_KEY_HERE"; // Replace with real key from razorpay.com
+  // ── RAZORPAY PAYMENT ──
+  // RAZORPAY_ENABLED controls production vs demo mode
+  // Set to true when Razorpay keys are added to Vercel env vars
+  const RAZORPAY_ENABLED=true;
   
   const handlePayment=async(plan)=>{
     if(!RAZORPAY_ENABLED){
-      // Demo mode: grant paid status directly (no duplicate localStorage write needed, setIsPro handles it)
+      // Demo mode: grant paid status directly
       alert(`🎉 You're on the waitlist for FitStreak Pro!\n\nWe'll email you the moment Pro launches with a 50% early-bird discount.\n\nFor now, you get FREE Pro access during our launch. Enjoy!`);
       setIsPro(true);
       setShowPaywall(false);
       return;
     }
-    // Real Razorpay integration
+    // Production: load Razorpay script if needed, then process
     if(!window.Razorpay){
       const script=document.createElement("script");
       script.src="https://checkout.razorpay.com/v1/checkout.js";
       script.onload=()=>processPayment(plan);
+      script.onerror=()=>alert("Could not load payment gateway. Check your internet connection.");
       document.body.appendChild(script);
     }else{
       processPayment(plan);
@@ -845,32 +846,71 @@ export default function App(){
   const processPayment=async(plan)=>{
     const amount=plan==="monthly"?9900:59900; // in paise
     try{
-      // In production, create order on backend first
+      // Step 1: Create order on backend (gets order_id + key_id from Vercel)
       const resp=await fetch("/api/create-order",{
-        method:"POST",headers:{"Content-Type":"application/json"},
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
         body:JSON.stringify({amount,plan})
       });
       const order=await resp.json();
-      if(!order.id){alert("Payment setup failed. Try again.");return}
+      if(!resp.ok||!order.order_id){
+        alert(order.error||"Could not create order. Try again.");
+        return;
+      }
+      
+      // Step 2: Open Razorpay checkout modal
       const options={
-        key:RAZORPAY_KEY,
-        amount,
-        currency:"INR",
+        key:order.key_id, // Backend provides this, not hardcoded
+        amount:order.amount,
+        currency:order.currency,
         name:"FitStreak Pro",
-        description:plan==="monthly"?"Monthly Pro Subscription":"Annual Pro Subscription",
-        order_id:order.id,
-        handler:(response)=>{
-          // Payment successful — setIsPro handles localStorage
-          setIsPro(true);
-          setShowPaywall(false);
-          alert("🎉 Welcome to FitStreak Pro! All AI features unlocked.");
+        description:plan==="monthly"?"Monthly Pro Subscription":"Annual Pro Subscription (Save 50%)",
+        order_id:order.order_id,
+        handler:async(response)=>{
+          // Step 3: Verify payment signature on backend
+          try{
+            const verifyResp=await fetch("/api/verify-payment",{
+              method:"POST",
+              headers:{"Content-Type":"application/json"},
+              body:JSON.stringify({
+                razorpay_order_id:response.razorpay_order_id,
+                razorpay_payment_id:response.razorpay_payment_id,
+                razorpay_signature:response.razorpay_signature
+              })
+            });
+            const verifyData=await verifyResp.json();
+            if(verifyData.success){
+              // Only mark as Pro after backend confirms signature is valid
+              setIsPro(true);
+              setShowPaywall(false);
+              alert(`🎉 Welcome to FitStreak Pro!\n\nAll AI features unlocked. Payment ID: ${response.razorpay_payment_id}`);
+            }else{
+              alert("Payment verification failed. If you were charged, contact support with order ID: "+response.razorpay_order_id);
+            }
+          }catch(err){
+            alert("Could not verify payment. Check your internet and contact support if charged.");
+          }
         },
-        prefill:{name:u.name},
-        theme:{color:"#FF6B35"}
+        prefill:{
+          name:u.name||""
+        },
+        theme:{color:"#FF6B35"},
+        modal:{
+          ondismiss:()=>{
+            // User closed the modal without paying
+            console.log("Payment modal dismissed");
+          }
+        }
       };
       const rzp=new window.Razorpay(options);
+      rzp.on("payment.failed",(response)=>{
+        alert("Payment failed: "+(response.error?.description||"Unknown error")+". Please try again.");
+      });
       rzp.open();
-    }catch(e){alert("Payment failed. Try again.")}
+    }catch(e){
+      console.error("Payment error:",e);
+      alert("Payment setup failed. Check your internet connection and try again.");
+    }
   };
 
   // ── AI COACH CHAT ──
@@ -1768,7 +1808,7 @@ export default function App(){
           <p style={{fontSize:18,fontWeight:800,color:"#fff"}}>{"\u20B9"}99<span style={{fontSize:13,fontWeight:600,color:"#b0b0b8"}}>/month</span></p>
         </button>
         
-        <p style={{fontSize:10,color:"#9a9aa2",textAlign:"center",lineHeight:1.5}}>{!RAZORPAY_ENABLED?"\u{1F389} Pre-launch: Join the waitlist and get instant access to test all Pro features for free!":"Secure payment via Razorpay \u2022 Cancel anytime"}</p>
+        <p style={{fontSize:10,color:"#9a9aa2",textAlign:"center",lineHeight:1.5}}>Secure payment via Razorpay \u2022 UPI \u2022 Cards \u2022 Wallets \u2022 Cancel anytime</p>
       </div>
     </div>;
   };
