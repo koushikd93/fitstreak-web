@@ -618,7 +618,7 @@ export default function App(){
 
   const axp=useCallback(a=>{const m=u.streak>=30?2:u.streak>=7?1.5:1;const t=Math.round(a*m);setXpa(t);setTimeout(()=>setXpa(null),2e3);setU(x=>{const nx=x.xp+t;const nb=[...x.badges];if(nx>=1e3&&!nb.includes("xp_1000"))nb.push("xp_1000");if(nx>=5e3&&!nb.includes("xp_5000"))nb.push("xp_5000");return{...x,xp:nx,badges:nb}})},[u.streak]);
 
-  const cw=useCallback(w=>{const td=new Date().toDateString();setU(x=>{const la=x.lastActiveDate?new Date(x.lastActiveDate).toDateString():null;const ns=la===td?x.streak:x.streak+1;const nb=[...x.badges];const nc=x.workoutsCompleted+1;if(nc>=1&&!nb.includes("first_flame"))nb.push("first_flame");if(nc>=10&&!nb.includes("workouts_10"))nb.push("workouts_10");if(ns>=7&&!nb.includes("streak_7"))nb.push("streak_7");if(ns>=30&&!nb.includes("streak_30"))nb.push("streak_30");return{...x,streak:ns,longestStreak:Math.max(x.longestStreak,ns),lastActiveDate:new Date().toISOString(),workoutsCompleted:nc,totalMinutes:x.totalMinutes+w.duration,badges:nb,completedWorkoutIds:[...x.completedWorkoutIds,w.id]}});axp(w.xp);setWa(null);setEi(0);setPop({type:"complete",w})},[axp]);
+  const cw=useCallback(w=>{const td=new Date().toDateString();setU(x=>{const la=x.lastActiveDate?new Date(x.lastActiveDate).toDateString():null;const ns=la===td?x.streak:x.streak+1;const nb=[...x.badges];const nc=x.workoutsCompleted+1;if(nc>=1&&!nb.includes("first_flame"))nb.push("first_flame");if(nc>=10&&!nb.includes("workouts_10"))nb.push("workouts_10");if(ns>=7&&!nb.includes("streak_7"))nb.push("streak_7");if(ns>=30&&!nb.includes("streak_30"))nb.push("streak_30");const newLog=[...(x.activityLog||[]),{type:"workout",value:w.duration,date:new Date().toISOString(),name:w.name}];return{...x,streak:ns,longestStreak:Math.max(x.longestStreak,ns),lastActiveDate:new Date().toISOString(),workoutsCompleted:nc,totalMinutes:x.totalMinutes+w.duration,badges:nb,completedWorkoutIds:[...x.completedWorkoutIds,w.id],activityLog:newLog}});axp(w.xp);setWa(null);setEi(0);setPop({type:"complete",w})},[axp]);
 
   const cfa=useCallback(d=>{const{pushups,flexibility,heartRate,weight,height,age}=d;const bmi=weight/((height/100)**2);const ps=Math.min(pushups/25,1)*30;const fls=Math.min(flexibility/40,1)*20;const hs=Math.min(Math.max(1-(heartRate-50)/60,0),1)*30;const bs=Math.min(Math.max(1-Math.abs(bmi-22)/10,0),1)*20;return Math.max(15,Math.min(Math.round(age-(ps+fls+hs+bs-50)*.4),age+20))},[]);
 
@@ -1083,10 +1083,25 @@ export default function App(){
     const periodSleep=homeView==="today"?(u.sleepHours||0):sleepEntries.length>0?(sleepEntries.reduce((sum,a)=>sum+Number(a.value||0),0)/sleepEntries.length):0;
     const periodCals=homeView==="today"?tc:filteredLog.length>0?(tc*(homeView==="week"?7:30)):0; // estimated
     
+    // Calculate workout calories burnt
+    // Formula: minutes * MET * weight * 0.0175 (approx for moderate HIIT)
+    // Using avg weight 65kg, avg MET 7 for mixed workouts = ~8 kcal/min
+    const workoutMinsToday=(u.totalMinutes||0); // all-time, will be filtered for period below
+    let workoutKcal=0;
+    if(homeView==="today"){
+      // Count workouts completed today from activityLog if available, else rough estimate
+      const todayMins=filteredLog.filter(a=>a.type==="workout").reduce((sum,a)=>sum+Number(a.value||0),0);
+      workoutKcal=Math.round(todayMins*8);
+    }else{
+      const periodMins=filteredLog.filter(a=>a.type==="workout").reduce((sum,a)=>sum+Number(a.value||0),0);
+      workoutKcal=Math.round(periodMins*8);
+    }
+    const workoutKcalGoal=homeView==="today"?300:homeView==="week"?1500:6000;
+    
     const stepsGoal=homeView==="today"?10000:homeView==="week"?70000:300000;
     const runGoal=homeView==="today"?5:homeView==="week"?25:100;
     
-    return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+    return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
       {/* Header */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
         <div>
@@ -1188,6 +1203,23 @@ export default function App(){
         </button>
       </div>
 
+      {/* Workout Kcal Burnt — compact row */}
+      <div onClick={()=>setTab("home")} style={{background:"linear-gradient(135deg,#12121A,#1A1A2E)",borderRadius:12,padding:"10px 14px",marginBottom:14,border:"1px solid #FF6B3520",display:"flex",alignItems:"center",gap:10}}>
+        <div style={{width:36,height:36,borderRadius:10,background:"#FF6B3515",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          <span style={{fontSize:18}}>{"\u{1F525}"}</span>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:3}}>
+            <span style={{fontSize:11,color:"#b0b0b8",fontWeight:600,textTransform:"uppercase",letterSpacing:.5}}>Workout Burn</span>
+            <span style={{fontSize:16,fontWeight:800,color:"#FF6B35"}}>{workoutKcal}<span style={{fontSize:10,fontWeight:600,color:"#b0b0b8",marginLeft:3}}>kcal</span></span>
+          </div>
+          <div style={{width:"100%",height:4,background:"#1A1A2E",borderRadius:2,overflow:"hidden"}}>
+            <div style={{width:`${Math.min((workoutKcal/workoutKcalGoal)*100,100)}%`,height:"100%",background:"linear-gradient(90deg,#FF6B35,#E94560)",borderRadius:2,transition:"width .3s"}}/>
+          </div>
+          <p style={{fontSize:10,color:"#9a9aa2",marginTop:3}}>Goal: {workoutKcalGoal} kcal · Net: {workoutKcal-Math.round(periodCals)} kcal</p>
+        </div>
+      </div>
+
       {/* Daily Sport Motivation */}
       <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
@@ -1265,7 +1297,7 @@ export default function App(){
 
   // ── WORKOUT PLAYER ──
   const Workout=()=>{if(!wa){setTab("home");return null}const ex=wa.exercises[ei];const pr=((ei+1)/wa.exercises.length)*100;
-  return <div style={{minHeight:"100vh",background:"#0A0A0F",padding:"20px 16px",position:"relative",zIndex:1}}>
+  return <div className="screen-wrap" style={{minHeight:"100vh",background:"#0A0A0F",padding:"0 16px",position:"relative",zIndex:1}}>
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}><button onClick={()=>{setWa(null);setTab("home")}} style={BB}>← Back</button><span style={{fontSize:13,color:"#b0b0b8"}}>{ei+1}/{wa.exercises.length}</span></div>
     <div style={{background:"#1A1A2E",borderRadius:6,height:5,marginBottom:20,overflow:"hidden"}}><div style={{width:`${pr}%`,height:"100%",background:"linear-gradient(90deg,#FF6B35,#E94560)",borderRadius:6,transition:"width .5s"}}/></div>
     <h1 style={{fontSize:22,fontWeight:800,color:"#fff",marginBottom:2}}>{wa.name}</h1>
@@ -1333,7 +1365,7 @@ export default function App(){
     
     // Show My Routine view
     if(showRoutine){
-      return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1,minHeight:"100vh"}}>
+      return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1,minHeight:"100vh"}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
           <button onClick={()=>setShowRoutine(false)} style={BB}>{"\u2190"}</button>
           <h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>My Routine {"\u{1F4CB}"}</h1>
@@ -1458,7 +1490,7 @@ export default function App(){
 
   // ── FOOD TRACKER — Manual Entry + AI Lookup + Database ──
   const Food=()=>{const cats=["all","breakfast","lunch","snack","drink","sweet","fruit"];const ff=FOOD_DB.filter(f=>(fc==="all"||f.category===fc)&&(!fs||f.name.toLowerCase().includes(fs.toLowerCase())||f.region.toLowerCase().includes(fs.toLowerCase())));const tl=u.foodLog||[];const tots=tl.reduce((a,f)=>({cal:a.cal+f.cal,protein:a.protein+(f.protein||0),carbs:a.carbs+(f.carbs||0),fat:a.fat+(f.fat||0)}),{cal:0,protein:0,carbs:0,fat:0});
-  return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+  return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
     <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>setTab("home")} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Food Tracker {"\u{1F37D}\uFE0F"}</h1></div>
     {/* Daily Summary */}
     <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.1}}>{"\u{1F37D}\uFE0F"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Intake</p><div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:10}}><span style={{fontSize:42,fontWeight:900,color:"#fff"}}>{tots.cal}</span><span style={{fontSize:15,color:"#ffffffcc"}}>/ 2000 kcal</span></div><div style={{background:"#ffffff30",borderRadius:6,height:8,marginBottom:12,overflow:"hidden"}}><div style={{width:`${Math.min((tots.cal/2e3)*100,100)}%`,height:"100%",background:"#fff",borderRadius:6,transition:"width .3s"}}/></div><div style={{display:"flex",gap:16}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Protein</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.protein}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Carbs</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.carbs}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Fat</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.fat}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Items</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tl.length}</p></div></div></div>
@@ -1513,7 +1545,7 @@ export default function App(){
 
   // ── ACTIVITY TRACKER — Sensors Enabled ──
   const Activity=()=>{const sl=u.sleepLog||[];const totalSteps=(u.steps||0)+liveSteps;
-  return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+  return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
     <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>{if(pedoActive)stopPedometer();if(runActive)stopRun();setTab("home")}} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Activity Tracker</h1></div>
     <div style={{display:"flex",gap:6,marginBottom:20}}>{[["walk","\u{1F6B6} Walk"],["run","\u{1F3C3} Run"],["sleep","\u{1F634} Sleep"]].map(([id,label])=><button key={id} onClick={()=>setAt(id)} style={{flex:1,background:at===id?(id==="walk"?"#38ef7d":id==="run"?"#FF6B35":"#667eea"):"#1A1A2E",border:"none",borderRadius:12,padding:"10px 4px",color:at===id?(id==="sleep"?"#fff":"#0A0A0F"):"#b0b0b8",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>)}</div>
 
@@ -1563,7 +1595,7 @@ export default function App(){
 
   // ── PRO TAB — AI FEATURES HUB ──
   const Pro=()=>{
-    return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+    return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
         <button onClick={()=>{setTab("home");setProView("home")}} style={BB}>{"\u2190"}</button>
         <h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>FitStreak Pro {isPro?"\u{1F451}":"\u{1F512}"}</h1>
@@ -1814,7 +1846,7 @@ export default function App(){
   };
 
   // ── CHALLENGES ──
-  const Challenges=()=><div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+  const Challenges=()=><div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
     <h1 style={{fontSize:24,fontWeight:800,color:"#fff",marginBottom:4}}>Challenges</h1><p style={{fontSize:13,color:"#b0b0b8",marginBottom:20}}>Compete & earn XP</p>
     <div style={{background:"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:16,padding:18,marginBottom:20,border:"1px solid #ffffff08"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}><h3 style={{fontSize:15,fontWeight:700,color:"#fff"}}>{"\u{1F3C6}"} Leaderboard</h3><div style={{display:"flex",gap:4}}>{["weekly","alltime"].map(t=><button key={t} onClick={()=>setLt(t)} style={{background:lt===t?"#FF6B35":"transparent",border:"none",borderRadius:8,padding:"3px 10px",color:lt===t?"#fff":"#b0b0b8",fontSize:11,fontWeight:600,cursor:"pointer"}}>{t==="weekly"?"Weekly":"All"}</button>)}</div></div>
@@ -1827,7 +1859,7 @@ export default function App(){
 
   // ── PROFILE ──
   const Stats=()=>{const ub=BADGES_DB.filter(b=>u.badges.includes(b.id));const lb=BADGES_DB.filter(b=>!u.badges.includes(b.id));
-  return <div style={{padding:"20px 16px 100px",position:"relative",zIndex:1}}>
+  return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
     <div style={{textAlign:"center",marginBottom:24}}><div style={{width:64,height:64,borderRadius:"50%",background:"linear-gradient(135deg,#FF6B35,#E94560)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:28}}>{u.name[0]?.toUpperCase()}</div><h1 style={{fontSize:20,fontWeight:800,color:"#fff"}}>{u.name}</h1><p style={{fontSize:12,color:"#b0b0b8"}}>{u.goal} · {u.level}</p></div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:24}}>{[{l:"Workouts",v:u.workoutsCompleted,i:"\u{1F4AA}"},{l:"XP",v:u.xp.toLocaleString(),i:"\u26A1"},{l:"Streak",v:u.streak+"d",i:"\u{1F525}"},{l:"Minutes",v:u.totalMinutes,i:"\u23F1\uFE0F"},{l:"Badges",v:ub.length,i:"\u{1F3C5}"},{l:"Fit Age",v:u.fitnessAge||"?",i:"\u{1F9EC}"}].map((s,i)=><div key={i} style={{background:"#12121A",borderRadius:12,padding:12,textAlign:"center",border:"1px solid #ffffff08"}}><div style={{fontSize:22,marginBottom:4}}>{s.i}</div><p style={{fontSize:18,fontWeight:800,color:"#fff"}}>{s.v}</p><p style={{fontSize:10,color:"#b0b0b8"}}>{s.l}</p></div>)}</div>
     <h3 style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:12}}>{"\u{1F3C5}"} Badges ({ub.length}/{BADGES_DB.length})</h3>
@@ -1856,7 +1888,7 @@ export default function App(){
     {pop.type==="food"&&<><div style={{fontSize:44}}>{"\u{1F37D}\uFE0F"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Food Logged! +5 XP</h2><p style={{fontSize:13,color:"#FF6B35",fontWeight:600}}>{pop.f?.name} — {pop.f?.cal} kcal</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>Close</button></>}
   </div></div>};
 
-  const Nav=()=>{if(["wo","ft","food","activity","pro"].includes(tab))return null;return <div style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:"#0A0A0Fee",backdropFilter:"blur(12px)",borderTop:"1px solid #ffffff08",display:"flex",justifyContent:"space-around",padding:"6px 0 10px",zIndex:50}}>{[{id:"home",i:"\u{1F3E0}",l:"Home"},{id:"explore",i:"\u{1F3AC}",l:"Explore"},{id:"pro",i:"\u{1F451}",l:"Pro AI"},{id:"challenges",i:"\u{1F3C6}",l:"Compete"},{id:"stats",i:"\u{1F4CA}",l:"Profile"}].map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:1,padding:"4px 10px"}}><span style={{fontSize:20,filter:tab===t.id?"none":"grayscale(1)",opacity:tab===t.id?1:.5,transition:"all .2s"}}>{t.i}</span><span style={{fontSize:9,fontWeight:600,color:tab===t.id?"#FF6B35":"#b0b0b8"}}>{t.l}</span></button>)}</div>};
+  const Nav=()=>{if(["wo","ft","food","activity","pro"].includes(tab))return null;return <div className="nav-safe" style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:"#0A0A0Fee",backdropFilter:"blur(16px)",WebkitBackdropFilter:"blur(16px)",borderTop:"1px solid #ffffff0a",display:"flex",justifyContent:"space-around",padding:"8px 0 10px",zIndex:50}}>{[{id:"home",i:"\u{1F3E0}",l:"Home"},{id:"explore",i:"\u{1F3AC}",l:"Explore"},{id:"pro",i:"\u{1F451}",l:"Pro AI"},{id:"challenges",i:"\u{1F3C6}",l:"Compete"},{id:"stats",i:"\u{1F4CA}",l:"Profile"}].map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:2,padding:"6px 10px",minHeight:48,minWidth:48}}><span style={{fontSize:22,filter:tab===t.id?"none":"grayscale(1)",opacity:tab===t.id?1:.55,transition:"all .2s"}}>{t.i}</span><span style={{fontSize:10,fontWeight:700,color:tab===t.id?"#FF6B35":"#9a9aa2",letterSpacing:.2}}>{t.l}</span></button>)}</div>};
 
   // Swipe-right gesture for back navigation
   const handleTouchStart=(e)=>{const t=e.touches[0];touchStartRef.current={x:t.clientX,y:t.clientY,time:Date.now()}};
@@ -1876,7 +1908,7 @@ export default function App(){
     touchStartRef.current={x:0,y:0,time:0};
   };
 
-  return <div style={AS} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}><style>{`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{background:#0A0A0F;overflow-x:hidden}input:focus{outline:none}button:active{transform:scale(.97)}@keyframes xpFloat{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(1.3)}}@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes scanLine{0%{top:15%;opacity:0}50%{opacity:1}100%{top:85%;opacity:0}}::-webkit-scrollbar{display:none}`}</style>
+  return <div style={AS} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}><style>{`@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:'Outfit',sans-serif}html,body{background:#0A0A0F;overflow-x:hidden;min-height:100vh;min-height:100dvh}body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}input:focus{outline:none}button:active{transform:scale(.97);transition:transform .1s}button{font-family:inherit}@keyframes xpFloat{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(1.3)}}@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes scanLine{0%{top:15%;opacity:0}50%{opacity:1}100%{top:85%;opacity:0}}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}.screen-wrap{padding-top:calc(20px + env(safe-area-inset-top))!important;padding-bottom:calc(110px + env(safe-area-inset-bottom))!important}.nav-safe{padding-bottom:calc(10px + env(safe-area-inset-bottom))!important}::-webkit-scrollbar{display:none}`}</style>
     <div style={G1}/><div style={G2}/>
     {tab==="home"&&Home()}{tab==="explore"&&Explore()}{tab==="challenges"&&Challenges()}{tab==="stats"&&Stats()}{tab==="wo"&&Workout()}{tab==="ft"&&FTest()}{tab==="food"&&Food()}{tab==="activity"&&Activity()}{tab==="pro"&&Pro()}
     {Paywall()}
