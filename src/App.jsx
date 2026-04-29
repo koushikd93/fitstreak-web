@@ -397,8 +397,64 @@ const MOTIV = {
     "\u{1F4AA} The only bad workout is the one that didn't happen.",
     "\u{1F525} Discipline is choosing between what you want now and what you want most.",
     "\u26A1 It's not about having time. It's about making time.",
+    "\u{1F94A} \"I hate every minute of training, but I said, 'Don't quit. Suffer now and live the rest of your life as a champion.'\" \u2014 Muhammad Ali",
+    "\u{1F94A} \"I don't count my sit-ups; I only start counting when it starts hurting because that's when it really counts.\" \u2014 Muhammad Ali",
+    "\u{1F94A} \"To be a great champion, you must believe you are the best. If you're not, pretend you are.\" \u2014 Muhammad Ali",
+    "\u{1F4AA} \"Strength does not come from winning. Your struggles develop your strengths.\" \u2014 Arnold Schwarzenegger",
+    "\u{1F4AA} \"The mind is the limit. As long as the mind can envision that you can do something, you can do it.\" \u2014 Arnold Schwarzenegger",
+    "\u{1F525} \"Hard work beats talent when talent doesn't work hard.\" \u2014 Tim Notke",
+    "\u{1F525} \"The more I sweat in training, the less I bleed in battle.\" \u2014 Richard Marcinko",
+    "\u{1F525} \"Continuous effort \u2014 not strength or intelligence \u2014 is the key to unlocking our potential.\" \u2014 Liane Cardes",
+    "\u{1F525} \"Winning is not a sometime thing; it's an all the time thing.\" \u2014 Vince Lombardi",
+    "\u{1F525} \"Persistence can change failure into extraordinary achievement.\" \u2014 Matt Biondi",
+    "\u{1F525} \"Today I will do what others won't, so tomorrow I can accomplish what others can't.\" \u2014 Jerry Rice",
+    "\u{1F525} \"Motivation is what gets you started. Habit is what keeps you going.\" \u2014 Jim Ryun",
+    "\u{1F525} \"The vision of a champion is someone bent over, drenched in sweat, at exhaustion, when no one else is watching.\" \u2014 Anson Dorrance",
+    "\u{1F525} \"There may be people that have more talent than you, but there's no excuse for anyone to work harder than you do.\" \u2014 Derek Jeter",
+    "\u{1F525} \"Age is no barrier. It's a limitation you put on your mind.\" \u2014 Jackie Joyner-Kersee",
   ]
 };
+
+// Extended sport-specific quotes (added in v1.0.1)
+MOTIV.cricket.push(
+  "\u{1F3CF} \"Dedication is not what others expect from you, it is what you can give to or expect from yourself.\" \u2014 Virat Kohli",
+  "\u{1F3CF} \"There is no substitute for hard work.\" \u2014 Sachin Tendulkar",
+  "\u{1F3CF} \"Focus on the process, and the results will take care of themselves.\" \u2014 MS Dhoni",
+  "\u{1F3CF} \"I just want to be the best version of myself.\" \u2014 Virat Kohli",
+  "\u{1F3CF} \"Fitness is a state of mind.\" \u2014 Virat Kohli"
+);
+
+MOTIV.football.push(
+  "\u26BD \"Your love makes me strong, your hate makes me unstoppable.\" \u2014 Cristiano Ronaldo",
+  "\u26BD \"Training is the most important part of my day. It's when I push my limits.\" \u2014 Cristiano Ronaldo",
+  "\u26BD \"Success is not an accident. It is hard work, perseverance, learning, studying, and sacrifice.\" \u2014 Pel\u00E9",
+  "\u26BD \"I always want more. Whether it's a goal, or winning a game, I am never satisfied.\" \u2014 Lionel Messi"
+);
+
+MOTIV.tennis.push(
+  "\u{1F3BE} \"My strength is my mental toughness. I just don't give up.\" \u2014 Rafael Nadal",
+  "\u{1F3BE} \"You have to believe in yourself when no one else does \u2014 that makes you a winner right there.\" \u2014 Venus Williams",
+  "\u{1F3BE} \"I feel like my best is yet to come.\" \u2014 Serena Williams",
+  "\u{1F3BE} \"To be the best, you must learn how to handle the worst.\" \u2014 Novak Djokovic",
+  "\u{1F3BE} \"You have to believe in the process even when the results aren't showing yet.\" \u2014 Roger Federer",
+  "\u{1F3BE} \"Champions keep playing until they get it right.\" \u2014 Billie Jean King"
+);
+
+MOTIV.athletics.push(
+  "\u{1F3C3} \"I don't think I'm better than anyone else, but I do think I'm different.\" \u2014 Usain Bolt",
+  "\u{1F3C3} \"I've reached a point where I feel I can achieve anything if I put my mind to it.\" \u2014 Usain Bolt",
+  "\u{1F3C3} \"You can't put a limit on anything. The more you dream, the farther you get.\" \u2014 Michael Phelps",
+  "\u{1F3C3} \"If you want to be the best, you have to do things that other people aren't willing to do.\" \u2014 Michael Phelps",
+  "\u{1F3C3} \"No matter how good you are, you can always get better.\" \u2014 Tiger Woods",
+  "\u{1F3C3} \"I've failed over and over and over again in my life. And that is why I succeed.\" \u2014 Michael Jordan",
+  "\u{1F3C3} \"You miss 100% of the shots you don't take.\" \u2014 Wayne Gretzky",
+  "\u{1F3C3} \"Obstacles don't have to stop you. If you run into a wall, don't turn around and give up.\" \u2014 Michael Jordan",
+  "\u{1F3C3} \"You have to expect things of yourself before you can do them.\" \u2014 Michael Jordan",
+  "\u{1F3C3} \"I've always believed that if you put in the work, the results will come.\" \u2014 Michael Jordan",
+  "\u{1F3C3} \"Don't be afraid of failure. This is the way to succeed.\" \u2014 LeBron James",
+  "\u{1F3C3} \"The most important thing is to try and inspire people so that they can be great in whatever they want to do.\" \u2014 Kobe Bryant",
+  "\u{1F3C3} \"It's not the size of the dog in the fight, it's the size of the fight in the dog.\" \u2014 Archie Griffin"
+);
 
 const REELS = [
   {id:1,title:"5-Min Ab Burner",trainer:"MadFit",views:"24M",likes:"580K",gradient:"linear-gradient(135deg,#FF6B35,#E94560)",exercises:["Crunches x20","Plank 30s","Leg Raises x15","Twists x20"],duration:"5:00",workoutId:8},
@@ -576,6 +632,11 @@ export default function App(){
   const[scanResult,setScanResult]=useState(null);
   const[postureResult,setPostureResult]=useState(null);
   const[postureLoading,setPostureLoading]=useState(false);
+  // AI Text Food Entry
+  const[textFoodName,setTextFoodName]=useState("");
+  const[textFoodQty,setTextFoodQty]=useState("");
+  const[textFoodLoading,setTextFoodLoading]=useState(false);
+  const[textFoodResult,setTextFoodResult]=useState(null);
   const[goalTarget,setGoalTarget]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-goal")||"null")}catch{return null}});
   const[proView,setProView]=useState("home");
   const[savedReels,setSavedReels]=useState(()=>{try{return JSON.parse(localStorage.getItem("fs-saved-reels")||"[]")}catch{return[]}});
@@ -818,6 +879,37 @@ export default function App(){
     return false;
   };
 
+  // ── FREE WEEKLY AI USAGE TRACKING ──
+  // Non-Pro users get 1 free scan per week per feature (food + posture + text food)
+  // Tracks last use timestamp, allows next use after 7 days
+  const checkFreeWeeklyAccess=(featureKey)=>{
+    if(isPro)return{allowed:true,daysLeft:0};
+    try{
+      const lastUseStr=localStorage.getItem(`fs-free-${featureKey}`);
+      if(!lastUseStr)return{allowed:true,daysLeft:0}; // never used = allowed
+      const lastUse=parseInt(lastUseStr);
+      const elapsed=Date.now()-lastUse;
+      const weekMs=7*86400000;
+      if(elapsed>=weekMs)return{allowed:true,daysLeft:0};
+      const daysLeft=Math.ceil((weekMs-elapsed)/86400000);
+      return{allowed:false,daysLeft};
+    }catch{return{allowed:true,daysLeft:0}}
+  };
+  const recordFreeWeeklyUse=(featureKey)=>{
+    try{localStorage.setItem(`fs-free-${featureKey}`,String(Date.now()))}catch{}
+  };
+  const tryFeatureAccess=(featureKey,featureName)=>{
+    if(isPro)return true;
+    const{allowed,daysLeft}=checkFreeWeeklyAccess(featureKey);
+    if(allowed){
+      recordFreeWeeklyUse(featureKey);
+      return true;
+    }
+    setPaywallFeature(`${featureName} (free weekly used \u2014 ${daysLeft}d left)`);
+    setShowPaywall(true);
+    return false;
+  };
+
   // ── RAZORPAY PAYMENT ──
   // RAZORPAY_ENABLED controls production vs demo mode
   // Set to true when Razorpay keys are added to Vercel env vars
@@ -883,12 +975,12 @@ export default function App(){
               // Only mark as Pro after backend confirms signature is valid
               setIsPro(true);
               setShowPaywall(false);
-              alert(`🎉 Welcome to FitStreak Pro!\n\nAll AI features unlocked. Payment ID: ${response.razorpay_payment_id}`);
+              setPop({type:"proSuccess",paymentId:response.razorpay_payment_id});
             }else{
-              alert("Payment verification failed. If you were charged, contact support with order ID: "+response.razorpay_order_id);
+              setPop({type:"proError",title:"Payment Verification Failed",msg:"If you were charged, contact support with order ID: "+response.razorpay_order_id});
             }
           }catch(err){
-            alert("Could not verify payment. Check your internet and contact support if charged.");
+            setPop({type:"proError",title:"Verification Error",msg:"Could not verify payment. Check your internet and contact support if charged."});
           }
         },
         prefill:{
@@ -1044,6 +1136,23 @@ export default function App(){
       else{setPostureResult(data)}
     }catch(e){setPostureResult({error:"Analysis failed. Try again."})}
     setPostureLoading(false);
+  };
+
+  // ── AI TEXT FOOD — type food name + quantity, AI calculates calories ──
+  const analyzeFoodText=async()=>{
+    if(!textFoodName.trim()||textFoodLoading)return;
+    if(!tryFeatureAccess("foodtext","AI Food Calculator"))return;
+    setTextFoodLoading(true);setTextFoodResult(null);
+    try{
+      const resp=await fetch("/api/analyze-food-text",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({foodName:textFoodName.trim(),quantity:textFoodQty.trim()||"1 serving"})
+      });
+      const data=await resp.json();
+      if(data.error){setTextFoodResult({error:data.error})}
+      else{setTextFoodResult(data)}
+    }catch(e){setTextFoodResult({error:"Analysis failed. Try again."})}
+    setTextFoodLoading(false);
   };
 
   // ── LOADING ──
@@ -1317,7 +1426,7 @@ export default function App(){
         <div style={{marginTop:10,background:"#11998e08",border:"1px solid #11998e20",borderRadius:10,padding:10}}>
           <p style={{fontSize:11,color:"#38ef7d",fontWeight:700,marginBottom:4}}>{"\u{1F4F8}"} AI Form Check {!isPro&&"(Pro)"}</p>
           <p style={{fontSize:11,color:"#b0b0b8",lineHeight:1.5,marginBottom:8}}>Have someone take a photo from the <b style={{color:"#fff"}}>side view</b> while you hold the hardest position (bottom of squat, plank, etc.). AI checks your alignment.</p>
-          <button onClick={()=>{if(!isPro){requirePro("AI Posture Analysis");return}openCameraForScan("posture",ex.name)}} disabled={postureLoading} style={{display:"block",width:"100%",background:isPro?"linear-gradient(135deg,#38ef7d,#11998e)":"#1A1A2E",borderRadius:10,padding:"10px 14px",textAlign:"center",cursor:isPro?"pointer":"default",border:isPro?"none":"1px solid #ffffff15"}}>
+          <button onClick={()=>{if(!tryFeatureAccess("posture","AI Form Check"))return;openCameraForScan("posture",ex.name)}} disabled={postureLoading} style={{display:"block",width:"100%",background:isPro?"linear-gradient(135deg,#38ef7d,#11998e)":"#1A1A2E",borderRadius:10,padding:"10px 14px",textAlign:"center",cursor:isPro?"pointer":"default",border:isPro?"none":"1px solid #ffffff15"}}>
             <span style={{color:isPro?"#0A0A0F":"#b0b0b8",fontSize:13,fontWeight:700}}>{postureLoading?"Analyzing form...":"\u{1F4F7} Snap Peak Form Photo"}</span>
             {!isPro&&<span style={{display:"block",fontSize:10,color:"#9a9aa2",marginTop:2}}>Pro feature \u2014 tap to unlock</span>}
           </button>
@@ -1495,16 +1604,15 @@ export default function App(){
     {/* Daily Summary */}
     <div style={{background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:18,padding:20,marginBottom:18,position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.1}}>{"\u{1F37D}\uFE0F"}</div><p style={{fontSize:11,color:"#ffffffaa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Intake</p><div style={{display:"flex",alignItems:"baseline",gap:6,marginBottom:10}}><span style={{fontSize:42,fontWeight:900,color:"#fff"}}>{tots.cal}</span><span style={{fontSize:15,color:"#ffffffcc"}}>/ 2000 kcal</span></div><div style={{background:"#ffffff30",borderRadius:6,height:8,marginBottom:12,overflow:"hidden"}}><div style={{width:`${Math.min((tots.cal/2e3)*100,100)}%`,height:"100%",background:"#fff",borderRadius:6,transition:"width .3s"}}/></div><div style={{display:"flex",gap:16}}><div><span style={{fontSize:11,color:"#ffffffaa"}}>Protein</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.protein}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Carbs</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.carbs}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Fat</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tots.fat}g</p></div><div><span style={{fontSize:11,color:"#ffffffaa"}}>Items</span><p style={{fontSize:16,fontWeight:700,color:"#fff"}}>{tl.length}</p></div></div></div>
 
-    {/* AI Food Scanner — Pro Feature */}
+    {/* AI Food Scanner — Pro feature with 1 free/week */}
     <div style={{background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:16,padding:2,marginBottom:14}}>
       <div style={{background:"#0e0e18",borderRadius:14,padding:14}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{"\u{1F4F7}"} AI Food Scanner</p><p style={{fontSize:11,color:"#b0b0b8"}}>Take a photo — AI calculates calories</p></div>
-          {!isPro&&<span style={{fontSize:10,color:"#667eea",fontWeight:600,background:"#667eea20",padding:"3px 8px",borderRadius:6}}>PRO</span>}
+          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{"\u{1F4F7}"} AI Food Scanner</p><p style={{fontSize:11,color:"#b0b0b8"}}>{!isPro?"1 free scan/week \u2022 Pro: unlimited":"Take a photo \u2014 AI calculates calories"}</p></div>
+          {!isPro&&(checkFreeWeeklyAccess("foodscan").allowed?<span style={{fontSize:10,color:"#38ef7d",fontWeight:700,background:"#38ef7d15",padding:"3px 8px",borderRadius:6}}>FREE</span>:<span style={{fontSize:10,color:"#667eea",fontWeight:600,background:"#667eea20",padding:"3px 8px",borderRadius:6}}>PRO</span>)}
         </div>
-        <button onClick={()=>{if(!isPro){requirePro("AI Food Scanner");return}openCameraForScan("food")}} disabled={scanLoading} style={{display:"block",width:"100%",background:isPro?"linear-gradient(135deg,#667eea,#764ba2)":"#333",borderRadius:10,padding:"12px 16px",textAlign:"center",cursor:isPro?"pointer":"default",opacity:isPro?1:.6,border:"none"}}>
+        <button onClick={()=>{if(!tryFeatureAccess("foodscan","AI Food Scanner"))return;openCameraForScan("food")}} disabled={scanLoading} style={{display:"block",width:"100%",background:"linear-gradient(135deg,#667eea,#764ba2)",borderRadius:10,padding:"12px 16px",textAlign:"center",cursor:"pointer",border:"none"}}>
           <span style={{color:"#fff",fontSize:13,fontWeight:700}}>{scanLoading?"Analyzing...":"\u{1F4F8} Scan Your Food"}</span>
-          {!isPro&&<span style={{display:"block",fontSize:10,color:"#ffffffcc",marginTop:4}}>Tap to unlock</span>}
         </button>
         {/* Hidden file input for browser fallback */}
         <input id="food-camera-input" type="file" accept="image/*" capture="environment" onChange={e=>{if(e.target.files[0])scanFood(e.target.files[0])}} style={{display:"none"}}/>
@@ -1519,6 +1627,32 @@ export default function App(){
           <button onClick={()=>{addFood({name:scanResult.name,cal:scanResult.cal,protein:scanResult.protein,carbs:scanResult.carbs,fat:scanResult.fat,region:"AI Scan"});setScanResult(null)}} style={{...BP,width:"100%",fontSize:13,padding:"10px"}}>{"\u2705"} Add to Food Log</button>
         </div>}
         {scanResult&&scanResult.error&&<p style={{fontSize:12,color:"#E94560",marginTop:8}}>{scanResult.error}</p>}
+      </div>
+    </div>
+
+    {/* AI Food Calculator (text input) — Pro with 1 free/week */}
+    <div style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",borderRadius:16,padding:2,marginBottom:14}}>
+      <div style={{background:"#0e0e18",borderRadius:14,padding:14}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+          <div><p style={{fontSize:14,fontWeight:700,color:"#fff"}}>{"\u270F\uFE0F"} AI Food Calculator</p><p style={{fontSize:11,color:"#b0b0b8"}}>{!isPro?"1 free calc/week \u2022 Pro: unlimited":"Type food + quantity, AI gives calories"}</p></div>
+          {!isPro&&(checkFreeWeeklyAccess("foodtext").allowed?<span style={{fontSize:10,color:"#38ef7d",fontWeight:700,background:"#38ef7d15",padding:"3px 8px",borderRadius:6}}>FREE</span>:<span style={{fontSize:10,color:"#38ef7d",fontWeight:600,background:"#38ef7d20",padding:"3px 8px",borderRadius:6}}>PRO</span>)}
+        </div>
+        <input value={textFoodName} onChange={e=>setTextFoodName(e.target.value)} placeholder="Food name (e.g. dal rice, biryani, chapati)" style={{width:"100%",background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"10px 12px",color:"#fff",fontSize:13,marginBottom:8}}/>
+        <input value={textFoodQty} onChange={e=>setTextFoodQty(e.target.value)} placeholder="Quantity (e.g. 1 plate, 2 rotis, 100g)" style={{width:"100%",background:"#1A1A2E",border:"1px solid #ffffff15",borderRadius:10,padding:"10px 12px",color:"#fff",fontSize:13,marginBottom:10}}/>
+        <button onClick={analyzeFoodText} disabled={textFoodLoading||!textFoodName.trim()} style={{display:"block",width:"100%",background:"linear-gradient(135deg,#38ef7d,#11998e)",borderRadius:10,padding:"12px 16px",textAlign:"center",cursor:textFoodName.trim()?"pointer":"default",border:"none",opacity:textFoodName.trim()?1:.5}}>
+          <span style={{color:"#0A0A0F",fontSize:13,fontWeight:700}}>{textFoodLoading?"Calculating...":"\u{1F9E0} Calculate Calories"}</span>
+        </button>
+        {textFoodResult&&!textFoodResult.error&&<div style={{marginTop:12,background:"#1A1A2E",borderRadius:12,padding:14,border:"1px solid #38ef7d30"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+            <div>
+              <p style={{fontSize:15,fontWeight:700,color:"#fff"}}>{textFoodResult.name}</p>
+              <p style={{fontSize:11,color:"#b0b0b8"}}>{textFoodResult.portion} \u00B7 P:{textFoodResult.protein}g C:{textFoodResult.carbs}g F:{textFoodResult.fat}g</p>
+            </div>
+            <span style={{fontSize:18,fontWeight:800,color:"#38ef7d"}}>{textFoodResult.cal} kcal</span>
+          </div>
+          <button onClick={()=>{addFood({name:textFoodResult.name,cal:textFoodResult.cal,protein:textFoodResult.protein,carbs:textFoodResult.carbs,fat:textFoodResult.fat,region:"AI Calc"});setTextFoodResult(null);setTextFoodName("");setTextFoodQty("")}} style={{...BP,width:"100%",fontSize:13,padding:"10px"}}>{"\u2705"} Add to Food Log</button>
+        </div>}
+        {textFoodResult&&textFoodResult.error&&<p style={{fontSize:12,color:"#E94560",marginTop:8}}>{textFoodResult.error}</p>}
       </div>
     </div>
 
@@ -1886,6 +2020,8 @@ export default function App(){
     {pop.type==="already"&&<><div style={{fontSize:44}}>{"\u{1F4CB}"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Already in Routine</h2><p style={{fontSize:12,color:"#b0b0b8"}}>{pop.msg||"This workout is already saved"}</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>OK</button></>}
     {pop.type==="comments"&&<><div style={{fontSize:44}}>{"\u{1F4AC}"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Comments</h2><div style={{textAlign:"left",maxHeight:200,overflowY:"auto",marginBottom:12}}>{[{n:"Aarav K.",t:"This burned my legs! 🔥",a:"\u{1F3CB}\uFE0F"},{n:"Priya S.",t:"Done 3 times this week, feeling stronger",a:"\u{1F9D8}"},{n:"Rahul M.",t:"Great form tips, thanks!",a:"\u{1F4AA}"},{n:"Sneha R.",t:"Perfect for beginners 💪",a:"\u{1F3C3}"}].map((c,i)=><div key={i} style={{display:"flex",gap:8,padding:"8px 0",borderBottom:"1px solid #ffffff08"}}><span style={{fontSize:18}}>{c.a}</span><div style={{flex:1}}><p style={{fontSize:12,fontWeight:700,color:"#fff"}}>{c.n}</p><p style={{fontSize:11,color:"#b0b0b8"}}>{c.t}</p></div></div>)}</div><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:8}}>Close</button></>}
     {pop.type==="food"&&<><div style={{fontSize:44}}>{"\u{1F37D}\uFE0F"}</div><h2 style={{fontSize:16,fontWeight:700,color:"#fff",margin:"8px 0"}}>Food Logged! +5 XP</h2><p style={{fontSize:13,color:"#FF6B35",fontWeight:600}}>{pop.f?.name} — {pop.f?.cal} kcal</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%",marginTop:12}}>Close</button></>}
+    {pop.type==="proSuccess"&&<><div style={{fontSize:64}}>{"\u{1F389}"}</div><h2 style={{fontSize:22,fontWeight:900,color:"#fff",margin:"12px 0 6px"}}>Welcome to Pro!</h2><p style={{fontSize:13,color:"#b0b0b8",marginBottom:8,lineHeight:1.5}}>All AI features unlocked. Build your best body, the smart way!</p>{pop.paymentId&&<p style={{fontSize:10,color:"#666",marginBottom:14}}>Payment ID: {pop.paymentId}</p>}<button onClick={()=>setPop(null)} style={{...BP,width:"100%"}}>Let's Go!</button></>}
+    {pop.type==="proError"&&<><div style={{fontSize:48}}>{"\u26A0\uFE0F"}</div><h2 style={{fontSize:18,fontWeight:800,color:"#fff",margin:"10px 0"}}>{pop.title||"Payment Issue"}</h2><p style={{fontSize:13,color:"#b0b0b8",marginBottom:14,lineHeight:1.5}}>{pop.msg}</p><button onClick={()=>setPop(null)} style={{...BS,width:"100%"}}>OK</button></>}
   </div></div>};
 
   const Nav=()=>{if(["wo","ft","food","activity","pro"].includes(tab))return null;return <div className="nav-safe" style={{position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:"#0A0A0Fee",backdropFilter:"blur(16px)",WebkitBackdropFilter:"blur(16px)",borderTop:"1px solid #ffffff0a",display:"flex",justifyContent:"space-around",padding:"8px 0 10px",zIndex:50}}>{[{id:"home",i:"\u{1F3E0}",l:"Home"},{id:"explore",i:"\u{1F3AC}",l:"Explore"},{id:"pro",i:"\u{1F451}",l:"Pro AI"},{id:"challenges",i:"\u{1F3C6}",l:"Compete"},{id:"stats",i:"\u{1F4CA}",l:"Profile"}].map(t=><button key={t.id} onClick={()=>setTab(t.id)} style={{background:"none",border:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:2,padding:"6px 10px",minHeight:48,minWidth:48}}><span style={{fontSize:22,filter:tab===t.id?"none":"grayscale(1)",opacity:tab===t.id?1:.55,transition:"all .2s"}}>{t.i}</span><span style={{fontSize:10,fontWeight:700,color:tab===t.id?"#FF6B35":"#9a9aa2",letterSpacing:.2}}>{t.l}</span></button>)}</div>};
