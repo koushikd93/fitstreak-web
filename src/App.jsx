@@ -910,6 +910,128 @@ export default function App(){
     return false;
   };
 
+  // ── NOTIFICATIONS SYSTEM ──
+  // Schedules local notifications via native bridge (only works in installed app, not browser)
+  // Smart messages based on streak, trial status, and sport preference
+  const NOTIF_QUOTES_CRICKET=[
+    "🏏 Kohli wakes up early to train. What's your excuse?",
+    "🏏 Sachin played for 24 years. Today's workout takes 15 mins.",
+    "🏏 MS Dhoni: 'Process is more important than results.' Show up today.",
+    "🏏 Bumrah's core is built daily. Yours can be too.",
+  ];
+  const NOTIF_QUOTES_FOOTBALL=[
+    "⚽ Ronaldo trained on Christmas. What's your excuse?",
+    "⚽ Messi: 'You have to fight for your dream.' Fight today.",
+    "⚽ Mbappé sprints daily. Move your body, even for 15 mins.",
+    "⚽ Chhetri scores at 39. Age is a number — start now.",
+  ];
+  const NOTIF_QUOTES_TENNIS=[
+    "🎾 Nadal: 'I didn't have talent, I had tenacity.' Be tenacious today.",
+    "🎾 Federer practices what he hates most. Do the hard rep.",
+    "🎾 Djokovic eats clean 365 days. Make a healthy choice today.",
+  ];
+  const NOTIF_QUOTES_DEFAULT=[
+    "🔥 Don't break your streak. 15 minutes is all it takes.",
+    "💪 Champions train on days they don't feel like it.",
+    "⚡ Sweat now, flex later. Open the app.",
+    "🏆 Your only competition is yesterday's you.",
+  ];
+  
+  const getMotivQuote=(sport)=>{
+    const pool=sport==="cricket"?NOTIF_QUOTES_CRICKET:sport==="football"?NOTIF_QUOTES_FOOTBALL:sport==="tennis"?NOTIF_QUOTES_TENNIS:NOTIF_QUOTES_DEFAULT;
+    return pool[Math.floor(Math.random()*pool.length)];
+  };
+  
+  // Schedule notifications for next 7 days based on user state
+  const scheduleSmartNotifications=()=>{
+    if(!window.ReactNativeWebView||!window.__FITSTREAK_NOTIFICATIONS__)return;
+    try{
+      const notifications=[];
+      const now=new Date();
+      const sport=u.sport||"default";
+      
+      // Schedule daily 7 PM workout reminder for next 7 days
+      for(let day=0;day<7;day++){
+        const fireDate=new Date(now);
+        fireDate.setDate(fireDate.getDate()+day);
+        fireDate.setHours(19,0,0,0); // 7:00 PM
+        if(fireDate<=now)continue; // skip past times
+        
+        notifications.push({
+          identifier:`daily-${day}`,
+          title:"FitStreak",
+          body:getMotivQuote(sport),
+          fireDate:fireDate.toISOString()
+        });
+      }
+      
+      // Trial expiry warning (if applicable)
+      if(proStatus.tier==="trial"&&trialDaysLeft>0&&trialDaysLeft<=2){
+        const expiryDate=new Date(proStatus.start+7*86400000-3600000); // 1h before expiry
+        if(expiryDate>now){
+          notifications.push({
+            identifier:"trial-expiry",
+            title:"⏳ FitStreak Pro Trial Ending",
+            body:`Your free trial ends soon. Subscribe ₹599/yr to keep AI features.`,
+            fireDate:expiryDate.toISOString()
+          });
+        }
+      }
+      
+      // Streak protection (8 PM if user hasn't worked out today)
+      const td=new Date().toDateString();
+      const la=u.lastActiveDate?new Date(u.lastActiveDate).toDateString():null;
+      if(la!==td&&u.streak>0){
+        const protectDate=new Date(now);
+        protectDate.setHours(20,0,0,0);
+        if(protectDate>now){
+          notifications.push({
+            identifier:"streak-protect",
+            title:`🔥 Save your ${u.streak}-day streak!`,
+            body:"4 hours left. A 15-min workout protects your streak.",
+            fireDate:protectDate.toISOString()
+          });
+        }
+      }
+      
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type:"scheduleNotifications",
+        notifications
+      }));
+    }catch(e){console.warn("Notif schedule failed:",e)}
+  };
+  
+  // Request permission + schedule on first app open after onboarding
+  const[notifAsked,setNotifAsked]=useState(()=>{try{return localStorage.getItem("fs-notif-asked")==="1"}catch{return false}});
+  useEffect(()=>{
+    // Only run if in native app and onboarded
+    if(!window.ReactNativeWebView||!u.onboarded||scr!=="app")return;
+    
+    if(!notifAsked){
+      // First time: ask permission
+      window.ReactNativeWebView.postMessage(JSON.stringify({type:"requestNotificationPermission"}));
+      try{localStorage.setItem("fs-notif-asked","1")}catch{}
+      setNotifAsked(true);
+    }
+    
+    // Listen for permission result
+    const handler=(event)=>{
+      try{
+        const data=typeof event.data==="string"?JSON.parse(event.data):event.data;
+        if(data.type==="notificationPermissionResult"&&data.granted){
+          scheduleSmartNotifications();
+        }
+      }catch{}
+    };
+    window.addEventListener("message",handler);
+    document.addEventListener("message",handler);
+    
+    // Re-schedule notifications every time app opens (refreshes the queue)
+    setTimeout(()=>scheduleSmartNotifications(),2000);
+    
+    return()=>{window.removeEventListener("message",handler);document.removeEventListener("message",handler)};
+  },[u.onboarded,scr]);
+
   // ── RAZORPAY PAYMENT ──
   // RAZORPAY_ENABLED controls production vs demo mode
   // Set to true when Razorpay keys are added to Vercel env vars
