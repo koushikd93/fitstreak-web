@@ -1003,6 +1003,30 @@ export default function App(){
   
   // Request permission + schedule on first app open after onboarding
   const[notifAsked,setNotifAsked]=useState(()=>{try{return localStorage.getItem("fs-notif-asked")==="1"}catch{return false}});
+  
+  // ── APP UPDATE BANNER ──
+  // Increment APP_VERSION when you push significant updates. Users will see a banner
+  // to refresh the app. They tap "Update" → page reloads → fresh code from Vercel.
+  const APP_VERSION="1.1.0"; // bump this when pushing major updates
+  const[showUpdateBanner,setShowUpdateBanner]=useState(false);
+  useEffect(()=>{
+    try{
+      const lastSeenVersion=localStorage.getItem("fs-app-version");
+      if(lastSeenVersion&&lastSeenVersion!==APP_VERSION){
+        setShowUpdateBanner(true);
+      }
+      // Always update stored version on app open if it's first time
+      if(!lastSeenVersion){
+        localStorage.setItem("fs-app-version",APP_VERSION);
+      }
+    }catch{}
+  },[]);
+  const dismissUpdate=()=>{
+    try{localStorage.setItem("fs-app-version",APP_VERSION)}catch{}
+    setShowUpdateBanner(false);
+    // Force reload to fetch latest static assets
+    window.location.reload();
+  };
   useEffect(()=>{
     // Only run if in native app and onboarded
     if(!window.ReactNativeWebView||!u.onboarded||scr!=="app")return;
@@ -1031,6 +1055,93 @@ export default function App(){
     
     return()=>{window.removeEventListener("message",handler);document.removeEventListener("message",handler)};
   },[u.onboarded,scr]);
+
+  // ── GOOGLE FIT INTEGRATION ──
+  // Auto-syncs steps, distance, sleep from Google Fit (if user connected)
+  // Native bridge handles OAuth flow + Fit API calls
+  // Works only inside Android app (not web browser) and only after OAuth setup complete
+  const[fitConnected,setFitConnected]=useState(()=>{try{return localStorage.getItem("fs-fit-connected")==="1"}catch{return false}});
+  const[fitSyncing,setFitSyncing]=useState(false);
+  const[fitLastSync,setFitLastSync]=useState(()=>{try{const v=localStorage.getItem("fs-fit-last-sync");return v?parseInt(v):0}catch{return 0}});
+  
+  const connectGoogleFit=()=>{
+    if(!window.ReactNativeWebView){
+      alert("Google Fit sync only works in the installed app. Please use the app on your phone.");
+      return;
+    }
+    setFitSyncing(true);
+    window.ReactNativeWebView.postMessage(JSON.stringify({type:"connectGoogleFit"}));
+  };
+  
+  const syncGoogleFit=()=>{
+    if(!window.ReactNativeWebView||!fitConnected)return;
+    setFitSyncing(true);
+    window.ReactNativeWebView.postMessage(JSON.stringify({type:"syncGoogleFit"}));
+  };
+  
+  const disconnectGoogleFit=()=>{
+    if(!window.ReactNativeWebView)return;
+    window.ReactNativeWebView.postMessage(JSON.stringify({type:"disconnectGoogleFit"}));
+    setFitConnected(false);
+    try{localStorage.removeItem("fs-fit-connected");localStorage.removeItem("fs-fit-last-sync")}catch{}
+  };
+  
+  // Listen for Google Fit results from native
+  useEffect(()=>{
+    if(!window.ReactNativeWebView)return;
+    const handler=(event)=>{
+      try{
+        const data=typeof event.data==="string"?JSON.parse(event.data):event.data;
+        
+        if(data.type==="fitConnectResult"){
+          setFitSyncing(false);
+          if(data.success){
+            setFitConnected(true);
+            try{localStorage.setItem("fs-fit-connected","1")}catch{}
+            // Trigger first sync immediately
+            setTimeout(()=>syncGoogleFit(),500);
+          }else{
+            alert(`Could not connect Google Fit: ${data.error||"Unknown error"}`);
+          }
+        }
+        
+        if(data.type==="fitSyncResult"){
+          setFitSyncing(false);
+          if(data.success&&data.data){
+            const{steps,distance,sleep}=data.data;
+            // Update user state with fit data (only if greater than current — never overwrite manual)
+            setU(x=>({
+              ...x,
+              steps:Math.max(x.steps||0,steps||0),
+              runKm:Math.max(x.runKm||0,distance||0),
+              sleepHours:sleep&&sleep>0?sleep:(x.sleepHours||0)
+            }));
+            const now=Date.now();
+            setFitLastSync(now);
+            try{localStorage.setItem("fs-fit-last-sync",String(now))}catch{}
+          }
+        }
+      }catch{}
+    };
+    window.addEventListener("message",handler);
+    document.addEventListener("message",handler);
+    return()=>{window.removeEventListener("message",handler);document.removeEventListener("message",handler)};
+  },[]);
+  
+  // Auto-sync every 15 minutes when app is open and Fit is connected
+  useEffect(()=>{
+    if(!fitConnected||!window.ReactNativeWebView)return;
+    const interval=setInterval(()=>{
+      const elapsed=Date.now()-fitLastSync;
+      if(elapsed>15*60*1000){ // 15 min
+        syncGoogleFit();
+      }
+    },60000); // check every minute
+    // Sync once when first loaded (if last sync >15 min ago or never)
+    const elapsed=Date.now()-fitLastSync;
+    if(elapsed>15*60*1000)setTimeout(()=>syncGoogleFit(),3000);
+    return()=>clearInterval(interval);
+  },[fitConnected]);
 
   // ── RAZORPAY PAYMENT ──
   // RAZORPAY_ENABLED controls production vs demo mode
@@ -1803,6 +1914,24 @@ export default function App(){
   const Activity=()=>{const sl=u.sleepLog||[];const totalSteps=(u.steps||0)+liveSteps;
   return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
     <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>{if(pedoActive)stopPedometer();if(runActive)stopRun();setTab("home")}} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Activity Tracker</h1></div>
+    
+    {/* Google Fit Auto-Sync Card */}
+    <div style={{background:fitConnected?"linear-gradient(135deg,#11998e15,#38ef7d10)":"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:14,padding:14,marginBottom:14,border:fitConnected?"1px solid #38ef7d40":"1px solid #ffffff15"}}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}>
+        <div style={{width:40,height:40,borderRadius:10,background:fitConnected?"#38ef7d20":"#ffffff10",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          <span style={{fontSize:22}}>{fitConnected?"\u2705":"\u{1F4F1}"}</span>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <p style={{fontSize:13,fontWeight:700,color:"#fff"}}>{fitConnected?"Google Fit Connected":"Auto-Track via Google Fit"}</p>
+          <p style={{fontSize:10,color:"#b0b0b8",marginTop:2,lineHeight:1.4}}>
+            {fitConnected?(fitLastSync?`Last synced: ${Math.round((Date.now()-fitLastSync)/60000)}m ago`:"Syncing soon..."):"Auto-sync steps, distance, sleep from Google Fit"}
+          </p>
+        </div>
+        {!fitConnected?<button onClick={connectGoogleFit} disabled={fitSyncing} style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",border:"none",borderRadius:8,padding:"8px 14px",color:"#0A0A0F",fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>{fitSyncing?"...":"Connect"}</button>:<button onClick={syncGoogleFit} disabled={fitSyncing} style={{background:"#ffffff10",border:"1px solid #ffffff20",borderRadius:8,padding:"6px 10px",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",flexShrink:0}}>{fitSyncing?"Syncing...":"Sync now"}</button>}
+      </div>
+      {fitConnected&&<button onClick={disconnectGoogleFit} style={{marginTop:8,background:"none",border:"none",color:"#9a9aa2",fontSize:10,cursor:"pointer",textDecoration:"underline"}}>Disconnect</button>}
+    </div>
+    
     <div style={{display:"flex",gap:6,marginBottom:20}}>{[["walk","\u{1F6B6} Walk"],["run","\u{1F3C3} Run"],["sleep","\u{1F634} Sleep"]].map(([id,label])=><button key={id} onClick={()=>setAt(id)} style={{flex:1,background:at===id?(id==="walk"?"#38ef7d":id==="run"?"#FF6B35":"#667eea"):"#1A1A2E",border:"none",borderRadius:12,padding:"10px 4px",color:at===id?(id==="sleep"?"#fff":"#0A0A0F"):"#b0b0b8",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>)}</div>
 
     {/* WALK — Accelerometer Pedometer */}
@@ -2170,6 +2299,14 @@ export default function App(){
     <div style={G1}/><div style={G2}/>
     {tab==="home"&&Home()}{tab==="explore"&&Explore()}{tab==="challenges"&&Challenges()}{tab==="stats"&&Stats()}{tab==="wo"&&Workout()}{tab==="ft"&&FTest()}{tab==="food"&&Food()}{tab==="activity"&&Activity()}{tab==="pro"&&Pro()}
     {Paywall()}
+    {showUpdateBanner&&<div style={{position:"fixed",top:`calc(env(safe-area-inset-top) + 8px)`,left:"50%",transform:"translateX(-50%)",width:"95%",maxWidth:410,background:"linear-gradient(135deg,#FF6B35,#E94560)",borderRadius:14,padding:"12px 14px",zIndex:80,boxShadow:"0 8px 24px rgba(255,107,53,.35)",animation:"slideIn .4s ease-out",display:"flex",alignItems:"center",gap:10}}>
+      <div style={{fontSize:24}}>{"\u{1F389}"}</div>
+      <div style={{flex:1,minWidth:0}}>
+        <p style={{fontSize:13,fontWeight:800,color:"#fff",lineHeight:1.2}}>App Updated!</p>
+        <p style={{fontSize:11,color:"#ffffffdd",lineHeight:1.3,marginTop:2}}>New features ready. Tap to refresh.</p>
+      </div>
+      <button onClick={dismissUpdate} style={{background:"#fff",border:"none",borderRadius:10,padding:"7px 14px",color:"#FF6B35",fontSize:12,fontWeight:800,cursor:"pointer",flexShrink:0}}>Update</button>
+    </div>}
     {Nav()}{Popup()}
     {xpa&&<div style={{position:"fixed",top:"40%",left:"50%",transform:"translate(-50%,-50%)",zIndex:200,animation:"xpFloat 2s ease-out forwards",pointerEvents:"none"}}><div style={{fontSize:32,fontWeight:900,color:"#FF6B35",textShadow:"0 0 30px #FF6B3560"}}>+{xpa} XP</div></div>}
   </div>
