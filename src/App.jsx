@@ -1915,23 +1915,6 @@ export default function App(){
   return <div className="screen-wrap" style={{padding:"0 16px",position:"relative",zIndex:1}}>
     <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}><button onClick={()=>{if(pedoActive)stopPedometer();if(runActive)stopRun();setTab("home")}} style={BB}>{"\u2190"}</button><h1 style={{fontSize:22,fontWeight:800,color:"#fff"}}>Activity Tracker</h1></div>
     
-    {/* Google Fit Auto-Sync Card */}
-    <div style={{background:fitConnected?"linear-gradient(135deg,#11998e15,#38ef7d10)":"linear-gradient(135deg,#1A1A2E,#16213E)",borderRadius:14,padding:14,marginBottom:14,border:fitConnected?"1px solid #38ef7d40":"1px solid #ffffff15"}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <div style={{width:40,height:40,borderRadius:10,background:fitConnected?"#38ef7d20":"#ffffff10",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-          <span style={{fontSize:22}}>{fitConnected?"\u2705":"\u{1F4F1}"}</span>
-        </div>
-        <div style={{flex:1,minWidth:0}}>
-          <p style={{fontSize:13,fontWeight:700,color:"#fff"}}>{fitConnected?"Google Fit Connected":"Auto-Track via Google Fit"}</p>
-          <p style={{fontSize:10,color:"#b0b0b8",marginTop:2,lineHeight:1.4}}>
-            {fitConnected?(fitLastSync?`Last synced: ${Math.round((Date.now()-fitLastSync)/60000)}m ago`:"Syncing soon..."):"Auto-sync steps, distance, sleep from Google Fit"}
-          </p>
-        </div>
-        {!fitConnected?<button onClick={connectGoogleFit} disabled={fitSyncing} style={{background:"linear-gradient(135deg,#38ef7d,#11998e)",border:"none",borderRadius:8,padding:"8px 14px",color:"#0A0A0F",fontSize:12,fontWeight:700,cursor:"pointer",flexShrink:0}}>{fitSyncing?"...":"Connect"}</button>:<button onClick={syncGoogleFit} disabled={fitSyncing} style={{background:"#ffffff10",border:"1px solid #ffffff20",borderRadius:8,padding:"6px 10px",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",flexShrink:0}}>{fitSyncing?"Syncing...":"Sync now"}</button>}
-      </div>
-      {fitConnected&&<button onClick={disconnectGoogleFit} style={{marginTop:8,background:"none",border:"none",color:"#9a9aa2",fontSize:10,cursor:"pointer",textDecoration:"underline"}}>Disconnect</button>}
-    </div>
-    
     <div style={{display:"flex",gap:6,marginBottom:20}}>{[["walk","\u{1F6B6} Walk"],["run","\u{1F3C3} Run"],["sleep","\u{1F634} Sleep"]].map(([id,label])=><button key={id} onClick={()=>setAt(id)} style={{flex:1,background:at===id?(id==="walk"?"#38ef7d":id==="run"?"#FF6B35":"#667eea"):"#1A1A2E",border:"none",borderRadius:12,padding:"10px 4px",color:at===id?(id==="sleep"?"#fff":"#0A0A0F"):"#b0b0b8",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>)}</div>
 
     {/* WALK — Accelerometer Pedometer */}
