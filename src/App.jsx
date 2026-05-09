@@ -1031,26 +1031,31 @@ export default function App(){
     // Only run if in native app and onboarded
     if(!window.ReactNativeWebView||!u.onboarded||scr!=="app")return;
     
-    if(!notifAsked){
-      // First time: ask permission
-      window.ReactNativeWebView.postMessage(JSON.stringify({type:"requestNotificationPermission"}));
-      try{localStorage.setItem("fs-notif-asked","1")}catch{}
-      setNotifAsked(true);
-    }
+    // ALWAYS request permission on app open. Native side checks current status
+    // and only shows the OS dialog if permission isn't already granted/denied.
+    // We do NOT gate on notifAsked anymore — that flag was a footgun: if the user
+    // missed the first dialog, they'd never see it again. Now: gate on actual
+    // OS permission state via the native bridge response.
+    window.ReactNativeWebView.postMessage(JSON.stringify({type:"requestNotificationPermission"}));
     
     // Listen for permission result
     const handler=(event)=>{
       try{
         const data=typeof event.data==="string"?JSON.parse(event.data):event.data;
-        if(data.type==="notificationPermissionResult"&&data.granted){
-          scheduleSmartNotifications();
+        if(data.type==="notificationPermissionResult"){
+          if(data.granted){
+            // Only mark "asked" AFTER we know it was actually granted
+            try{localStorage.setItem("fs-notif-asked","1")}catch{}
+            setNotifAsked(true);
+            scheduleSmartNotifications();
+          }
         }
       }catch{}
     };
     window.addEventListener("message",handler);
     document.addEventListener("message",handler);
     
-    // Re-schedule notifications every time app opens (refreshes the queue)
+    // Also try scheduling on open (no-op if no permission — native silently fails)
     setTimeout(()=>scheduleSmartNotifications(),2000);
     
     return()=>{window.removeEventListener("message",handler);document.removeEventListener("message",handler)};
