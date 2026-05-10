@@ -1001,13 +1001,34 @@ export default function App(){
     }catch(e){console.warn("Notif schedule failed:",e)}
   };
   
+  // Diagnostic: schedule a one-off notification 5 seconds in the future.
+  // Used in Profile screen to verify notifications actually fire on user's device.
+  // Critical for ColorOS/MIUI users where scheduled notifications get killed by OS.
+  const testNotification=()=>{
+    if(!window.ReactNativeWebView){alert("Test only works in the installed app");return;}
+    if(!window.__FITSTREAK_NOTIFICATIONS__){alert("This app version doesn't support notifications. Update from Play Store.");return;}
+    try{
+      const fireDate=new Date(Date.now()+5000).toISOString();
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type:"scheduleNotifications",
+        notifications:[{
+          identifier:"test-notif",
+          title:"FitStreak Test \u26A1",
+          body:"If you see this, notifications work! \u{1F525}",
+          fireDate
+        }]
+      }));
+      alert("Test scheduled! \u23F1\uFE0F\n\nLock your phone NOW and wait 10 seconds.\n\nIf nothing appears, your phone is killing background notifications \u2014 follow the fix below.");
+    }catch(e){alert("Test failed: "+e.message)}
+  };
+  
   // Request permission + schedule on first app open after onboarding
   const[notifAsked,setNotifAsked]=useState(()=>{try{return localStorage.getItem("fs-notif-asked")==="1"}catch{return false}});
   
   // ── APP UPDATE BANNER ──
   // Increment APP_VERSION when you push significant updates. Users will see a banner
   // to refresh the app. They tap "Update" → page reloads → fresh code from Vercel.
-  const APP_VERSION="1.1.0"; // bump this when pushing major updates
+  const APP_VERSION="1.1.1"; // bump this when pushing major updates
   const[showUpdateBanner,setShowUpdateBanner]=useState(false);
   useEffect(()=>{
     try{
@@ -2246,6 +2267,13 @@ export default function App(){
           <button key={id} onClick={()=>setU(x=>({...x,sport:id}))} style={{flex:"1 0 45%",background:u.sport===id?"linear-gradient(135deg,#FF6B35,#E94560)":"#1A1A2E",border:u.sport===id?"none":"1px solid #ffffff15",borderRadius:10,padding:"10px 8px",color:u.sport===id?"#fff":"#b0b0b8",fontSize:13,fontWeight:700,cursor:"pointer"}}>{label}</button>
         )}
       </div>
+    </div>
+    <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
+      <p style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:6}}>{"\u{1F514}"} Notifications</p>
+      <p style={{fontSize:11,color:"#b0b0b8",marginBottom:10,lineHeight:1.5}}>Daily 7 PM workout reminders. Tap test below to confirm they work on your phone.</p>
+      <button onClick={testNotification} style={{width:"100%",background:"#1A1A2E",border:"1px solid #FF6B3540",borderRadius:10,padding:10,color:"#FF6B35",fontSize:12,fontWeight:700,cursor:"pointer",marginBottom:10}}>{"\u{1F514}"} Send Test Notification (5 sec)</button>
+      <p style={{fontSize:10,color:"#9a9aa2",lineHeight:1.6,marginBottom:6}}><b style={{color:"#E94560"}}>If test fails on Realme/OPPO/OnePlus/Xiaomi/Vivo:</b></p>
+      <p style={{fontSize:10,color:"#9a9aa2",lineHeight:1.6}}>Settings {"\u2192"} Apps {"\u2192"} FitStreak {"\u2192"} enable <b style={{color:"#fff"}}>Auto-launch / Auto-start</b>, set <b style={{color:"#fff"}}>Battery</b> to <b style={{color:"#fff"}}>"No restrictions"</b> or <b style={{color:"#fff"}}>"Unrestricted"</b>, and ensure <b style={{color:"#fff"}}>Notifications</b> are <b style={{color:"#fff"}}>Allowed</b>.</p>
     </div>
     <button onClick={()=>{if(confirm("Reset all data?")){setU({...DU});setScr("onboarding");setOs(0)}}} style={{width:"100%",background:"transparent",border:"1px solid #E9456030",borderRadius:12,padding:10,color:"#E94560",fontSize:12,cursor:"pointer"}}>Reset Account</button>
   </div>};
