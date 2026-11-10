@@ -529,6 +529,10 @@ function ExAnim({type,size=200,showLabel=false,color="auto"}){
 
 const load=async()=>{try{const r=await window.storage.get("fs-v4");return r?JSON.parse(r.value):null}catch{return null}};
 const save=async s=>{try{await window.storage.set("fs-v4",JSON.stringify(s))}catch{}};
+// ── Cloud backup helpers (v1.2.0) ── fs-device-id = this phone's private backup code
+const isUuid=s=>/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(s||""));
+const getDeviceId=()=>{try{let id=localStorage.getItem("fs-device-id");if(!isUuid(id)){id=(window.crypto&&typeof window.crypto.randomUUID==="function")?window.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)});localStorage.setItem("fs-device-id",id)}return id.toLowerCase()}catch{return null}};
+const buildCloudBackup=user=>{const g=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch{return null}};return{v:1,u:user,measurements:g("fs-measurements"),goal:g("fs-goal"),routine:g("fs-routine"),savedReels:g("fs-saved-reels"),likedReels:g("fs-liked-reels")}};
 const DU={name:"",goal:"",level:"",duration:15,gender:"",sport:"cricket",xp:0,streak:0,longestStreak:0,freezeTokens:1,lastActiveDate:null,lastOpenedDate:null,workoutsCompleted:0,totalMinutes:0,badges:["early_bird"],fitnessAge:0,realAge:0,joinedChallenges:[],shares:0,completedWorkoutIds:[],foodLog:[],foodLogTotal:0,steps:0,stepsGoal:10000,runKm:0,sleepHours:0,sleepGoal:8,sleepLog:[],activityLog:[],onboarded:false};
 
 export default function App(){
@@ -943,7 +947,7 @@ export default function App(){
   };
   
   // Schedule notifications for next 7 days based on user state
-  const scheduleSmartNotifications=()=>{
+  const scheduleSmartNotifications=(extra=[])=>{
     if(!window.ReactNativeWebView||!window.__FITSTREAK_NOTIFICATIONS__)return;
     try{
       const notifications=[];
@@ -994,6 +998,9 @@ export default function App(){
         }
       }
       
+      // Extra one-off items (e.g. the 5-sec test) are sent WITH the daily list,
+      // because native cancels everything before scheduling a new list.
+      if(Array.isArray(extra)&&extra.length)notifications.push(...extra);
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type:"scheduleNotifications",
         notifications
@@ -1009,26 +1016,26 @@ export default function App(){
     if(!window.__FITSTREAK_NOTIFICATIONS__){alert("This app version doesn't support notifications. Update from Play Store.");return;}
     try{
       const fireDate=new Date(Date.now()+5000).toISOString();
-      window.ReactNativeWebView.postMessage(JSON.stringify({
-        type:"scheduleNotifications",
-        notifications:[{
-          identifier:"test-notif",
-          title:"FitStreak Test \u26A1",
-          body:"If you see this, notifications work! \u{1F525}",
-          fireDate
-        }]
-      }));
+      testPendingRef.current=true;
+      // Send the test PLUS the normal daily reminders (so the test no longer wipes the 7 PM reminders)
+      scheduleSmartNotifications([{
+        identifier:"test-notif",
+        title:"FitStreak Test \u26A1",
+        body:"If you see this, notifications work! \u{1F525}",
+        fireDate
+      }]);
       alert("Test scheduled! \u23F1\uFE0F\n\nLock your phone NOW and wait 10 seconds.\n\nIf nothing appears, your phone is killing background notifications \u2014 follow the fix below.");
     }catch(e){alert("Test failed: "+e.message)}
   };
   
   // Request permission + schedule on first app open after onboarding
   const[notifAsked,setNotifAsked]=useState(()=>{try{return localStorage.getItem("fs-notif-asked")==="1"}catch{return false}});
+  const testPendingRef=useRef(false); // true while waiting for native result of the test notification
   
   // ── APP UPDATE BANNER ──
   // Increment APP_VERSION when you push significant updates. Users will see a banner
   // to refresh the app. They tap "Update" → page reloads → fresh code from Vercel.
-  const APP_VERSION="1.1.1"; // bump this when pushing major updates
+  const APP_VERSION="1.2.0"; // bump this when pushing major updates
   const[showUpdateBanner,setShowUpdateBanner]=useState(false);
   useEffect(()=>{
     try{
@@ -1071,6 +1078,13 @@ export default function App(){
             scheduleSmartNotifications();
           }
         }
+        // Native 1.1.2+ reports what it scheduled. Only shown after tapping the Test button.
+        if(data.type==="notificationScheduleResult"&&testPendingRef.current){
+          testPendingRef.current=false;
+          if(data.failed>0||data.scheduled===0){
+            alert("\u26A0\uFE0F Your phone could not schedule notifications.\n\nScheduled: "+data.scheduled+" \u00B7 Failed: "+data.failed+"\nPermission: "+data.permission+(data.error?"\nError: "+data.error:"")+"\n\nPlease take a screenshot and send it to support.");
+          }
+        }
       }catch{}
     };
     window.addEventListener("message",handler);
@@ -1081,6 +1095,93 @@ export default function App(){
     
     return()=>{window.removeEventListener("message",handler);document.removeEventListener("message",handler)};
   },[u.onboarded,scr]);
+
+  // ── CLOUD BACKUP (Supabase via /api/user-sync) ──
+  // Each phone has a private backup code (fs-device-id). Progress auto-saves ~15 s after a change
+  // and when the app goes to background. Restore on a new phone from Profile.
+  // The Profile panel stays hidden until the server confirms backup works (Vercel env vars set).
+  const[cloudReady,setCloudReady]=useState(()=>{try{return localStorage.getItem("fs-cloud-ready")==="1"}catch{return false}});
+  const[cloudLast,setCloudLast]=useState(()=>{try{return localStorage.getItem("fs-cloud-last")||""}catch{return""}});
+  const[cloudBusy,setCloudBusy]=useState(false);
+  const[restoreCode,setRestoreCode]=useState("");
+  const[restoreLoading,setRestoreLoading]=useState(false);
+  const cloudTimerRef=useRef(null);
+  const cloudLastBodyRef=useRef("");
+  const cloudRestoringRef=useRef(false);
+  const uLatestRef=useRef(u);
+  // A payment that could not be saved to the database yet (e.g. server not configured) is kept
+  // in fs-pay-pending and re-sent after the next successful backup.
+  const sendPendingPayment=async()=>{
+    try{
+      const raw=localStorage.getItem("fs-pay-pending");if(!raw)return;
+      const resp=await fetch("/api/record-payment",{method:"POST",headers:{"Content-Type":"application/json"},body:raw});
+      if(resp.ok||resp.status===400)localStorage.removeItem("fs-pay-pending");
+    }catch{}
+  };
+  const cloudSave=async(user,opts={})=>{
+    try{
+      if(cloudRestoringRef.current||!user||!user.onboarded)return false;
+      const deviceId=getDeviceId();if(!deviceId)return false;
+      const body=JSON.stringify({action:"save",deviceId,appVersion:APP_VERSION,name:user.name||"",data:buildCloudBackup(user)});
+      if(!opts.force&&body===cloudLastBodyRef.current)return true;
+      const resp=await fetch("/api/user-sync",{method:"POST",headers:{"Content-Type":"application/json"},body,keepalive:!!opts.background&&body.length<60000});
+      if(resp.ok){
+        cloudLastBodyRef.current=body;
+        const t=new Date().toISOString();
+        try{localStorage.setItem("fs-cloud-last",t);localStorage.setItem("fs-cloud-ready","1")}catch{}
+        setCloudLast(t);setCloudReady(true);
+        sendPendingPayment();
+        return true;
+      }
+      if(resp.status===500){try{localStorage.setItem("fs-cloud-ready","0")}catch{};setCloudReady(false)}
+      return false;
+    }catch{return false}
+  };
+  useEffect(()=>{
+    uLatestRef.current=u;
+    if(!u.onboarded||scr!=="app")return;
+    clearTimeout(cloudTimerRef.current);
+    cloudTimerRef.current=setTimeout(()=>cloudSave(uLatestRef.current),15000);
+    return()=>clearTimeout(cloudTimerRef.current);
+  },[u,scr]);
+  useEffect(()=>{
+    const h=()=>{if(document.visibilityState==="hidden"&&uLatestRef.current?.onboarded)cloudSave(uLatestRef.current,{background:true})};
+    document.addEventListener("visibilitychange",h);
+    return()=>document.removeEventListener("visibilitychange",h);
+  },[]);
+  const cloudBackupNow=async()=>{
+    setCloudBusy(true);
+    const ok=await cloudSave(u,{force:true});
+    setCloudBusy(false);
+    alert(ok?"\u2705 Backed up!":"Backup failed. Check your internet and try again.");
+  };
+  const copyBackupCode=async()=>{
+    const code=getDeviceId()||"";
+    try{await navigator.clipboard.writeText(code);setPop({type:"copied"})}catch{alert("Your backup code:\n\n"+code+"\n\nTake a screenshot and keep it safe.")}
+  };
+  const cloudRestore=async()=>{
+    const code=restoreCode.trim().toLowerCase();
+    if(!isUuid(code)){alert("That doesn't look like a backup code. It has 36 characters, like 1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d");return}
+    if(code===getDeviceId()){alert("That is this phone's own backup code.");return}
+    setRestoreLoading(true);
+    try{
+      const resp=await fetch("/api/user-sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"restore",deviceId:code})});
+      const r=await resp.json().catch(()=>({}));
+      if(!resp.ok||!r.success){alert(r.error||"Restore failed. Check the code and your internet.");setRestoreLoading(false);return}
+      const when=r.updatedAt?new Date(r.updatedAt).toLocaleString():"";
+      if(!confirm("Restore backup of \""+(r.name||"User")+"\""+(when?" (saved "+when+")":"")+"?\n\nThis REPLACES the progress on this phone.")){setRestoreLoading(false);return}
+      cloudRestoringRef.current=true;clearTimeout(cloudTimerRef.current);
+      const d=r.data||{};
+      const put=(k,v)=>{try{if(v!==null&&v!==undefined)localStorage.setItem(k,JSON.stringify(v))}catch{}};
+      put("fs-measurements",d.measurements);put("fs-goal",d.goal);put("fs-routine",d.routine);put("fs-saved-reels",d.savedReels);put("fs-liked-reels",d.likedReels);
+      try{localStorage.setItem("fs-device-id",code)}catch{}
+      // Pro comes back ONLY if the server has a verified Razorpay payment for this code
+      if(r.pro){try{localStorage.setItem("fs-pro","paid");localStorage.setItem("fs-pro-start",String(Date.now()))}catch{}}
+      if(d.u&&d.u.onboarded)await save({...DU,...d.u});
+      alert("\u2705 Restored! The app will reload now.");
+      window.location.reload();
+    }catch(e){cloudRestoringRef.current=false;alert("Restore failed. Check your internet and try again.");setRestoreLoading(false)}
+  };
 
   // ── GOOGLE FIT INTEGRATION ──
   // Auto-syncs steps, distance, sleep from Google Fit (if user connected)
@@ -1235,6 +1336,13 @@ export default function App(){
               setIsPro(true);
               setShowPaywall(false);
               setPop({type:"proSuccess",paymentId:response.razorpay_payment_id});
+              // Save the payment in the database (fire-and-forget, never blocks Pro).
+              // Kept in fs-pay-pending until the server confirms, then removed.
+              try{
+                const payRec=JSON.stringify({razorpay_order_id:response.razorpay_order_id,razorpay_payment_id:response.razorpay_payment_id,razorpay_signature:response.razorpay_signature,deviceId:getDeviceId(),plan});
+                localStorage.setItem("fs-pay-pending",payRec);
+                sendPendingPayment();
+              }catch{}
             }else{
               setPop({type:"proError",title:"Payment Verification Failed",msg:"If you were charged, contact support with order ID: "+response.razorpay_order_id});
             }
@@ -2268,6 +2376,21 @@ export default function App(){
         )}
       </div>
     </div>
+    {cloudReady&&<div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #667eea30"}}>
+      <p style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:6}}>{"\u2601\uFE0F"} Cloud Backup</p>
+      <p style={{fontSize:11,color:"#b0b0b8",marginBottom:10,lineHeight:1.5}}>{cloudLast?"Last backup: "+new Date(cloudLast).toLocaleString():"Not backed up yet"}</p>
+      <p style={{fontSize:10,color:"#9a9aa2",marginBottom:4,textTransform:"uppercase",letterSpacing:1}}>Your backup code</p>
+      <div style={{background:"#1A1A2E",borderRadius:10,padding:10,display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:6}}>
+        <span style={{fontSize:11,fontWeight:700,color:"#fff",wordBreak:"break-all",fontFamily:"monospace"}}>{getDeviceId()||"-"}</span>
+        <button onClick={copyBackupCode} style={{background:"#667eea30",border:"none",borderRadius:8,padding:"5px 12px",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",flexShrink:0}}>Copy</button>
+      </div>
+      <p style={{fontSize:10,color:"#9a9aa2",lineHeight:1.5,marginBottom:10}}>Keep this code private (for example, WhatsApp it to yourself). If you change phone or reinstall, enter it below to get your progress back.</p>
+      <button onClick={cloudBackupNow} disabled={cloudBusy} style={{width:"100%",background:"#1A1A2E",border:"1px solid #667eea40",borderRadius:10,padding:10,color:"#667eea",fontSize:12,fontWeight:700,cursor:"pointer",marginBottom:12}}>{cloudBusy?"Backing up...":"\u2601\uFE0F Back Up Now"}</button>
+      <p style={{fontSize:11,fontWeight:700,color:"#fff",marginBottom:6}}>Restore from another phone</p>
+      <input value={restoreCode} onChange={e=>setRestoreCode(e.target.value)} placeholder="Paste backup code" type="text" autoCapitalize="none" autoCorrect="off" spellCheck={false} style={{...IS,fontSize:13,padding:"10px 12px",marginBottom:8}}/>
+      <button onClick={cloudRestore} disabled={restoreLoading||!restoreCode.trim()} style={{width:"100%",background:restoreCode.trim()?"linear-gradient(135deg,#667eea,#764ba2)":"#1A1A2E",border:"none",borderRadius:10,padding:10,color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",opacity:restoreCode.trim()?1:.5}}>{restoreLoading?"Restoring...":"Restore My Progress"}</button>
+      <p style={{fontSize:10,color:"#9a9aa2",lineHeight:1.5,marginTop:8}}>Your progress is stored on our secure server in India. See our <span onClick={()=>openExternal(window.location.origin+"/privacy.html")} style={{color:"#667eea",textDecoration:"underline",cursor:"pointer"}}>Privacy Policy</span>.</p>
+    </div>}
     <div style={{background:"#12121A",borderRadius:14,padding:14,marginBottom:14,border:"1px solid #ffffff08"}}>
       <p style={{fontSize:13,fontWeight:700,color:"#fff",marginBottom:6}}>{"\u{1F514}"} Notifications</p>
       <p style={{fontSize:11,color:"#b0b0b8",marginBottom:10,lineHeight:1.5}}>Daily 7 PM workout reminders. Tap test below to confirm they work on your phone.</p>
