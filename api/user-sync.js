@@ -33,8 +33,9 @@ export default async function handler(req, res) {
   if (dailyCount >= 20000) return res.status(429).json({ error: 'Daily limit' });
   dailyCount++;
 
-  const SB_URL = process.env.SUPABASE_URL;
-  const SB_KEY = process.env.SUPABASE_SECRET_KEY;
+  // Strip spaces/line breaks that sneak in when the key is pasted into Vercel
+  const SB_URL = (process.env.SUPABASE_URL || '').trim().replace(/\/+$/, '');
+  const SB_KEY = (process.env.SUPABASE_SECRET_KEY || '').replace(/\s+/g, '');
   if (!SB_URL || !SB_KEY) return res.status(500).json({ error: 'Cloud backup not configured' });
 
   let body = req.body;
@@ -107,7 +108,8 @@ export default async function handler(req, res) {
 
     return res.status(400).json({ error: 'Unknown action' });
   } catch (err) {
-    console.error('user-sync error', err);
+    // Log only the error type: some errors contain request headers (the secret key)
+    console.error('user-sync error:', (err && err.name) || 'Error');
     return res.status(500).json({ error: 'Server error' });
   }
 }

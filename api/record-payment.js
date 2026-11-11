@@ -24,8 +24,9 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const SECRET = process.env.RAZORPAY_KEY_SECRET;
-  const SB_URL = process.env.SUPABASE_URL;
-  const SB_KEY = process.env.SUPABASE_SECRET_KEY;
+  // Strip spaces/line breaks that sneak in when the key is pasted into Vercel
+  const SB_URL = (process.env.SUPABASE_URL || '').trim().replace(/\/+$/, '');
+  const SB_KEY = (process.env.SUPABASE_SECRET_KEY || '').replace(/\s+/g, '');
   if (!SECRET || !SB_URL || !SB_KEY) return res.status(500).json({ error: 'Not configured' });
 
   let body = req.body;
@@ -67,7 +68,8 @@ export default async function handler(req, res) {
     }
     return res.status(200).json({ success: true });
   } catch (err) {
-    console.error('record-payment error', err);
+    // Log only the error type: some errors contain request headers (the secret key)
+    console.error('record-payment error:', (err && err.name) || 'Error');
     return res.status(500).json({ error: 'Server error' });
   }
 }
