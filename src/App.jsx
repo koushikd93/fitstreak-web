@@ -532,6 +532,43 @@ const save=async s=>{try{await window.storage.set("fs-v4",JSON.stringify(s))}cat
 // ── Cloud backup helpers (v1.2.0) ── fs-device-id = this phone's private backup code
 const isUuid=s=>/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(s||""));
 const getDeviceId=()=>{try{let id=localStorage.getItem("fs-device-id");if(!isUuid(id)){id=(window.crypto&&typeof window.crypto.randomUUID==="function")?window.crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&3|8)).toString(16)});localStorage.setItem("fs-device-id",id)}return id.toLowerCase()}catch{return null}};
+// ── Step detector (v1.2.1) ── works on TIME, so it counts the same on every phone's sensor speed.
+// 1) removes gravity  2) smooths the movement signal  3) counts a step on each peak that is strong
+// enough and 0.25-2 s after the previous one  4) only starts counting after 6 steps in a steady
+// rhythm, so shaking, typing or picking up the phone doesn't add steps  5) fills one missed soft step.
+const makeStepDetector=()=>{
+  let g=9.81,s1=0,s=0,p1=0,p2=0,lastT=0,lastStepT=0,avgPeak=1,avgGap=0,prevGap=0,armed=true,pending=0,walking=false,init=false;
+  return(mag,t)=>{
+    if(!init||t-lastT>500||t<lastT){g=mag;s1=0;s=0;p1=0;p2=0;lastT=t;init=true;return 0}
+    const dt=t-lastT;lastT=t;if(dt<=0)return 0;
+    g+=(mag-g)*(1-Math.exp(-dt/700));
+    const k=1-Math.exp(-dt/45);
+    s1+=((mag-g)-s1)*k;s+=(s1-s)*k;
+    let out=0;
+    if(s<0)armed=true;
+    if(lastStepT&&t-lastStepT>2000){pending=0;prevGap=0;walking=false;avgPeak=1}
+    const thr=Math.max(0.3,avgPeak*0.35);
+    if(armed&&p1>thr&&p1>p2&&p1>=s){
+      const gap=t-lastStepT;
+      if(!lastStepT||gap>2000){armed=false;pending=1;prevGap=0;walking=false;lastStepT=t}
+      else if(gap>=250&&!(walking&&gap<avgGap*0.55)){
+        armed=false;avgPeak+=(Math.min(p1,8)-avgPeak)*0.2;
+        if(walking){
+          if(gap>avgGap*1.7&&gap<avgGap*2.3)out=2;
+          else{out=1;avgGap+=(gap-avgGap)*0.2}
+        }else{
+          if(prevGap&&(gap<prevGap*0.6||gap>prevGap*1.7))pending=1;
+          else pending++;
+          prevGap=gap;
+          if(pending>=6){walking=true;out=pending;pending=0;avgGap=gap}
+        }
+        lastStepT=t;
+      }
+    }
+    p2=p1;p1=s;
+    return out;
+  };
+};
 const buildCloudBackup=user=>{const g=k=>{try{return JSON.parse(localStorage.getItem(k)||"null")}catch{return null}};return{v:1,u:user,measurements:g("fs-measurements"),goal:g("fs-goal"),routine:g("fs-routine"),savedReels:g("fs-saved-reels"),likedReels:g("fs-liked-reels")}};
 const DU={name:"",goal:"",level:"",duration:15,gender:"",sport:"cricket",xp:0,streak:0,longestStreak:0,freezeTokens:1,lastActiveDate:null,lastOpenedDate:null,workoutsCompleted:0,totalMinutes:0,badges:["early_bird"],fitnessAge:0,realAge:0,joinedChallenges:[],shares:0,completedWorkoutIds:[],foodLog:[],foodLogTotal:0,steps:0,stepsGoal:10000,runKm:0,sleepHours:0,sleepGoal:8,sleepLog:[],activityLog:[],onboarded:false};
 
@@ -720,13 +757,11 @@ export default function App(){
   const initPedometer=()=>{
     setPedoActive(true);setLiveSteps(0);
     requestWakeLock(); // Keep screen on while counting
-    const ref=pedometerRef.current;ref.cooldown=0;ref.lastMag=9.8;
+    const detect=makeStepDetector();
     const handler=(e)=>{
-      const a=e.accelerationIncludingGravity;if(!a)return;
-      const mag=Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
-      const diff=Math.abs(mag-ref.lastMag);ref.lastMag=mag;
-      if(ref.cooldown>0){ref.cooldown--;return}
-      if(diff>ref.stepThreshold){setLiveSteps(s=>s+1);ref.cooldown=8}
+      const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;
+      const n=detect(Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z),performance.now());
+      if(n>0)setLiveSteps(s=>s+n);
     };
     window.addEventListener("devicemotion",handler);
     pedometerRef.current.handler=handler;
@@ -1035,7 +1070,7 @@ export default function App(){
   // ── APP UPDATE BANNER ──
   // Increment APP_VERSION when you push significant updates. Users will see a banner
   // to refresh the app. They tap "Update" → page reloads → fresh code from Vercel.
-  const APP_VERSION="1.2.0"; // bump this when pushing major updates
+  const APP_VERSION="1.2.1"; // bump this when pushing major updates
   const[showUpdateBanner,setShowUpdateBanner]=useState(false);
   useEffect(()=>{
     try{
@@ -2054,7 +2089,7 @@ export default function App(){
     {/* WALK — Accelerometer Pedometer */}
     {at==="walk"&&<div>
       <div style={{background:"linear-gradient(135deg,#11998e,#38ef7d)",borderRadius:20,padding:24,marginBottom:16,textAlign:"center",position:"relative",overflow:"hidden"}}><div style={{position:"absolute",top:-20,right:-20,fontSize:80,opacity:.15}}>{"\u{1F6B6}"}</div><p style={{fontSize:11,color:"#000000aa",fontWeight:600,textTransform:"uppercase",letterSpacing:1.5,marginBottom:6}}>Today's Steps</p><div style={{fontSize:52,fontWeight:900,color:"#0A0A0F"}}>{totalSteps.toLocaleString()}</div><p style={{fontSize:14,color:"#0A0A0F99",marginBottom:12}}>Goal: 10,000</p><div style={{background:"#00000020",borderRadius:8,height:10,overflow:"hidden",maxWidth:260,margin:"0 auto"}}><div style={{width:`${Math.min((totalSteps/1e4)*100,100)}%`,height:"100%",background:"#0A0A0F",borderRadius:8}}/></div><p style={{fontSize:12,color:"#0A0A0F88",marginTop:8}}>{"\u2248"} {(totalSteps*.000762).toFixed(1)} km · {"\u2248"} {Math.round(totalSteps*.04)} kcal</p>
-      {pedoActive&&<div style={{marginTop:12,background:"#00000020",borderRadius:10,padding:8}}><p style={{fontSize:12,color:"#0A0A0F",fontWeight:700}}>{"\u{1F7E2}"} Counting live... {liveSteps} new steps</p><p style={{fontSize:10,color:"#0A0A0Faa",marginTop:2}}>{"\u{1F4F1}"} Keep app open. Screen will stay on automatically.</p></div>}
+      {pedoActive&&<div style={{marginTop:12,background:"#00000020",borderRadius:10,padding:8}}><p style={{fontSize:12,color:"#0A0A0F",fontWeight:700}}>{"\u{1F7E2}"} Counting live... {liveSteps} new steps</p><p style={{fontSize:10,color:"#0A0A0Faa",marginTop:2}}>{"\u{1F4F1}"} Keep app open. Screen will stay on automatically.</p><p style={{fontSize:10,color:"#0A0A0Faa",marginTop:2}}>Steps show after about 6 steps of steady walking.</p></div>}
       </div>
       {/* Auto step counter */}
       <div style={{marginBottom:16}}>
